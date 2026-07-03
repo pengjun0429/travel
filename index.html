@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>115.7 九寨溝與四川經典14日遊</title>
+    <title id="web-title">115.7 九寨溝與四川經典14日遊</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -53,14 +53,17 @@
         <div class="flex items-center gap-3">
             <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
             <div>
-                <h1 class="text-xl font-bold text-dark">帶爸媽去九寨溝 14天之旅</h1>
-                <p class="text-xs text-slate-500">2026.07.03 - 2026.07.16</p>
+                <h1 id="main-trip-title" class="text-xl font-bold text-dark">載入中...</h1>
+                <p id="main-trip-date" class="text-xs text-slate-500">載入中...</p>
             </div>
         </div>
         <div class="flex items-center gap-4">
             <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">
                 <i class="fa-solid fa-eye mr-1"></i> 訪客預覽模式
             </div>
+            <button id="btn-global-config" class="edit-only hidden flex items-center gap-2 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-4 py-2 rounded-lg transition" onclick="openGlobalConfigModal()">
+                <i class="fa-solid fa-gear"></i> 行程代碼/標題設定
+            </button>
             <button id="btn-share" class="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg transition" onclick="shareItinerary()">
                 <i class="fa-solid fa-share-nodes"></i> 分享行程
             </button>
@@ -153,6 +156,33 @@
         訊息提示
     </div>
 
+    <div id="modal-global-config" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-lg">變更旅遊主設定</h3>
+                <button onclick="closeModal('modal-global-config')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">行程密碼解鎖代碼</label>
+                    <input type="text" id="config-trip-code" class="w-full border border-slate-300 rounded-lg px-3 py-2 font-bold text-sky-600 focus:ring-2 focus:ring-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">旅遊行程標題名稱</label>
+                    <input type="text" id="config-trip-title" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">日期區間 (顯示用)</label>
+                    <input type="text" id="config-trip-date" placeholder="例如：2026.07.03 - 2026.07.16" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                </div>
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
+                <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存主設定</button>
+            </div>
+        </div>
+    </div>
+
     <div id="modal-day-info" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
         <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -226,11 +256,14 @@
     <script>
         /**
          * ==========================================
-         * 1. 預設資料與金鑰設定
+         * 1. 預設全域主設定
          * ==========================================
          */
-        // 在此設定進入行程需要的專屬代碼
-        const TRIP_CODE = "九寨溝2026"; 
+        let globalConfig = {
+            tripCode: "九寨溝2026",
+            tripTitle: "帶爸媽去九寨溝 14天之旅",
+            tripDate: "2026.07.03 - 2026.07.16"
+        };
 
         const defaultItinerary = [
             { id: "d1", date: "2026-07-03", title: "啟程：高雄飛往成都", hotel: "成都市區飯店", food: "機上餐點", notes: "首日抵達較晚，直接回飯店休息，儲備體力。",
@@ -336,7 +369,14 @@
         let isGuestMode = false;
 
         function initApp() {
-            // 優先驗證行程代碼（如果 Session 沒有解鎖紀錄，就保持阻擋）
+            // 載入主設定 (包含標題、日期、通關密碼代碼)
+            const savedConfig = localStorage.getItem('trip_global_config');
+            if (savedConfig) {
+                globalConfig = JSON.parse(savedConfig);
+            }
+            updateHeaderUI();
+
+            // 優先驗證行程代碼
             if (sessionStorage.getItem('trip_unlocked') === 'true') {
                 hideAuthOverlay();
             }
@@ -370,19 +410,23 @@
             selectDay(0);
         }
 
-        // 驗證行程代碼函數
+        function updateHeaderUI() {
+            document.getElementById('web-title').textContent = globalConfig.tripTitle;
+            document.getElementById('main-trip-title').textContent = globalConfig.tripTitle;
+            document.getElementById('main-trip-date').textContent = globalConfig.tripDate;
+        }
+
         function verifyTripCode() {
             const inputCode = document.getElementById('input-trip-code').value.trim();
             const errorElement = document.getElementById('trip-code-error');
             
-            if (inputCode === TRIP_CODE) {
+            if (inputCode === globalConfig.tripCode) {
                 sessionStorage.setItem('trip_unlocked', 'true');
                 errorElement.classList.add('opacity-0');
                 hideAuthOverlay();
                 showToast("解鎖成功，歡迎查看行程！");
             } else {
                 errorElement.classList.remove('opacity-0');
-                // 震動視覺提示
                 const overlayBox = document.getElementById('itinerary-auth-overlay').firstElementChild;
                 overlayBox.classList.add('animate-bounce');
                 setTimeout(() => overlayBox.classList.remove('animate-bounce'), 1000);
@@ -401,7 +445,39 @@
 
         /**
          * ==========================================
-         * 3. 權限與登入邏輯
+         * 3. 全域設定編輯面板
+         * ==========================================
+         */
+        function openGlobalConfigModal() {
+            if(!isLoggedIn) return;
+            document.getElementById('config-trip-code').value = globalConfig.tripCode;
+            document.getElementById('config-trip-title').value = globalConfig.tripTitle;
+            document.getElementById('config-trip-date').value = globalConfig.tripDate;
+            document.getElementById('modal-global-config').classList.remove('hidden');
+        }
+
+        function saveGlobalConfig() {
+            const newCode = document.getElementById('config-trip-code').value.trim();
+            const newTitle = document.getElementById('config-trip-title').value.trim();
+            const newDate = document.getElementById('config-trip-date').value.trim();
+
+            if(!newCode || !newTitle) {
+                return showToast("代碼與標題不能為空！");
+            }
+
+            globalConfig.tripCode = newCode;
+            globalConfig.tripTitle = newTitle;
+            globalConfig.tripDate = newDate;
+
+            localStorage.setItem('trip_global_config', JSON.stringify(globalConfig));
+            updateHeaderUI();
+            closeModal('modal-global-config');
+            showToast("旅遊主設定已成功更新！");
+        }
+
+        /**
+         * ==========================================
+         * 4. 權限與登入邏輯
          * ==========================================
          */
         function handleLogin() {
@@ -453,7 +529,7 @@
 
         /**
          * ==========================================
-         * 4. UI 渲染邏輯
+         * 5. UI 渲染邏輯
          * ==========================================
          */
         function renderTimeline() {
@@ -551,7 +627,7 @@
 
         /**
          * ==========================================
-         * 5. 編輯與表單邏輯
+         * 6. 編輯與表單邏輯
          * ==========================================
          */
         let editingActIndex = -1;
@@ -646,7 +722,7 @@
 
         /**
          * ==========================================
-         * 6. 地圖與右側面板預覽
+         * 7. 地圖與右側面板預覽
          * ==========================================
          */
         function showMapPreview(act) {
