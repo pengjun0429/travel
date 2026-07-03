@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>115.7 九寨溝與四川經典14日遊</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#0ea5e9',
+                        secondary: '#10b981',
+                        dark: '#1e293b'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 自訂滾動條 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800 h-screen flex flex-col overflow-hidden font-sans" onload="initApp()">
+
+    <div id="itinerary-auth-overlay" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-50 p-4">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 md:p-8 shadow-2xl border border-slate-100 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sky-50 text-primary mb-4">
+                <i class="fa-solid fa-lock text-2xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-dark mb-2">請輸入行程代碼</h2>
+            <p class="text-sm text-slate-500 mb-6">此行程已受密碼保護，請輸入代碼以解鎖內容。</p>
+            
+            <div class="space-y-4">
+                <input type="password" id="input-trip-code" placeholder="請輸入行程代碼" class="w-full border-2 border-slate-200 rounded-xl px-4 py-3 text-center font-medium tracking-widest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition" onkeyup="if(event.key==='Enter') verifyTripCode()">
+                <button onclick="verifyTripCode()" class="w-full bg-primary hover:bg-sky-600 text-white font-medium py-3 rounded-xl transition shadow-sm">
+                    確認解鎖 <i class="fa-solid fa-arrow-right ml-1"></i>
+                </button>
+            </div>
+            <p id="trip-code-error" class="text-red-500 text-xs font-medium mt-3 opacity-0 transition-opacity">代碼錯誤，請重新輸入！</p>
+        </div>
+    </div>
+
+    <header class="bg-white shadow-sm z-10 px-6 py-4 flex justify-between items-center shrink-0">
+        <div class="flex items-center gap-3">
+            <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
+            <div>
+                <h1 class="text-xl font-bold text-dark">帶爸媽去九寨溝 14天之旅</h1>
+                <p class="text-xs text-slate-500">2026.07.03 - 2026.07.16</p>
+            </div>
+        </div>
+        <div class="flex items-center gap-4">
+            <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">
+                <i class="fa-solid fa-eye mr-1"></i> 訪客預覽模式
+            </div>
+            <button id="btn-share" class="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg transition" onclick="shareItinerary()">
+                <i class="fa-solid fa-share-nodes"></i> 分享行程
+            </button>
+            <div id="auth-section">
+                <button id="btn-login" class="bg-primary hover:bg-sky-600 text-white px-5 py-2 rounded-lg font-medium transition shadow-sm" onclick="handleLogin()">
+                    <i class="fa-brands fa-google mr-2"></i> 登入編輯
+                </button>
+                <div id="user-profile" class="hidden flex items-center gap-3">
+                    <span id="user-name" class="text-sm font-medium text-slate-700"></span>
+                    <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition" title="登出">
+                        <i class="fa-solid fa-sign-out-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 flex overflow-hidden">
+        
+        <aside class="w-24 md:w-64 lg:w-72 bg-white border-r border-slate-200 overflow-y-auto shrink-0 flex flex-col">
+            <div class="p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
+                <h2 class="font-bold text-slate-700">行程總覽</h2>
+            </div>
+            <div id="timeline-container" class="flex-1 p-2 md:p-4 space-y-1">
+                </div>
+        </aside>
+
+        <section class="flex-1 overflow-y-auto bg-slate-50 relative scroll-smooth" id="detail-section">
+            <div class="max-w-3xl mx-auto p-4 md:p-8 pb-32">
+                
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
+                        <p id="current-day-date" class="text-slate-500 font-medium"></p>
+                    </div>
+                    <button class="edit-only hidden bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="openDayInfoModal()">
+                        <i class="fa-solid fa-pen mr-1"></i> 編輯食宿
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
+                        <div class="bg-blue-50 text-blue-500 p-3 rounded-lg"><i class="fa-solid fa-bed text-xl"></i></div>
+                        <div>
+                            <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">住宿 (Sleep)</h3>
+                            <p id="info-hotel" class="text-slate-700 font-medium"></p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
+                        <div class="bg-orange-50 text-orange-500 p-3 rounded-lg"><i class="fa-solid fa-utensils text-xl"></i></div>
+                        <div>
+                            <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">餐飲 (Eat)</h3>
+                            <p id="info-food" class="text-slate-700 font-medium"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6 flex justify-between items-center">
+                    <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-route text-primary mr-2"></i> 今日行程路線</h3>
+                    <button class="edit-only hidden text-primary hover:text-sky-700 font-medium text-sm" onclick="openActivityModal()">
+                        <i class="fa-solid fa-plus mr-1"></i> 新增景點
+                    </button>
+                </div>
+
+                <div id="activities-container" class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent">
+                    </div>
+
+                <div class="mt-12 bg-yellow-50 p-5 rounded-xl border border-yellow-100 relative">
+                    <h3 class="text-yellow-800 font-bold mb-2"><i class="fa-solid fa-book-open text-yellow-600 mr-2"></i> 旅程備忘錄</h3>
+                    <p id="info-notes" class="text-yellow-700 text-sm whitespace-pre-wrap"></p>
+                </div>
+
+            </div>
+        </section>
+
+        <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>景點預覽</h3>
+                <button class="lg:hidden text-slate-400 hover:text-slate-600" onclick="document.getElementById('map-panel').classList.remove('flex'); document.getElementById('map-panel').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div id="preview-content" class="flex-1 p-5 overflow-y-auto flex flex-col items-center justify-center text-center text-slate-400">
+                <i class="fa-regular fa-compass text-4xl mb-3"></i>
+                <p>點擊左側行程中的景點<br>即可在此預覽與導航</p>
+            </div>
+        </aside>
+
+    </main>
+
+    <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-50">
+        訊息提示
+    </div>
+
+    <div id="modal-day-info" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-lg">編輯今日資訊</h3>
+                <button onclick="closeModal('modal-day-info')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">住宿地點</label>
+                    <input type="text" id="input-hotel" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">推薦美食/餐廳</label>
+                    <input type="text" id="input-food" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">旅程日記 / 注意事項</label>
+                    <textarea id="input-notes" rows="4" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary focus:border-primary outline-none"></textarea>
+                </div>
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
+                <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存變更</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-activity" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 id="modal-activity-title" class="font-bold text-lg">新增景點/活動</h3>
+                <button onclick="closeModal('modal-activity')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <input type="hidden" id="act-id">
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">時間</label>
+                        <input type="time" id="act-time" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">類型圖示</label>
+                        <select id="act-icon" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                            <option value="fa-location-dot">預設地標</option>
+                            <option value="fa-plane">飛機航班</option>
+                            <option value="fa-train">高鐵/火車</option>
+                            <option value="fa-car">包車/汽車</option>
+                            <option value="fa-ship">遊船</option>
+                            <option value="fa-camera">拍照景點</option>
+                            <option value="fa-utensils">餐飲</option>
+                            <option value="fa-person-walking">徒步</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">標題 (景點名稱)</label>
+                    <input type="text" id="act-title" placeholder="例如：五花海" class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">簡介/玩法建議</label>
+                    <textarea id="act-desc" rows="3" placeholder="例如：走左邊環湖，湖水色彩絕佳..." class="w-full border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
+                </div>
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
+                <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * ==========================================
+         * 1. 預設資料與金鑰設定
+         * ==========================================
+         */
+        // 在此設定進入行程需要的專屬代碼
+        const TRIP_CODE = "九寨溝2026"; 
+
+        const defaultItinerary = [
+            { id: "d1", date: "2026-07-03", title: "啟程：高雄飛往成都", hotel: "成都市區飯店", food: "機上餐點", notes: "首日抵達較晚，直接回飯店休息，儲備體力。",
+              activities: [
+                  { id: "a1", time: "13:40", icon: "fa-plane", title: "高雄小港機場 T1起飛", desc: "國泰航空 CX423 前往香港轉機 (轉機時間 3h50m)" },
+                  { id: "a2", time: "19:15", icon: "fa-plane", title: "香港 T1起飛", desc: "國泰航空 CX916 前往成都" },
+                  { id: "a3", time: "21:55", icon: "fa-location-dot", title: "抵達成都天府機場 T1", desc: "專車接送至成都市區飯店" }
+              ]
+            },
+            { id: "d2", date: "2026-07-04", title: "成都市區遊覽", hotel: "成都市區飯店", food: "寬窄巷子小吃、老媽蹄花", notes: "適應四川氣候。",
+              activities: [
+                  { id: "a4", time: "09:30", icon: "fa-camera", title: "武侯祠", desc: "三國歷史文化探訪" },
+                  { id: "a5", time: "14:00", icon: "fa-person-walking", title: "錦里古街", desc: "西蜀第一街，體驗採耳與古街風情" }
+              ]
+            },
+            { id: "d3", date: "2026-07-05", title: "成都市區遊覽", hotel: "成都市區飯店", food: "春熙路火鍋 (建議微辣起步)", notes: "準備隔天前往高原地區的衣物。",
+              activities: [
+                  { id: "a6", time: "10:00", icon: "fa-camera", title: "大熊貓繁育研究基地", desc: "早點去人較少，看大熊貓花花" },
+                  { id: "a7", time: "15:00", icon: "fa-person-walking", title: "春熙路 & 太古里", desc: "看 IFS 爬樓大熊貓，逛裸眼3D牆" }
+              ]
+            },
+            { id: "d4", date: "2026-07-06", title: "高鐵前往高原", hotel: "松潘或九寨溝口飯店", food: "松潘古城特色美食", notes: "開始進入高海拔地區(約2500m以上)，行動放緩，不要跑跳，可準備高原安。",
+              activities: [
+                  { id: "a8", time: "09:00", icon: "fa-train", title: "成都東站 -> 黃龍九寨站", desc: "搭乘動車前往，車程約 1.5 小時" },
+                  { id: "a9", time: "14:00", icon: "fa-camera", title: "松州古城 (松潘)", desc: "千年歷史古鎮，適應海拔" }
+              ]
+            },
+            { id: "d5", date: "2026-07-07", title: "人間瑤池：黃龍", hotel: "九寨溝口飯店", food: "自備乾糧或景區內簡餐", notes: "黃龍海拔較高(約3000m+)，建議搭纜車上，步行下。",
+              activities: [
+                  { id: "a10", time: "08:30", icon: "fa-car", title: "包車前往黃龍風景區", desc: "從高鐵站或松潘出發" },
+                  { id: "a11", time: "10:00", icon: "fa-camera", title: "黃龍五彩池", desc: "世界罕見大型高山鈣華地貌，金黃色階梯狀鈣華池" },
+                  { id: "a12", time: "16:00", icon: "fa-car", title: "前往九寨溝口", desc: "車程約 2-3 小時，入住溝口飯店休息" }
+              ]
+            },
+            { id: "d6", date: "2026-07-08", title: "童話世界：九寨溝一日遊", hotel: "九寨溝口飯店", food: "諾日朗中心自助餐或自帶麵包", notes: "搭乘VIP包車或觀光車。抓大放小，自上而下遊玩。秋季穿搭注意溫差。",
+              activities: [
+                  { id: "a13", time: "08:00", icon: "fa-bus", title: "進入九寨溝景區", desc: "搭乘觀光車前往日則溝頂端 (原始森林或箭竹海)" },
+                  { id: "a14", time: "11:00", icon: "fa-camera", title: "五花海 & 珍珠灘瀑布", desc: "五花海是九寨精華，顏色變幻莫測。珍珠灘是西遊記取景地。" },
+                  { id: "a15", time: "14:00", icon: "fa-camera", title: "長海 & 五彩池", desc: "換乘至則查窪溝。長海壯觀，五彩池色彩最鮮艷。" },
+                  { id: "a16", time: "16:00", icon: "fa-camera", title: "樹正群海", desc: "出溝前沿途欣賞蘆葦海、火花海" }
+              ]
+            },
+            { id: "d7", date: "2026-07-09", title: "返回平地前往樂山", hotel: "樂山市區飯店", food: "樂山蹺腳牛肉、甜皮鴨", notes: "從高海拔回到平地，較為輕鬆。",
+              activities: [
+                  { id: "a17", time: "09:00", icon: "fa-train", title: "黃龍九寨站 -> 樂山站", desc: "搭乘高鐵/動車前往樂山" },
+                  { id: "a18", time: "15:00", icon: "fa-location-dot", title: "樂山市區漫步", desc: "飯店Check-in，品嚐樂山道地美食" }
+              ]
+            },
+            { id: "d8", date: "2026-07-10", title: "樂山大佛與黃龍溪", hotel: "樂山市區飯店", food: "古鎮小吃", notes: "帶爸媽遊樂山大佛，『搭船』看全景是最輕鬆且護膝的選擇。",
+              activities: [
+                  { id: "a19", time: "09:30", icon: "fa-ship", title: "遊船觀樂山大佛", desc: "不爬山，搭船在江面上觀賞71公尺高的千年大佛全貌" },
+                  { id: "a20", time: "14:00", icon: "fa-camera", title: "黃龍溪古鎮", desc: "千年水碼頭，欣賞榕樹與古街" }
+              ]
+            },
+            { id: "d9", date: "2026-07-11", title: "峨嵋山金頂", hotel: "樂山市區飯店", food: "峨嵋山素齋或當地農家菜", notes: "山上氣候多變，記得攜帶保暖外套。",
+              activities: [
+                  { id: "a21", time: "08:30", icon: "fa-car", title: "前往峨嵋山", desc: "到達景區後轉乘觀光車至雷洞坪" },
+                  { id: "a22", time: "11:00", icon: "fa-train", title: "搭乘金頂索道", desc: "搭乘纜車直達金頂，節省體力" },
+                  { id: "a23", time: "12:00", icon: "fa-camera", title: "峨嵋金頂", desc: "觀賞十方普賢銅像、雲海，天氣好可見佛光" }
+              ]
+            },
+            { id: "d10", date: "2026-07-12", title: "返回成都", hotel: "成都市區飯店", food: "奎星樓街美食、蛋烘糕", notes: "",
+              activities: [
+                  { id: "a24", time: "10:00", icon: "fa-car", title: "樂山 -> 成都", desc: "包車或搭乘高鐵返回成都" }
+              ]
+            },
+            { id: "d11", date: "2026-07-13", title: "千古水利工程", hotel: "成都市區飯店", food: "都江堰周邊美食", notes: "晚上可看南橋藍眼淚。",
+              activities: [
+                  { id: "a25", time: "10:00", icon: "fa-camera", title: "都江堰", desc: "參觀運作兩千年的偉大水利工程" },
+                  { id: "a26", time: "19:00", icon: "fa-camera", title: "南橋夜景 (藍眼淚)", desc: "江水在燈光照射下呈現夢幻藍色" }
+              ]
+            },
+            { id: "d12", date: "2026-07-14", title: "古蜀文明探秘", hotel: "成都市區飯店", food: "川菜人家", notes: "三星堆非常震撼，建議租用語音導覽。",
+              activities: [
+                  { id: "a27", time: "09:30", icon: "fa-camera", title: "三星堆博物館", desc: "看青銅神樹、黃金面具，沉睡數千年一醒驚天下" }
+              ]
+            },
+            { id: "d13", date: "2026-07-15", title: "成都悠閒時光", hotel: "成都市區飯店", food: "伴手禮採買，最後一頓火鍋", notes: "整理行李，準備隔天回程。",
+              activities: [
+                  { id: "a28", time: "10:00", icon: "fa-person-walking", title: "人民公園", desc: "喝蓋碗茶、體驗成都慢生活，看相親角" },
+                  { id: "a29", time: "14:00", icon: "fa-camera", title: "東郊記憶", desc: "工業風文創園區，拍美照" }
+              ]
+            },
+            { id: "d14", date: "2026-07-16", title: "賦歸：成都飛往高雄", hotel: "溫慢的家", food: "機場簡餐、機上餐點", notes: "班機較早，請提早前往天府機場。",
+              activities: [
+                  { id: "a30", time: "05:00", icon: "fa-car", title: "前往天府機場 T1", desc: "成都市區至天府機場約需1-1.5小時" },
+                  { id: "a31", time: "08:10", icon: "fa-plane", title: "成都起飛 (CX917)", desc: "前往香港轉機" },
+                  { id: "a32", time: "16:35", icon: "fa-plane", title: "香港起飛 (CX458)", desc: "飛往高雄小港機場，18:10 抵達" }
+              ]
+            }
+        ];
+
+        /**
+         * ==========================================
+         * 2. 狀態管理與密碼驗證
+         * ==========================================
+         */
+        let itineraryData = [];
+        let currentDayIndex = 0;
+        
+        const ALLOWED_EMAILS = ['admin@gmail.com', 'test@gmail.com']; 
+        let isLoggedIn = false;
+        let isGuestMode = false;
+
+        function initApp() {
+            // 優先驗證行程代碼（如果 Session 沒有解鎖紀錄，就保持阻擋）
+            if (sessionStorage.getItem('trip_unlocked') === 'true') {
+                hideAuthOverlay();
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('guest') === '1') {
+                isGuestMode = true;
+                document.getElementById('guest-badge').classList.remove('hidden');
+                document.getElementById('btn-login').classList.add('hidden');
+                document.getElementById('btn-share').classList.add('hidden');
+            }
+
+            const savedData = localStorage.getItem('sichuan_itinerary');
+            if (savedData) {
+                itineraryData = JSON.parse(savedData);
+            } else {
+                itineraryData = JSON.parse(JSON.stringify(defaultItinerary));
+                saveDataToStorage();
+            }
+
+            const savedUser = localStorage.getItem('itinerary_user');
+            if (savedUser && !isGuestMode) {
+                isLoggedIn = true;
+                document.getElementById('btn-login').classList.add('hidden');
+                document.getElementById('user-profile').classList.remove('hidden');
+                document.getElementById('user-name').textContent = savedUser;
+                document.getElementById('btn-share').classList.remove('hidden');
+            }
+
+            renderTimeline();
+            selectDay(0);
+        }
+
+        // 驗證行程代碼函數
+        function verifyTripCode() {
+            const inputCode = document.getElementById('input-trip-code').value.trim();
+            const errorElement = document.getElementById('trip-code-error');
+            
+            if (inputCode === TRIP_CODE) {
+                sessionStorage.setItem('trip_unlocked', 'true');
+                errorElement.classList.add('opacity-0');
+                hideAuthOverlay();
+                showToast("解鎖成功，歡迎查看行程！");
+            } else {
+                errorElement.classList.remove('opacity-0');
+                // 震動視覺提示
+                const overlayBox = document.getElementById('itinerary-auth-overlay').firstElementChild;
+                overlayBox.classList.add('animate-bounce');
+                setTimeout(() => overlayBox.classList.remove('animate-bounce'), 1000);
+            }
+        }
+
+        function hideAuthOverlay() {
+            const overlay = document.getElementById('itinerary-auth-overlay');
+            overlay.classList.add('opacity-0', 'pointer-events-none', 'transition-all', 'duration-500');
+            setTimeout(() => overlay.classList.add('hidden'), 500);
+        }
+
+        function saveDataToStorage() {
+            localStorage.setItem('sichuan_itinerary', JSON.stringify(itineraryData));
+        }
+
+        /**
+         * ==========================================
+         * 3. 權限與登入邏輯
+         * ==========================================
+         */
+        function handleLogin() {
+            const email = prompt("請輸入您的編輯權限登入 Email：\n(測試白名單可輸入: test@gmail.com)");
+            if (!email) return;
+
+            if (ALLOWED_EMAILS.includes(email.trim().toLowerCase())) {
+                isLoggedIn = true;
+                localStorage.setItem('itinerary_user', email);
+                document.getElementById('btn-login').classList.add('hidden');
+                document.getElementById('user-profile').classList.remove('hidden');
+                document.getElementById('user-name').textContent = email;
+                document.getElementById('btn-share').classList.remove('hidden');
+                applyPermissions();
+                showToast("登入成功！已開啟編輯權限");
+            } else {
+                showToast("登入失敗：此帳號不在權限白名單內");
+            }
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            localStorage.removeItem('itinerary_user');
+            document.getElementById('btn-login').classList.remove('hidden');
+            document.getElementById('user-profile').classList.add('hidden');
+            applyPermissions();
+            showToast("已成功登出");
+        }
+
+        function applyPermissions() {
+            const editElements = document.querySelectorAll('.edit-only');
+            editElements.forEach(el => {
+                if (isLoggedIn && !isGuestMode) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+        }
+
+        function shareItinerary() {
+            const shareUrl = `${window.location.origin}${window.location.pathname}?guest=1`;
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                showToast("已複製訪客唯讀分享連結到剪貼簿！");
+            }).catch(() => {
+                showToast("複製失敗，請手動加上 ?guest=1 分享");
+            });
+        }
+
+        /**
+         * ==========================================
+         * 4. UI 渲染邏輯
+         * ==========================================
+         */
+        function renderTimeline() {
+            const container = document.getElementById('timeline-container');
+            container.innerHTML = '';
+            
+            itineraryData.forEach((day, index) => {
+                const dateObj = new Date(day.date);
+                const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
+                const shortDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
+                
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-3 md:p-4 rounded-xl transition-all duration-200 border-2 mb-2 flex items-center gap-3 ${
+                    index === currentDayIndex 
+                    ? 'bg-sky-50 border-primary text-primary shadow-sm scale-100' 
+                    : 'bg-white border-transparent text-slate-600 hover:bg-slate-50 scale-95 md:scale-100'
+                }`;
+                btn.onclick = () => selectDay(index);
+                
+                btn.innerHTML = `
+                    <div class="bg-white/80 shrink-0 w-12 h-12 rounded-lg flex flex-col items-center justify-center border border-slate-100 shadow-sm">
+                        <span class="text-xs font-bold text-slate-400">Day ${index + 1}</span>
+                        <span class="text-sm font-black">${shortDate}</span>
+                    </div>
+                    <div class="hidden md:block overflow-hidden">
+                        <div class="text-xs font-bold uppercase tracking-wider mb-0.5 opacity-80">星期${dayOfWeek}</div>
+                        <div class="font-bold truncate text-sm">${day.title}</div>
+                    </div>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function selectDay(index) {
+            currentDayIndex = index;
+            renderTimeline();
+            
+            const day = itineraryData[index];
+            document.getElementById('current-day-title').textContent = `Day ${index + 1}: ${day.title}`;
+            
+            const dateObj = new Date(day.date);
+            const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
+            document.getElementById('current-day-date').textContent = `${day.date} (星期${dayOfWeek})`;
+
+            document.getElementById('info-hotel').textContent = day.hotel || '無安排';
+            document.getElementById('info-food').textContent = day.food || '無特別安排';
+            document.getElementById('info-notes').textContent = day.notes || '尚無備忘錄資訊...';
+
+            renderActivities(day.activities);
+            
+            document.getElementById('map-panel').classList.remove('lg:flex');
+            document.getElementById('map-panel').classList.add('hidden');
+        }
+
+        function renderActivities(activities) {
+            const container = document.getElementById('activities-container');
+            container.innerHTML = '';
+            
+            if(!activities || activities.length === 0) {
+                container.innerHTML = `<div class="text-slate-400 text-center py-8">尚無景點行程，請點擊新增。</div>`;
+                return;
+            }
+
+            activities.forEach((act, idx) => {
+                const actDiv = document.createElement('div');
+                actDiv.className = "relative flex items-start gap-4 md:gap-6 group cursor-pointer";
+                actDiv.onclick = (e) => {
+                    if(e.target.closest('button')) return;
+                    showMapPreview(act);
+                };
+
+                actDiv.innerHTML = `
+                    <div class="w-12 md:w-20 pt-1 text-right shrink-0">
+                        <span class="text-sm font-black text-slate-700">${act.time}</span>
+                    </div>
+                    <div class="relative z-10 w-10 h-10 rounded-full bg-white border-4 border-slate-100 shadow-sm flex items-center justify-center text-primary shrink-0 transition-transform group-hover:scale-110 group-hover:border-blue-100 group-hover:text-sky-600">
+                        <i class="fa-solid ${act.icon}"></i>
+                    </div>
+                    <div class="flex-1 bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-slate-100 transition-all hover:shadow-md">
+                        <div class="flex justify-between items-start">
+                            <h4 class="font-bold text-lg text-slate-800 mb-1">${act.title}</h4>
+                            <div class="edit-only hidden flex gap-2">
+                                <button onclick="editActivity(${idx})" class="text-slate-400 hover:text-primary"><i class="fa-solid fa-pen-to-square"></i></button>
+                                <button onclick="deleteActivity(${idx})" class="text-slate-400 hover:text-red-500"><i class="fa-solid fa-trash"></i></button>
+                            </div>
+                        </div>
+                        <p class="text-slate-600 text-sm leading-relaxed">${act.desc}</p>
+                    </div>
+                `;
+                container.appendChild(actDiv);
+            });
+            
+            applyPermissions();
+        }
+
+        /**
+         * ==========================================
+         * 5. 編輯與表單邏輯
+         * ==========================================
+         */
+        let editingActIndex = -1;
+
+        function openDayInfoModal() {
+            if(!isLoggedIn) return showToast("請先登入");
+            const day = itineraryData[currentDayIndex];
+            document.getElementById('input-hotel').value = day.hotel || '';
+            document.getElementById('input-food').value = day.food || '';
+            document.getElementById('input-notes').value = day.notes || '';
+            document.getElementById('modal-day-info').classList.remove('hidden');
+        }
+
+        function saveDayInfo() {
+            const day = itineraryData[currentDayIndex];
+            day.hotel = document.getElementById('input-hotel').value;
+            day.food = document.getElementById('input-food').value;
+            day.notes = document.getElementById('input-notes').value;
+            
+            saveDataToStorage();
+            selectDay(currentDayIndex);
+            closeModal('modal-day-info');
+            showToast("資訊已儲存");
+        }
+
+        function openActivityModal(isEdit = false, idx = -1) {
+            if(!isLoggedIn) return showToast("請先登入");
+            editingActIndex = idx;
+            document.getElementById('modal-activity-title').textContent = isEdit ? '編輯景點' : '新增景點';
+            
+            if (isEdit && idx >= 0) {
+                const act = itineraryData[currentDayIndex].activities[idx];
+                document.getElementById('act-time').value = act.time;
+                document.getElementById('act-icon').value = act.icon;
+                document.getElementById('act-title').value = act.title;
+                document.getElementById('act-desc').value = act.desc;
+            } else {
+                document.getElementById('act-time').value = '09:00';
+                document.getElementById('act-icon').value = 'fa-location-dot';
+                document.getElementById('act-title').value = '';
+                document.getElementById('act-desc').value = '';
+            }
+            document.getElementById('modal-activity').classList.remove('hidden');
+        }
+
+        function editActivity(idx) { openActivityModal(true, idx); }
+
+        function deleteActivity(idx) {
+            if(!isLoggedIn) return;
+            if(confirm('確定要刪除這個行程嗎？')) {
+                itineraryData[currentDayIndex].activities.splice(idx, 1);
+                saveDataToStorage();
+                renderActivities(itineraryData[currentDayIndex].activities);
+                showToast("已刪除");
+            }
+        }
+
+        function saveActivity() {
+            const time = document.getElementById('act-time').value;
+            const icon = document.getElementById('act-icon').value;
+            const title = document.getElementById('act-title').value.trim();
+            const desc = document.getElementById('act-desc').value.trim();
+            
+            if(!title) return showToast("標題不能為空");
+
+            const newAct = {
+                id: Date.now().toString(),
+                time, icon, title, desc
+            };
+
+            if (!itineraryData[currentDayIndex].activities) {
+                itineraryData[currentDayIndex].activities = [];
+            }
+
+            if (editingActIndex >= 0) {
+                itineraryData[currentDayIndex].activities[editingActIndex] = newAct;
+            } else {
+                itineraryData[currentDayIndex].activities.push(newAct);
+            }
+            
+            itineraryData[currentDayIndex].activities.sort((a, b) => a.time.localeCompare(b.time));
+
+            saveDataToStorage();
+            renderActivities(itineraryData[currentDayIndex].activities);
+            closeModal('modal-activity');
+            showToast("行程已儲存");
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+        }
+
+        /**
+         * ==========================================
+         * 6. 地圖與右側面板預覽
+         * ==========================================
+         */
+        function showMapPreview(act) {
+            const panel = document.getElementById('map-panel');
+            const content = document.getElementById('preview-content');
+            
+            panel.classList.remove('hidden');
+            panel.classList.add('flex');
+            
+            if(window.innerWidth < 1024) {
+                panel.classList.add('fixed', 'inset-y-0', 'right-0', 'z-40', 'shadow-2xl');
+            }
+
+            const searchKeyword = encodeURIComponent(act.title);
+            const googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${searchKeyword}`;
+            const amapUrl = `https://ditu.amap.com/search?query=${searchKeyword}`;
+
+            content.innerHTML = `
+                <div class="w-full text-left">
+                    <div class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-blue-50 text-primary mb-4">
+                        <i class="fa-solid ${act.icon} text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-800 mb-2">${act.title}</h3>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">${act.desc || '暫無詳細說明。'}</p>
+                    
+                    <div class="space-y-2 mt-4">
+                        <a href="${amapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm shadow-sm">
+                            <i class="fa-solid fa-map"></i> 使用高德地圖導航 (大陸推薦)
+                        </a>
+                        <a href="${googleMapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-4 rounded-xl transition text-sm">
+                            <i class="fa-solid fa-location-arrow"></i> 使用 Google Maps 搜尋
+                        </a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
