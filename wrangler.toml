@@ -2,7 +2,9 @@ name = "travel-api"
 main = "src/index.js"
 compatibility_date = "2024-12-18"
 
+account_id = "6ff26bec4d6597fab63a05a7eed1f497"
+
 [[d1_databases]]
 binding = "DB"
 database_name = "travel-db"
-database_id = ""
+database_id = "0700771d-a54a-4026-a00c-427c1a93495f"
