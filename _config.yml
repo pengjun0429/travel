@@ -1,0 +1,7 @@
+exclude:
+  - src
+  - wrangler.toml
+  - schema.sql
+  - node_modules
+  - package.json
+  - package-lock.json
