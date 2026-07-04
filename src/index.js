@@ -101,7 +101,8 @@ async function handleLineCallback(request) {
 function parseIdToken(idToken) {
     try {
         const parts = idToken.split('.');
-        const payload = JSON.parse(atob(parts[1]));
+        const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        const payload = JSON.parse(decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join('')));
         return payload;
     } catch (e) {
         return {};

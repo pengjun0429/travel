@@ -373,6 +373,12 @@
                         <label class="block text-sm font-medium text-slate-700 mb-1">日期區間</label>
                         <input type="text" id="config-trip-date" placeholder="2026.07.03 - 2026.07.16" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
+                        <p class="text-xs text-slate-400 mb-1">帳號資訊</p>
+                        <p class="text-sm font-medium text-slate-700"><i class="fa-solid fa-envelope mr-1 text-slate-400"></i><span id="config-email">-</span></p>
+                        <p class="text-xs text-slate-500 mt-1">登入方式：<span id="config-auth-method">-</span></p>
+                        <p class="text-xs text-slate-400 mt-1">同 Email 的登入方式共用同一個行程帳號</p>
+                    </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
                     <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
@@ -599,6 +605,7 @@
             localStorage.setItem('tw_user_name', payload.name);
             localStorage.setItem('tw_user_picture', payload.picture);
             localStorage.setItem('tw_user_uid', uid);
+            localStorage.setItem('tw_auth_method', 'google');
 
             updateLandingAuthUI();
             showToast(`歡迎，${payload.name}！`);
@@ -839,6 +846,8 @@
             if(!canEdit()) return;
             document.getElementById('config-trip-title').value = globalConfig.tripTitle;
             document.getElementById('config-trip-date').value = globalConfig.tripDate;
+            document.getElementById('config-auth-method').textContent = localStorage.getItem('tw_auth_method') || 'google';
+            document.getElementById('config-email').textContent = currentUser ? currentUser.email : '-';
             document.getElementById('modal-global-config').classList.remove('hidden');
         }
 
