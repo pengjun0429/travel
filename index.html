@@ -661,6 +661,9 @@
                 if (cloudConfig.itineraryData && cloudConfig.itineraryData.length > 0) {
                     itineraryData = cloudConfig.itineraryData;
                 }
+                if (!ownerEmail && currentUser) {
+                    ownerEmail = currentUser.email;
+                }
             }
 
             // Per-user local data fallback
@@ -757,6 +760,7 @@
         function canEdit() {
             if (!currentUser) return false;
             if (isGuestMode) return false;
+            if (!ownerEmail) return true;
             if (ownerEmail && currentUser.email === ownerEmail) return true;
             if (collaborators.includes(currentUser.email)) return true;
             return false;
@@ -779,6 +783,9 @@
             } else {
                 document.getElementById('btn-global-config').classList.add('hidden');
                 document.getElementById('btn-collab').classList.add('hidden');
+            }
+            if (currentUser) {
+                document.getElementById('btn-share').classList.remove('hidden');
             }
         }
 
