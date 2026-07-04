@@ -45,6 +45,7 @@ async function handleLineCallback(request) {
     const url = new URL(request.url);
     const code = url.searchParams.get('code');
     const error = url.searchParams.get('error');
+    const callbackUrl = url.origin + url.pathname;
 
     if (error || !code) {
         const redirectUrl = `${FRONTEND_URL}?line_error=${encodeURIComponent(error || 'no_code')}`;
@@ -59,7 +60,7 @@ async function handleLineCallback(request) {
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code: code,
-                redirect_uri: `${FRONTEND_URL}/auth/line/callback`,
+                redirect_uri: callbackUrl,
                 client_id: LINE_CHANNEL_ID,
                 client_secret: LINE_CHANNEL_SECRET,
             })
