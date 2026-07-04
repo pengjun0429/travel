@@ -8,7 +8,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
-    
     <script>
         tailwind.config = {
             theme: {
@@ -28,248 +27,398 @@
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .glass-panel { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        .animate-fade-in-up { animation: fadeInUp 0.8s ease-out forwards; }
+        .animate-fade-in-up-delay-1 { animation: fadeInUp 0.8s ease-out 0.2s forwards; opacity: 0; }
+        .animate-fade-in-up-delay-2 { animation: fadeInUp 0.8s ease-out 0.4s forwards; opacity: 0; }
+        .animate-fade-in-up-delay-3 { animation: fadeInUp 0.8s ease-out 0.6s forwards; opacity: 0; }
+        .animate-fade-in-up-delay-4 { animation: fadeInUp 0.8s ease-out 0.8s forwards; opacity: 0; }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        .animate-float-delay { animation: float 6s ease-in-out 2s infinite; }
+        .landing-bg { background: linear-gradient(135deg, #0f172a 0%, #1e293b 40%, #0ea5e9 100%); }
+        .landing-bg::before { content: ''; position: absolute; inset: 0; background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); pointer-events: none; }
+
+        #landing-view { transition: opacity 0.5s ease; }
+        #app-view { transition: opacity 0.5s ease; }
+        .view-hidden { display: none; }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 h-screen flex flex-col overflow-hidden font-sans" onload="initApp()">
+<body class="bg-slate-100 text-slate-800 font-sans m-0">
 
-    <div id="loading-overlay" class="fixed inset-0 bg-slate-900/80 flex flex-col items-center justify-center z-50 transition-opacity duration-300">
-        <div class="animate-spin text-white text-4xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
-        <p class="text-white text-sm font-medium">正在從雲端同步最新行程與後端白名單...</p>
-    </div>
-
-    <div id="itinerary-auth-overlay" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-40 p-4 hidden">
-        <div class="bg-white rounded-2xl w-full max-w-md p-6 md:p-8 shadow-2xl border border-slate-100 text-center">
-            <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sky-50 text-primary mb-4">
-                <i class="fa-solid fa-lock text-2xl"></i>
-            </div>
-            <h2 class="text-xl font-bold text-dark mb-2">請輸入行程代碼</h2>
-            <p class="text-sm text-slate-500 mb-6">此行程已受密碼保護，請輸入代碼以解鎖內容。</p>
-            
-            <div class="space-y-4">
-                <input type="password" id="input-trip-code" placeholder="請輸入行程代碼" class="w-full bg-white text-slate-900 border-2 border-slate-200 rounded-xl px-4 py-3 text-center font-medium tracking-widest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition" onkeyup="if(event.key==='Enter') verifyTripCode()">
-                <button onclick="verifyTripCode()" class="w-full bg-primary hover:bg-sky-600 text-white font-medium py-3 rounded-xl transition shadow-sm">
-                    確認解鎖 <i class="fa-solid fa-arrow-right ml-1"></i>
-                </button>
-            </div>
-            <p id="trip-code-error" class="text-red-500 text-xs font-medium mt-3 opacity-0 transition-opacity">代碼錯誤，請重新輸入！</p>
-        </div>
-    </div>
-
-    <header class="bg-white shadow-sm z-10 px-6 py-4 flex justify-between items-center shrink-0">
-        <div class="flex items-center gap-3">
-            <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
-            <div>
-                <h1 id="main-trip-title" class="text-xl font-bold text-dark">載入中...</h1>
-                <p id="main-trip-date" class="text-xs text-slate-500">載入中...</p>
-            </div>
-        </div>
-        <div class="flex items-center gap-4">
-            <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">
-                <i class="fa-solid fa-eye mr-1"></i> 訪客唯讀模式
-            </div>
-            <button id="btn-global-config" class="edit-only hidden flex items-center gap-2 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-4 py-2 rounded-lg transition" onclick="openGlobalConfigModal()">
-                <i class="fa-solid fa-gear"></i> 行程代碼/標題設定
-            </button>
-            <button id="btn-share" class="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg transition" onclick="shareItinerary()">
-                <i class="fa-solid fa-share-nodes"></i> 分享行程網址
-            </button>
-            
-            <div id="auth-section" class="flex items-center gap-3">
-    <div id="g-signin-btn-wrapper">
-        <div id="g_id_onload"
-             data-client_id="1006606665070-26sq5tv532t84jqa2onivk26fbisnhl4.apps.googleusercontent.com"
-             data-callback="handleGoogleSignInResponse"
-             data-auto_prompt="false"
-             data-itp_support="true">
-        </div>
-        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
-    </div>
-    
-    <div id="user-profile" class="hidden flex items-center gap-3">
-        <img id="user-avatar" class="w-8 h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
-        <span id="user-name" class="text-sm font-medium text-slate-700"></span>
-        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition" title="登出">
-            <i class="fa-solid fa-sign-out-alt"></i>
-        </button>
-    </div>
-</div>
-        </div>
-    </header>
-
-    <main class="flex-1 flex overflow-hidden">
-        
-        <aside class="w-24 md:w-64 lg:w-72 bg-white border-r border-slate-200 overflow-y-auto shrink-0 flex flex-col">
-            <div class="p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
-                <h2 class="font-bold text-slate-700">行程總覽</h2>
-            </div>
-            <div id="timeline-container" class="flex-1 p-2 md:p-4 space-y-1"></div>
-        </aside>
-
-        <section class="flex-1 overflow-y-auto bg-slate-50 relative scroll-smooth" id="detail-section">
-            <div class="max-w-3xl mx-auto p-4 md:p-8 pb-32">
-                
-                <div class="flex justify-between items-end mb-6">
-                    <div>
-                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
-                        <p id="current-day-date" class="text-slate-500 font-medium"></p>
-                    </div>
-                    <button class="edit-only hidden bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="openDayInfoModal()">
-                        <i class="fa-solid fa-pen mr-1"></i> 編輯食宿
-                    </button>
+    <!-- ========== LANDING PAGE ========== -->
+    <div id="landing-view">
+        <div class="landing-bg relative min-h-screen flex flex-col overflow-hidden">
+            <nav class="relative z-10 flex items-center justify-between px-6 md:px-12 py-5">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
+                    <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
+                <div id="landing-g_id_onload"
+                     data-client_id="1006606665070-26sq5tv532t84jqa2onivk26fbisnhl4.apps.googleusercontent.com"
+                     data-callback="handleGoogleSignInResponse"
+                     data-auto_prompt="false"
+                     data-itp_support="true">
+                </div>
+                <div id="landing-auth" class="flex items-center gap-3">
+                    <div id="landing-g-signin-btn-wrapper">
+                        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
+                    </div>
+                    <div id="landing-user-profile" class="hidden items-center gap-3">
+                        <img id="landing-user-avatar" class="w-8 h-8 rounded-full border-2 border-white/30 shadow-sm" src="" alt="Avatar">
+                        <span id="landing-user-name" class="text-sm font-medium text-white"></span>
+                        <button onclick="enterApp()" class="bg-primary hover:bg-sky-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition shadow-sm">
+                            進入我的行程 <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            </nav>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
-                        <div class="bg-blue-50 text-blue-500 p-3 rounded-lg"><i class="fa-solid fa-bed text-xl"></i></div>
-                        <div>
-                            <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">住宿 (Sleep)</h3>
-                            <p id="info-hotel" class="text-slate-700 font-medium"></p>
+            <div class="relative z-10 flex-1 flex flex-col items-center justify-center text-center px-6 py-20">
+                <div class="animate-float mb-8">
+                    <div class="w-20 h-20 md:w-24 md:h-24 mx-auto bg-white/10 backdrop-blur rounded-full flex items-center justify-center border border-white/20">
+                        <i class="fa-solid fa-mountain-sun text-white text-4xl md:text-5xl"></i>
+                    </div>
+                </div>
+                <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight animate-fade-in-up">
+                    用 <span class="text-primary">Travelweb</span> 規劃旅程
+                </h1>
+                <p class="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 animate-fade-in-up-delay-1">
+                    建立專屬的旅遊行程，一鍵分享給親友<br class="hidden md:block">
+                    所有人即時查看，輕鬆同步
+                </p>
+                <div class="animate-fade-in-up-delay-2">
+                    <div id="landing-hero-gsignin" class="inline-block">
+                        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-width="280"></div>
+                    </div>
+                    <div id="landing-hero-user" class="hidden">
+                        <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
+                            <i class="fa-solid fa-map mr-2"></i> 進入我的行程
+                        </button>
+                        <p id="landing-hero-email" class="text-slate-400 text-sm mt-3"></p>
+                    </div>
+                </div>
+                <p class="text-slate-500 text-sm mt-6 animate-fade-in-up-delay-3">
+                    <i class="fa-solid fa-shield-halved mr-1"></i> 使用 Google 帳號快速登入
+                </p>
+            </div>
+
+            <div class="relative z-10 pb-8 text-center animate-fade-in-up-delay-4">
+                <p class="text-slate-500 text-xs"><i class="fa-solid fa-chevron-down animate-bounce inline-block"></i></p>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <section class="bg-white py-20 px-6">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">為什麼選擇 Travelweb？</h2>
+                <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">讓規劃行程變得簡單、優雅、可分享</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
+                        <div class="w-14 h-14 rounded-xl bg-sky-50 text-primary flex items-center justify-center mb-5">
+                            <i class="fa-solid fa-user-gear text-2xl"></i>
                         </div>
+                        <h3 class="text-xl font-bold text-dark mb-2">專屬行程</h3>
+                        <p class="text-slate-600">登入後擁有個人獨立的旅遊行程，自由編輯每日景點、住宿、餐飲。</p>
                     </div>
-                    <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
-                        <div class="bg-orange-50 text-orange-500 p-3 rounded-lg"><i class="fa-solid fa-utensils text-xl"></i></div>
-                        <div>
-                            <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">餐飲 (Eat)</h3>
-                            <p id="info-food" class="text-slate-700 font-medium"></p>
+                    <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
+                        <div class="w-14 h-14 rounded-xl bg-emerald-50 text-secondary flex items-center justify-center mb-5">
+                            <i class="fa-solid fa-share-nodes text-2xl"></i>
                         </div>
+                        <h3 class="text-xl font-bold text-dark mb-2">一鍵分享</h3>
+                        <p class="text-slate-600">產生專屬網址分享給親友，訪客無需登入即可查看完整行程。</p>
+                    </div>
+                    <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
+                        <div class="w-14 h-14 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center mb-5">
+                            <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-dark mb-2">雲端同步</h3>
+                        <p class="text-slate-600">行程資料自動同步至雲端，隨時隨地更新，不怕遺失。</p>
                     </div>
                 </div>
-
-                <div class="mb-6 flex justify-between items-center">
-                    <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-route text-primary mr-2"></i> 今日行程路線</h3>
-                    <button class="edit-only hidden text-primary hover:text-sky-700 font-medium text-sm" onclick="openActivityModal()">
-                        <i class="fa-solid fa-plus mr-1"></i> 新增景點
-                    </button>
-                </div>
-
-                <div id="activities-container" class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent"></div>
-
-                <div class="mt-12 bg-yellow-50 p-5 rounded-xl border border-yellow-100 relative">
-                    <h3 class="text-yellow-800 font-bold mb-2"><i class="fa-solid fa-book-open text-yellow-600 mr-2"></i> 旅程備忘錄</h3>
-                    <p id="info-notes" class="text-yellow-700 text-sm whitespace-pre-wrap"></p>
-                </div>
-
             </div>
         </section>
 
-        <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>景點預覽</h3>
-                <button class="lg:hidden text-slate-400 hover:text-slate-600" onclick="document.getElementById('map-panel').classList.remove('flex'); document.getElementById('map-panel').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
-            </div>
-            <div id="preview-content" class="flex-1 p-5 overflow-y-auto flex flex-col items-center justify-center text-center text-slate-400">
-                <i class="fa-regular fa-compass text-4xl mb-3"></i>
-                <p>點擊左側行程中的景點<br>即可在此預覽與導航</p>
-            </div>
-        </aside>
-
-    </main>
-
-    <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-50"></div>
-
-    <div id="modal-global-config" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-lg text-slate-900">變更旅遊主設定</h3>
-                <button onclick="closeModal('modal-global-config')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">行程密碼解鎖代碼 (雲端即時同步)</label>
-                    <input type="text" id="config-trip-code" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 font-bold text-sky-600 focus:ring-2 focus:ring-primary outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">旅遊行程標題名稱</label>
-                    <input type="text" id="config-trip-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">日期區間 (顯示用)</label>
-                    <input type="text" id="config-trip-date" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
-                </div>
-            </div>
-            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存主設定至雲端</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-day-info" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-lg text-slate-900">編輯今日資訊</h3>
-                <button onclick="closeModal('modal-day-info')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 space-y-4">
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">住宿地點</label>
-                    <input type="text" id="input-hotel" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">推薦美食/餐廳</label>
-                    <input type="text" id="input-food" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
-                </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">旅程日記 / 注意事項</label>
-                    <textarea id="input-notes" rows="4" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
-                </div>
-            </div>
-            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存變更</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-activity" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
-        <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">新增景點/活動</h3>
-                <button onclick="closeModal('modal-activity')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 space-y-4">
-                <input type="hidden" id="act-id">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">時間</label>
-                        <input type="time" id="act-time" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+        <!-- How It Works -->
+        <section class="bg-slate-50 py-20 px-6">
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">三步驟開始</h2>
+                <p class="text-slate-500 text-center mb-16">簡單三步，建立你的旅遊行程</p>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                    <div class="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-slate-200"></div>
+                    <div class="text-center relative">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">1</div>
+                        <h3 class="text-lg font-bold text-dark mb-2">Google 登入</h3>
+                        <p class="text-slate-600 text-sm">使用你的 Google 帳號快速登入，安全又方便。</p>
                     </div>
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">類型圖示</label>
-                        <select id="act-icon" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
-                            <option value="fa-location-dot">預設地標</option>
-                            <option value="fa-plane">飛機航班</option>
-                            <option value="fa-train">高鐵/火車</option>
-                            <option value="fa-car">包車/汽車</option>
-                            <option value="fa-ship">遊船</option>
-                            <option value="fa-camera">拍照景點</option>
-                            <option value="fa-utensils">餐飲</option>
-                            <option value="fa-person-walking">徒步</option>
-                        </select>
+                    <div class="text-center relative">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">2</div>
+                        <h3 class="text-lg font-bold text-dark mb-2">編輯行程</h3>
+                        <p class="text-slate-600 text-sm">新增每日景點、住宿、美食，自由安排旅遊路線。</p>
+                    </div>
+                    <div class="text-center relative">
+                        <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">3</div>
+                        <h3 class="text-lg font-bold text-dark mb-2">分享網址</h3>
+                        <p class="text-slate-600 text-sm">產生專屬網址分享給親友，大家都能看到完整行程。</p>
                     </div>
                 </div>
-                <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">標題 (景點名稱)</label>
-                    <input type="text" id="act-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="bg-dark text-slate-400 py-10 px-6 text-center text-sm">
+            <div class="max-w-4xl mx-auto">
+                <div class="flex items-center justify-center gap-2 mb-4">
+                    <i class="fa-solid fa-mountain-sun text-primary"></i>
+                    <span class="text-white font-bold">Travelweb</span>
                 </div>
+                <p>用旅行，創造回憶。</p>
+                <div class="mt-4 space-x-4">
+                    <a href="privacy.html" class="hover:text-white transition">隱私權政策</a>
+                </div>
+                <p class="mt-6 text-xs">&copy; 2026 Travelweb. All rights reserved.</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ========== APP VIEW (hidden initially) ========== -->
+    <div id="app-view" class="view-hidden">
+
+        <div id="loading-overlay" class="fixed inset-0 bg-slate-900/80 flex flex-col items-center justify-center z-50 transition-opacity duration-300">
+            <div class="animate-spin text-white text-4xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
+            <p class="text-white text-sm font-medium">正在從雲端同步最新行程與後端白名單...</p>
+        </div>
+
+        <div id="itinerary-auth-overlay" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-40 p-4 hidden">
+            <div class="bg-white rounded-2xl w-full max-w-md p-6 md:p-8 shadow-2xl border border-slate-100 text-center">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sky-50 text-primary mb-4">
+                    <i class="fa-solid fa-lock text-2xl"></i>
+                </div>
+                <h2 class="text-xl font-bold text-dark mb-2">請輸入行程代碼</h2>
+                <p class="text-sm text-slate-500 mb-6">此行程已受密碼保護，請輸入代碼以解鎖內容。</p>
+                <div class="space-y-4">
+                    <input type="password" id="input-trip-code" placeholder="請輸入行程代碼" class="w-full bg-white text-slate-900 border-2 border-slate-200 rounded-xl px-4 py-3 text-center font-medium tracking-widest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition" onkeyup="if(event.key==='Enter') verifyTripCode()">
+                    <button onclick="verifyTripCode()" class="w-full bg-primary hover:bg-sky-600 text-white font-medium py-3 rounded-xl transition shadow-sm">確認解鎖 <i class="fa-solid fa-arrow-right ml-1"></i></button>
+                </div>
+                <p id="trip-code-error" class="text-red-500 text-xs font-medium mt-3 opacity-0 transition-opacity">代碼錯誤，請重新輸入！</p>
+            </div>
+        </div>
+
+        <header class="bg-white shadow-sm z-10 px-6 py-4 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
                 <div>
-                    <label class="block text-sm font-medium text-slate-700 mb-1">簡介/玩法建議</label>
-                    <textarea id="act-desc" rows="3" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
+                    <h1 id="main-trip-title" class="text-xl font-bold text-dark">載入中...</h1>
+                    <p id="main-trip-date" class="text-xs text-slate-500">載入中...</p>
                 </div>
             </div>
-            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存</button>
+            <div class="flex items-center gap-4">
+                <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-sm font-medium">
+                    <i class="fa-solid fa-eye mr-1"></i> 訪客唯讀模式
+                </div>
+                <button id="btn-back-home" class="flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-3 py-2 rounded-lg transition text-sm" onclick="goToHome()">
+                    <i class="fa-solid fa-house"></i> 首頁
+                </button>
+                <button id="btn-global-config" class="edit-only hidden flex items-center gap-2 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-4 py-2 rounded-lg transition" onclick="openGlobalConfigModal()">
+                    <i class="fa-solid fa-gear"></i> 行程代碼/標題設定
+                </button>
+                <button id="btn-share" class="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg transition" onclick="shareItinerary()">
+                    <i class="fa-solid fa-share-nodes"></i> 分享行程網址
+                </button>
+                <div id="auth-section" class="flex items-center gap-3">
+                    <div id="app-user-profile" class="flex items-center gap-3">
+                        <img id="app-user-avatar" class="w-8 h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
+                        <span id="app-user-name" class="text-sm font-medium text-slate-700"></span>
+                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition" title="登出">
+                            <i class="fa-solid fa-sign-out-alt"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-1 flex overflow-hidden" style="height: calc(100vh - 73px);">
+            <aside class="w-24 md:w-64 lg:w-72 bg-white border-r border-slate-200 overflow-y-auto shrink-0 flex flex-col">
+                <div class="p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
+                    <h2 class="font-bold text-slate-700">行程總覽</h2>
+                </div>
+                <div id="timeline-container" class="flex-1 p-2 md:p-4 space-y-1"></div>
+            </aside>
+
+            <section class="flex-1 overflow-y-auto bg-slate-50 relative scroll-smooth" id="detail-section">
+                <div class="max-w-3xl mx-auto p-4 md:p-8 pb-32">
+                    <div class="flex justify-between items-end mb-6">
+                        <div>
+                            <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
+                            <p id="current-day-date" class="text-slate-500 font-medium"></p>
+                        </div>
+                        <button class="edit-only hidden bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="openDayInfoModal()">
+                            <i class="fa-solid fa-pen mr-1"></i> 編輯食宿
+                        </button>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
+                            <div class="bg-blue-50 text-blue-500 p-3 rounded-lg"><i class="fa-solid fa-bed text-xl"></i></div>
+                            <div>
+                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">住宿 (Sleep)</h3>
+                                <p id="info-hotel" class="text-slate-700 font-medium"></p>
+                            </div>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
+                            <div class="bg-orange-50 text-orange-500 p-3 rounded-lg"><i class="fa-solid fa-utensils text-xl"></i></div>
+                            <div>
+                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">餐飲 (Eat)</h3>
+                                <p id="info-food" class="text-slate-700 font-medium"></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-6 flex justify-between items-center">
+                        <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-route text-primary mr-2"></i> 今日行程路線</h3>
+                        <button class="edit-only hidden text-primary hover:text-sky-700 font-medium text-sm" onclick="openActivityModal()">
+                            <i class="fa-solid fa-plus mr-1"></i> 新增景點
+                        </button>
+                    </div>
+                    <div id="activities-container" class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent"></div>
+                    <div class="mt-12 bg-yellow-50 p-5 rounded-xl border border-yellow-100 relative">
+                        <h3 class="text-yellow-800 font-bold mb-2"><i class="fa-solid fa-book-open text-yellow-600 mr-2"></i> 旅程備忘錄</h3>
+                        <p id="info-notes" class="text-yellow-700 text-sm whitespace-pre-wrap"></p>
+                    </div>
+                </div>
+            </section>
+
+            <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>景點預覽</h3>
+                    <button class="lg:hidden text-slate-400 hover:text-slate-600" onclick="document.getElementById('map-panel').classList.remove('flex'); document.getElementById('map-panel').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div id="preview-content" class="flex-1 p-5 overflow-y-auto flex flex-col items-center justify-center text-center text-slate-400">
+                    <i class="fa-regular fa-compass text-4xl mb-3"></i>
+                    <p>點擊左側行程中的景點<br>即可在此預覽與導航</p>
+                </div>
+            </aside>
+        </main>
+
+        <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-50"></div>
+
+        <!-- Modals -->
+        <div id="modal-global-config" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+            <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 class="font-bold text-lg text-slate-900">變更旅遊主設定</h3>
+                    <button onclick="closeModal('modal-global-config')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">行程密碼解鎖代碼 (雲端即時同步)</label>
+                        <input type="text" id="config-trip-code" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 font-bold text-sky-600 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">旅遊行程標題名稱</label>
+                        <input type="text" id="config-trip-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">日期區間 (顯示用)</label>
+                        <input type="text" id="config-trip-date" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                </div>
+                <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
+                    <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存主設定至雲端</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-day-info" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+            <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 class="font-bold text-lg text-slate-900">編輯今日資訊</h3>
+                    <button onclick="closeModal('modal-day-info')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">住宿地點</label>
+                        <input type="text" id="input-hotel" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">推薦美食/餐廳</label>
+                        <input type="text" id="input-food" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">旅程日記 / 注意事項</label>
+                        <textarea id="input-notes" rows="4" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
+                    </div>
+                </div>
+                <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
+                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存變更</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal-activity" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+            <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">新增景點/活動</h3>
+                    <button onclick="closeModal('modal-activity')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <input type="hidden" id="act-id">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">時間</label>
+                            <input type="time" id="act-time" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">類型圖示</label>
+                            <select id="act-icon" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                                <option value="fa-location-dot">預設地標</option>
+                                <option value="fa-plane">飛機航班</option>
+                                <option value="fa-train">高鐵/火車</option>
+                                <option value="fa-car">包車/汽車</option>
+                                <option value="fa-ship">遊船</option>
+                                <option value="fa-camera">拍照景點</option>
+                                <option value="fa-utensils">餐飲</option>
+                                <option value="fa-person-walking">徒步</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">標題 (景點名稱)</label>
+                        <input type="text" id="act-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">簡介/玩法建議</label>
+                        <textarea id="act-desc" rows="3" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
+                    </div>
+                </div>
+                <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
+                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 🔗 請將此換成你重新部署好的 Google Apps Script 網頁應用程式網址
+        // ============================================================
+        //  CONFIG
+        // ============================================================
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwj5ySfliPEHveD_9QpzkRwDGmWXjrREUbZz58rGwMyAMwZOo0XbyR2zPt12FeranlaLQ/exec";
 
-        // 🛡️ 後端同步白名單（會自動從 GAS 下載回來更新）
-        let allowedEmails = []; 
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let currentUser = null;           // { email, name, picture, uid }
+        let isLoggedIn = false;
+        let isGuestMode = false;
+        let guestUserUid = null;         // uid of the trip owner being viewed as guest
 
         let globalConfig = {
             tripCode: "九寨溝2026",
@@ -278,10 +427,11 @@
         };
         let itineraryData = [];
         let currentDayIndex = 0;
-        
-        let isLoggedIn = false;
-        let isGuestMode = false;
+        let allowedEmails = [];
 
+        // ============================================================
+        //  UTILS
+        // ============================================================
         function decodeJwt(token) {
             try {
                 const base64Url = token.split('.')[1];
@@ -290,52 +440,135 @@
                     return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
                 }).join(''));
                 return JSON.parse(jsonPayload);
-            } catch (e) {
-                return null;
+            } catch (e) { return null; }
+        }
+
+        function generateUid(email) {
+            let hash = 0;
+            for (let i = 0; i < email.length; i++) {
+                const chr = email.charCodeAt(i);
+                hash = ((hash << 5) - hash) + chr;
+                hash |= 0;
+            }
+            return 'u' + Math.abs(hash).toString(36);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
+            }, 3000);
+        }
+
+        // ============================================================
+        //  VIEW SWITCHING (Landing <-> App)
+        // ============================================================
+        function showLanding() {
+            document.getElementById('landing-view').classList.remove('view-hidden');
+            document.getElementById('app-view').classList.add('view-hidden');
+        }
+
+        function showApp() {
+            document.getElementById('landing-view').classList.add('view-hidden');
+            document.getElementById('app-view').classList.remove('view-hidden');
+        }
+
+        function goToHome() {
+            if (confirm('返回首頁？你的行程資料不會遺失。')) {
+                showLanding();
+                window.history.replaceState({}, '', window.location.pathname);
             }
         }
 
-        // 核心：當使用者透過 Google 登入成功
+        // ============================================================
+        //  AUTH — shared handler for both landing and app
+        // ============================================================
         function handleGoogleSignInResponse(response) {
             const payload = decodeJwt(response.credential);
             if (!payload) return showToast("無法讀取 Google 登入資訊");
 
             const email = payload.email.trim().toLowerCase();
-            
-            // 🔍 比對從後端 GAS 傳過來的白名單陣列
-            if (allowedEmails.includes(email) && !isGuestMode) {
-                isLoggedIn = true;
-                localStorage.setItem('itinerary_user_email', email);
-                localStorage.setItem('user_profile_name', payload.name);
-                localStorage.setItem('user_profile_picture', payload.picture);
-                
-                showUserProfileUI(payload.name, payload.picture);
-                applyPermissions();
-                showToast(`歡迎回來，${payload.name}！已開通編輯權限。`);
-            } else {
-                showToast("登入成功！但你的帳號不在雲端試算表白名單中，改以唯讀模式瀏覽。");
-            }
+            const uid = generateUid(email);
+
+            currentUser = {
+                email: email,
+                name: payload.name,
+                picture: payload.picture,
+                uid: uid
+            };
+
+            isLoggedIn = true;
+            isGuestMode = false;
+
+            localStorage.setItem('tw_user_email', email);
+            localStorage.setItem('tw_user_name', payload.name);
+            localStorage.setItem('tw_user_picture', payload.picture);
+            localStorage.setItem('tw_user_uid', uid);
+
+            updateLandingAuthUI();
+            showToast(`歡迎，${payload.name}！`);
         }
 
-        function showUserProfileUI(name, picture) {
-            document.getElementById('g-signin-btn-wrapper').classList.add('hidden');
-            const profile = document.getElementById('user-profile');
-            profile.classList.remove('hidden');
-            document.getElementById('user-avatar').src = picture;
-            document.getElementById('user-name').textContent = name;
+        function updateLandingAuthUI() {
+            if (currentUser) {
+                document.getElementById('landing-g-signin-btn-wrapper').classList.add('hidden');
+                document.getElementById('landing-hero-gsignin').classList.add('hidden');
+                const profile = document.getElementById('landing-user-profile');
+                profile.classList.remove('hidden');
+                profile.style.display = 'flex';
+                document.getElementById('landing-user-avatar').src = currentUser.picture;
+                document.getElementById('landing-user-name').textContent = currentUser.name;
+
+                const heroUser = document.getElementById('landing-hero-user');
+                heroUser.classList.remove('hidden');
+                document.getElementById('landing-hero-email').textContent = '已使用 ' + currentUser.email + ' 登入';
+            } else {
+                document.getElementById('landing-g-signin-btn-wrapper').classList.remove('hidden');
+                document.getElementById('landing-hero-gsignin').classList.remove('hidden');
+                document.getElementById('landing-user-profile').classList.add('hidden');
+                document.getElementById('landing-user-profile').style.display = 'none';
+                document.getElementById('landing-hero-user').classList.add('hidden');
+            }
         }
 
         function handleLogout() {
             isLoggedIn = false;
-            localStorage.removeItem('itinerary_user_email');
-            localStorage.removeItem('user_profile_name');
-            localStorage.removeItem('user_profile_picture');
-            
+            currentUser = null;
+            localStorage.removeItem('tw_user_email');
+            localStorage.removeItem('tw_user_name');
+            localStorage.removeItem('tw_user_picture');
+            localStorage.removeItem('tw_user_uid');
             google.accounts.id.disableAutoSelect();
-            showToast("已成功登出管理權限");
-            setTimeout(() => window.location.reload(), 800);
+            showToast("已登出");
+            showLanding();
+            updateLandingAuthUI();
         }
 
+        // ============================================================
+        //  ENTER APP (from landing page)
+        // ============================================================
+        async function enterApp() {
+            if (!currentUser) return showToast("請先登入 Google 帳號");
+            showApp();
+
+            const baseUrl = window.location.origin + window.location.pathname;
+            const userUrl = baseUrl + '?user=' + currentUser.uid;
+            window.history.replaceState({}, '', userUrl);
+
+            document.getElementById('app-user-avatar').src = currentUser.picture;
+            document.getElementById('app-user-name').textContent = currentUser.name;
+            document.getElementById('btn-share').classList.remove('hidden');
+
+            await initApp();
+        }
+
+        // ============================================================
+        //  CLOUD SYNC
+        // ============================================================
         async function fetchFromCloud(action, data = null) {
             if (!GAS_API_URL || GAS_API_URL.includes("請將你部署好的")) {
                 console.warn("GAS_API_URL 未正確設定，切換為本地模擬模式。");
@@ -355,27 +588,33 @@
             }
         }
 
+        // ============================================================
+        //  APP INIT
+        // ============================================================
         async function initApp() {
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.get('guest') === '1') {
-                isGuestMode = true;
+            isGuestMode = urlParams.get('guest') === '1';
+
+            if (isGuestMode) {
                 document.getElementById('guest-badge').classList.remove('hidden');
-                document.getElementById('g-signin-btn-wrapper').classList.add('hidden');
             }
 
-            // 📥 從雲端把設定、行程跟「白名單」一起拉下來
             const cloudConfig = await fetchFromCloud("get");
             if (cloudConfig) {
                 globalConfig.tripCode = cloudConfig.tripCode || globalConfig.tripCode;
                 globalConfig.tripTitle = cloudConfig.tripTitle || globalConfig.tripTitle;
                 globalConfig.tripDate = cloudConfig.tripDate || globalConfig.tripDate;
-                
-                if (cloudConfig.allowedEmails) {
-                    allowedEmails = cloudConfig.allowedEmails; // 同步雲端白名單
-                }
-                
+                if (cloudConfig.allowedEmails) allowedEmails = cloudConfig.allowedEmails;
                 if (cloudConfig.itineraryData && cloudConfig.itineraryData.length > 0) {
                     itineraryData = cloudConfig.itineraryData;
+                }
+            }
+
+            // Per-user local data fallback
+            if (itineraryData.length === 0 && currentUser) {
+                const saved = localStorage.getItem('tw_data_' + currentUser.uid);
+                if (saved) {
+                    try { itineraryData = JSON.parse(saved); } catch(e) {}
                 }
             }
 
@@ -385,27 +624,21 @@
             }
 
             document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
+
             updateHeaderUI();
-
-            if (sessionStorage.getItem('trip_unlocked') === 'true') {
-                hideAuthOverlay();
-            } else {
-                document.getElementById('itinerary-auth-overlay').classList.remove('hidden');
-            }
-
-            // 檢查本地登入記憶狀態
-            const savedEmail = localStorage.getItem('itinerary_user_email');
-            if (savedEmail && allowedEmails.includes(savedEmail) && !isGuestMode) {
-                isLoggedIn = true;
-                showUserProfileUI(
-                    localStorage.getItem('user_profile_name') || savedEmail,
-                    localStorage.getItem('user_profile_picture') || ""
-                );
-            }
+            checkTripCodeAuth();
 
             renderTimeline();
             selectDay(0);
             applyPermissions();
+        }
+
+        function checkTripCodeAuth() {
+            if (sessionStorage.getItem('trip_unlocked') === 'true') {
+                document.getElementById('itinerary-auth-overlay').classList.add('hidden');
+            } else {
+                document.getElementById('itinerary-auth-overlay').classList.remove('hidden');
+            }
         }
 
         function updateHeaderUI() {
@@ -425,18 +658,39 @@
             if (result && result.status === "success") {
                 showToast("雲端行程同步完成！");
             } else {
-                showToast("同步失敗，已暫存於本地。");
+                if (currentUser) {
+                    localStorage.setItem('tw_data_' + currentUser.uid, JSON.stringify(itineraryData));
+                }
+                showToast("雲端同步失敗，已儲存於本地。");
             }
         }
 
+        // ============================================================
+        //  SHARE — unique URL per user
+        // ============================================================
+        function shareItinerary() {
+            if (!currentUser) return showToast("請先登入");
+            const baseUrl = window.location.origin + window.location.pathname;
+            const shareUrl = baseUrl + '?user=' + currentUser.uid + '&guest=1';
+            navigator.clipboard.writeText(shareUrl).then(() => {
+                showToast("已複製專屬分享網址！");
+            }).catch(() => {
+                prompt("請手動複製以下網址分享：", shareUrl);
+            });
+        }
+
+        // ============================================================
+        //  TRIP CODE / VERIFY
+        // ============================================================
         function verifyTripCode() {
             const inputCode = document.getElementById('input-trip-code').value.trim();
             const errorElement = document.getElementById('trip-code-error');
-            
             if (inputCode === globalConfig.tripCode) {
                 sessionStorage.setItem('trip_unlocked', 'true');
                 errorElement.classList.add('opacity-0');
-                hideAuthOverlay();
+                const overlay = document.getElementById('itinerary-auth-overlay');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => overlay.classList.add('hidden'), 500);
                 showToast("解鎖成功，歡迎查看行程！");
             } else {
                 errorElement.classList.remove('opacity-0');
@@ -446,12 +700,9 @@
             }
         }
 
-        function hideAuthOverlay() {
-            const overlay = document.getElementById('itinerary-auth-overlay');
-            overlay.classList.add('opacity-0', 'pointer-events-none', 'transition-all', 'duration-500');
-            setTimeout(() => overlay.classList.add('hidden'), 500);
-        }
-
+        // ============================================================
+        //  GLOBAL CONFIG
+        // ============================================================
         function openGlobalConfigModal() {
             if(!isLoggedIn) return;
             document.getElementById('config-trip-code').value = globalConfig.tripCode;
@@ -464,59 +715,48 @@
             const newCode = document.getElementById('config-trip-code').value.trim();
             const newTitle = document.getElementById('config-trip-title').value.trim();
             const newDate = document.getElementById('config-trip-date').value.trim();
-
             if(!newCode || !newTitle) return showToast("代碼與標題不能為空！");
-
             globalConfig.tripCode = newCode;
             globalConfig.tripTitle = newTitle;
             globalConfig.tripDate = newDate;
-
             updateHeaderUI();
             closeModal('modal-global-config');
             await syncToCloud();
         }
 
-        function shareItinerary() {
-            const shareUrl = `${window.location.origin}${window.location.pathname}?guest=1`;
-            navigator.clipboard.writeText(shareUrl).then(() => {
-                showToast("已複製訪客分享網址！");
-            }).catch(() => {
-                prompt("請手動複製以下網址分享：", shareUrl);
-            });
-        }
-
+        // ============================================================
+        //  PERMISSIONS
+        // ============================================================
         function applyPermissions() {
             const editElements = document.querySelectorAll('.edit-only');
             editElements.forEach(el => {
                 if (isLoggedIn && !isGuestMode) el.classList.remove('hidden');
                 else el.classList.add('hidden');
             });
-            
             if(isLoggedIn && !isGuestMode) {
                 document.getElementById('btn-global-config').classList.remove('hidden');
-                document.getElementById('btn-share').classList.remove('hidden');
             } else {
                 document.getElementById('btn-global-config').classList.add('hidden');
             }
         }
 
+        // ============================================================
+        //  TIMELINE / DAYS
+        // ============================================================
         function renderTimeline() {
             const container = document.getElementById('timeline-container');
             container.innerHTML = '';
-            
             itineraryData.forEach((day, index) => {
                 const dateObj = new Date(day.date);
                 const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
                 const shortDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
-                
                 const btn = document.createElement('button');
                 btn.className = `w-full text-left p-3 md:p-4 rounded-xl transition-all duration-200 border-2 mb-2 flex items-center gap-3 ${
-                    index === currentDayIndex 
-                    ? 'bg-sky-50 border-primary text-primary shadow-sm' 
+                    index === currentDayIndex
+                    ? 'bg-sky-50 border-primary text-primary shadow-sm'
                     : 'bg-white border-transparent text-slate-600 hover:bg-slate-50'
                 }`;
                 btn.onclick = () => selectDay(index);
-                
                 btn.innerHTML = `
                     <div class="bg-white/80 shrink-0 w-12 h-12 rounded-lg flex flex-col items-center justify-center border border-slate-100 shadow-sm">
                         <span class="text-xs font-bold text-slate-400">Day ${index + 1}</span>
@@ -534,30 +774,24 @@
         function selectDay(index) {
             currentDayIndex = index;
             renderTimeline();
-            
             const day = itineraryData[index];
             document.getElementById('current-day-title').textContent = `Day ${index + 1}: ${day.title}`;
-            
             const dateObj = new Date(day.date);
             const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
             document.getElementById('current-day-date').textContent = `${day.date} (星期${dayOfWeek})`;
-
             document.getElementById('info-hotel').textContent = day.hotel || '無安排';
             document.getElementById('info-food').textContent = day.food || '無特別安排';
             document.getElementById('info-notes').textContent = day.notes || '尚無備忘錄資訊...';
-
             renderActivities(day.activities);
         }
 
         function renderActivities(activities) {
             const container = document.getElementById('activities-container');
             container.innerHTML = '';
-            
             if(!activities || activities.length === 0) {
                 container.innerHTML = `<div class="text-slate-400 text-center py-8">尚無景點行程，請點擊新增。</div>`;
                 return;
             }
-
             activities.forEach((act, idx) => {
                 const actDiv = document.createElement('div');
                 actDiv.className = "relative flex items-start gap-4 md:gap-6 group cursor-pointer";
@@ -565,7 +799,6 @@
                     if(e.target.closest('button')) return;
                     showMapPreview(act);
                 };
-
                 actDiv.innerHTML = `
                     <div class="w-12 md:w-20 pt-1 text-right shrink-0">
                         <span class="text-sm font-black text-slate-700">${act.time}</span>
@@ -605,7 +838,6 @@
             day.hotel = document.getElementById('input-hotel').value;
             day.food = document.getElementById('input-food').value;
             day.notes = document.getElementById('input-notes').value;
-            
             selectDay(currentDayIndex);
             closeModal('modal-day-info');
             await syncToCloud();
@@ -615,7 +847,6 @@
             if(!isLoggedIn) return showToast("請先登入");
             editingActIndex = idx;
             document.getElementById('modal-activity-title').textContent = isEdit ? '編輯景點' : '新增景點';
-            
             if (isEdit && idx >= 0) {
                 const act = itineraryData[currentDayIndex].activities[idx];
                 document.getElementById('act-time').value = act.time;
@@ -647,14 +878,11 @@
             const icon = document.getElementById('act-icon').value;
             const title = document.getElementById('act-title').value.trim();
             const desc = document.getElementById('act-desc').value.trim();
-            
             if(!title) return showToast("標題不能為空");
             const newAct = { id: Date.now().toString(), time, icon, title, desc };
-
             if (!itineraryData[currentDayIndex].activities) itineraryData[currentDayIndex].activities = [];
             if (editingActIndex >= 0) itineraryData[currentDayIndex].activities[editingActIndex] = newAct;
             else itineraryData[currentDayIndex].activities.push(newAct);
-            
             itineraryData[currentDayIndex].activities.sort((a, b) => a.time.localeCompare(b.time));
             renderActivities(itineraryData[currentDayIndex].activities);
             closeModal('modal-activity');
@@ -668,11 +896,9 @@
             const content = document.getElementById('preview-content');
             panel.classList.remove('hidden');
             panel.classList.add('flex');
-            
             const searchKeyword = encodeURIComponent(act.title);
             const googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${searchKeyword}`;
             const amapUrl = `https://ditu.amap.com/search?query=${searchKeyword}`;
-
             content.innerHTML = `
                 <div class="w-full text-left">
                     <h3 class="text-xl font-bold text-slate-800 mb-2">${act.title}</h3>
@@ -689,22 +915,58 @@
             `;
         }
 
-        function showToast(message) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-            toast.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
-            }, 3000);
-        }
-
         function getFallbackDefaultData() {
             return [
                 { id: "d1", date: "2026-07-03", title: "啟程：高雄飛往成都", hotel: "成都市區精選飯店", food: "機上餐點 / 飯店宵夜", notes: "首日抵達時間較晚，專車接送至飯店後請盡早休息。", activities: [{ id: "d1_a1", time: "13:40", icon: "fa-plane", title: "高雄小港機場 T1 起飛", desc: "搭乘航班前往香港轉機。" }] }
             ];
         }
+
+        // ============================================================
+        //  ON LOAD — determine initial view
+        // ============================================================
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const userParam = urlParams.get('user');
+            const guestParam = urlParams.get('guest');
+
+            // Check stored login state
+            const savedEmail = localStorage.getItem('tw_user_email');
+            const savedName = localStorage.getItem('tw_user_name');
+            const savedPicture = localStorage.getItem('tw_user_picture');
+            const savedUid = localStorage.getItem('tw_user_uid');
+
+            if (savedEmail && savedName && savedUid) {
+                currentUser = { email: savedEmail, name: savedName, picture: savedPicture, uid: savedUid };
+                isLoggedIn = true;
+                updateLandingAuthUI();
+
+                // If URL has user param matching, go straight to app
+                if (userParam && userParam === savedUid && !guestParam) {
+                    enterApp();
+                    return;
+                }
+            }
+
+            // Guest mode from URL
+            if (guestParam === '1' && userParam) {
+                isGuestMode = true;
+                showApp();
+                document.getElementById('guest-badge').classList.remove('hidden');
+                document.getElementById('app-user-avatar').src = '';
+                document.getElementById('app-user-name').textContent = '訪客';
+                initApp();
+                return;
+            }
+
+            // If user param but not logged in, show landing (with guest login hint)
+            if (userParam && !currentUser) {
+                showLanding();
+                return;
+            }
+
+            showLanding();
+            updateLandingAuthUI();
+        };
     </script>
 </body>
 </html>
