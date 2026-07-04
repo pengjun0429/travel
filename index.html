@@ -730,10 +730,13 @@
                 return null;
             }
             try {
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 10000);
                 if (action === "get") {
                     const uid = data?.uid;
-                    if (!uid) return null;
-                    const res = await fetch(`${API_BASE}/api/trip?uid=${encodeURIComponent(uid)}`);
+                    if (!uid) { clearTimeout(timeout); return null; }
+                    const res = await fetch(`${API_BASE}/api/trip?uid=${encodeURIComponent(uid)}`, { signal: controller.signal });
+                    clearTimeout(timeout);
                     const json = await res.json();
                     if (json.empty) return null;
                     return json;
@@ -742,8 +745,10 @@
                     const res = await fetch(`${API_BASE}/api/trip`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(data)
+                        body: JSON.stringify(data),
+                        signal: controller.signal
                     });
+                    clearTimeout(timeout);
                     return await res.json();
                 }
                 return null;
@@ -810,10 +815,8 @@
 
         async function syncToCloud() {
             if (!currentUser) {
-                showToast("請先登入以同步至雲端");
                 return;
             }
-            showToast("正在同步最新行程至雲端...");
             const result = await fetchFromCloud("save", {
                 uid: currentUser ? currentUser.uid : null,
                 ownerEmail: ownerEmail,
