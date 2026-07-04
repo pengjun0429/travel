@@ -61,7 +61,7 @@
                     <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
-                <div id="landing-g_id_onload"
+                <div id="g_id_onload"
                      data-client_id="1006606665070-26sq5tv532t84jqa2onivk26fbisnhl4.apps.googleusercontent.com"
                      data-callback="handleGoogleSignInResponse"
                      data-auto_prompt="false"
@@ -624,8 +624,9 @@
             }
 
             // Per-user local data fallback
-            if (itineraryData.length === 0 && currentUser) {
-                const saved = localStorage.getItem('tw_data_' + currentUser.uid);
+            const targetUid = currentUser ? currentUser.uid : guestUserUid;
+            if (itineraryData.length === 0 && targetUid) {
+                const saved = localStorage.getItem('tw_data_' + targetUid);
                 if (saved) {
                     try { itineraryData = JSON.parse(saved); } catch(e) {}
                 }
@@ -963,6 +964,7 @@
             // Guest mode from URL
             if (guestParam === '1' && userParam) {
                 isGuestMode = true;
+                guestUserUid = userParam;
                 showApp();
                 document.getElementById('guest-badge').classList.remove('hidden');
                 document.getElementById('app-user-avatar').src = '';
