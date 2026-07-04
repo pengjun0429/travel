@@ -711,7 +711,10 @@
             const container = document.getElementById('trips-list');
             container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">載入中...</div>';
             try {
-                const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}`);
+                const res = await Promise.race([
+                    fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}`),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+                ]);
                 const data = await res.json();
                 const trips = data.trips || [];
                 document.getElementById('trip-count').textContent = trips.length;
@@ -744,7 +747,7 @@
                     </div>
                 `).join('');
             } catch (err) {
-                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12">載入失敗</div>';
+                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>載入失敗</p><button onclick="loadTrips()" class="mt-2 text-sm underline">重試</button></div>';
             }
         }
 
