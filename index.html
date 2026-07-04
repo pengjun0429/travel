@@ -258,7 +258,7 @@
             </aside>
 
             <section class="main-mobile flex-1 overflow-y-auto bg-slate-50 relative scroll-smooth" id="detail-section">
-                <div class="max-w-3xl mx-auto p-4 md:p-8 pb-32">
+                <div class="max-w-3xl mx-auto p-4 md:p-8 pb-24">
                     <div class="flex justify-between items-end mb-6">
                         <div>
                             <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
@@ -297,6 +297,15 @@
                     </div>
                 </div>
             </section>
+
+            <div id="fab-container" class="edit-only hidden fixed bottom-6 right-6 z-30 flex flex-col gap-3 md:hidden">
+                <button onclick="addNewDay()" class="w-12 h-12 bg-white hover:bg-slate-50 text-slate-700 rounded-full shadow-lg border border-slate-200 flex items-center justify-center transition">
+                    <i class="fa-solid fa-calendar-plus"></i>
+                </button>
+                <button onclick="openActivityModal()" class="w-14 h-14 bg-primary hover:bg-sky-600 text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center transition text-xl">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
+            </div>
 
             <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -787,6 +796,11 @@
             if (currentUser) {
                 document.getElementById('btn-share').classList.remove('hidden');
             }
+            const fab = document.getElementById('fab-container');
+            if (fab) {
+                if (allowed) fab.classList.remove('hidden');
+                else fab.classList.add('hidden');
+            }
         }
 
         function openCollabModal() {
@@ -1005,6 +1019,30 @@
             renderActivities(itineraryData[currentDayIndex].activities);
             closeModal('modal-activity');
             await syncToCloud();
+        }
+
+        function addNewDay() {
+            if (!canEdit()) return showToast("請先登入");
+            const lastDay = itineraryData[itineraryData.length - 1];
+            let nextDate = new Date();
+            if (lastDay && lastDay.date) {
+                nextDate = new Date(lastDay.date);
+                nextDate.setDate(nextDate.getDate() + 1);
+            }
+            const newDay = {
+                id: 'd' + (itineraryData.length + 1),
+                date: nextDate.toISOString().slice(0, 10),
+                title: '第' + (itineraryData.length + 1) + '天',
+                hotel: '',
+                food: '',
+                notes: '',
+                activities: []
+            };
+            itineraryData.push(newDay);
+            renderTimeline();
+            selectDay(itineraryData.length - 1);
+            syncToCloud();
+            showToast('已新增 Day ' + itineraryData.length);
         }
 
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
