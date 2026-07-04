@@ -58,12 +58,11 @@
         @media (max-width: 767px) {
             .modal-full { border-radius: 0 !important; max-width: 100% !important; margin: 0 !important; height: 100dvh; display: flex; flex-direction: column; }
             .modal-full > div { max-width: 100% !important; height: 100dvh; border-radius: 0; }
-            .main-mobile { height: calc(100dvh - 112px) !important; }
             body { overflow: hidden; }
         }
     </style>
 </head>
-<body class="bg-slate-100 text-slate-800 font-sans m-0">
+<body class="bg-slate-100 text-slate-800 font-sans m-0 h-screen flex flex-col">
 
     <!-- Google Sign-In global config (must be at body top level) -->
     <div id="g_id_onload"
@@ -210,7 +209,7 @@
     </div>
 
     <!-- ========== APP VIEW (hidden initially) ========== -->
-    <div id="app-view" class="view-hidden">
+    <div id="app-view" class="view-hidden h-full flex flex-col">
 
         <div id="loading-overlay" class="fixed inset-0 bg-slate-900/80 flex flex-col items-center justify-center z-50 transition-opacity duration-300">
             <div class="animate-spin text-white text-4xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
