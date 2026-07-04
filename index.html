@@ -122,7 +122,7 @@
                 </p>
                 <div class="animate-fade-in-up-delay-2 flex flex-col items-center gap-4">
                     <button id="btn-start-hero" onclick="handleStartClick()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50 flex items-center gap-2">
-                        <i class="fa-solid fa-rocket"></i> 開始規劃旅程
+                        <i class="fa-solid fa-suitcase-rolling"></i> 開始規劃旅程
                     </button>
                     <div id="landing-hero-user" class="hidden flex flex-col items-center gap-3">
                         <p id="landing-hero-email" class="text-slate-400 text-sm"></p>
@@ -691,7 +691,11 @@
                 showToast('請先用 Google 或 Line 登入');
                 return;
             }
-            showTrips();
+            document.getElementById('landing-view').classList.add('view-hidden');
+            document.getElementById('trips-view').classList.remove('view-hidden');
+            document.getElementById('trips-user-avatar').src = currentUser.picture || '';
+            document.getElementById('trips-user-name').textContent = currentUser.name || '';
+            loadTrips();
         }
 
         // ============================================================
