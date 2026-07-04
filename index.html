@@ -1405,11 +1405,12 @@
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
 
-            // Clean old ?user= param → redirect to clean URL
+            // Clean old ?user= param silently
             if (urlParams.get('user')) {
-                window.history.replaceState({}, '', window.location.pathname);
-                window.location.reload();
-                return;
+                urlParams.delete('user');
+                urlParams.delete('guest');
+                const clean = urlParams.toString() ? '?' + urlParams.toString() : '';
+                window.history.replaceState({}, '', window.location.pathname + clean);
             }
 
             // Line OAuth callback
@@ -1432,34 +1433,7 @@
                 updateLandingAuthUI();
             }
 
-            const tripParam = urlParams.get('trip');
-            const guestParam = urlParams.get('guest');
-
-            // Guest mode: ?trip=xxx&guest=1
-            if (guestParam === '1' && tripParam) {
-                isGuestMode = true;
-                currentTripId = tripParam;
-                showApp();
-                document.getElementById('guest-badge').classList.remove('hidden');
-                document.getElementById('app-user-avatar').src = '';
-                document.getElementById('app-user-name').textContent = '訪客';
-                document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
-                initApp();
-                return;
-            }
-
-            // Logged in with ?trip=xxx → enter that trip
-            if (tripParam && currentUser) {
-                currentTripId = tripParam;
-                showApp();
-                document.getElementById('app-user-avatar').src = currentUser.picture;
-                document.getElementById('app-user-name').textContent = currentUser.name;
-                document.getElementById('btn-share').classList.remove('hidden');
-                initApp();
-                return;
-            }
-
-            // Logged in, no trip param → show landing page
+            // Always show landing page
             showLanding();
         };
     </script>
