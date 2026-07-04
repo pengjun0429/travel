@@ -118,6 +118,13 @@
                             <i class="fa-solid fa-map mr-2"></i> 進入我的行程
                         </button>
                     </div>
+                    <div class="flex items-center gap-3 text-sm text-slate-500 mt-2">
+                        <button onclick="lineLogin()" class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl transition shadow-sm">
+                            <i class="fa-brands fa-line text-lg"></i> Line 登入
+                        </button>
+                        <span class="text-slate-600">或</span>
+                        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
+                    </div>
                 </div>
                 <p class="text-slate-500 text-sm mt-6 animate-fade-in-up-delay-3">
                     <i class="fa-solid fa-shield-halved mr-1"></i> 使用 Google 帳號快速登入
@@ -494,6 +501,7 @@
         // ============================================================
         //  CONFIG
         // ============================================================
+        const LINE_CHANNEL_ID = "2010603361"; // Line Developers 的 Channel ID
         const API_BASE = "https://travel-api.pengjun0429.workers.dev";
 
         // ============================================================
@@ -621,6 +629,51 @@
 
         function handleStartClick() {
             enterApp();
+        }
+
+        function lineLogin() {
+            const state = Math.random().toString(36).substring(2);
+            localStorage.setItem('tw_line_state', state);
+            const params = new URLSearchParams({
+                response_type: 'code',
+                client_id: LINE_CHANNEL_ID,
+                redirect_uri: API_BASE + '/auth/line/callback',
+                state: state,
+                scope: 'openid profile',
+                nonce: Math.random().toString(36).substring(2)
+            });
+            window.location.href = 'https://access.line.me/oauth2/v2.1/authorize?' + params.toString();
+        }
+
+        function handleLineResponse(params) {
+            const lineId = params.get('line_id');
+            const lineName = params.get('line_name');
+            const linePicture = params.get('line_picture');
+            const lineEmail = params.get('line_email') || lineId + '@line.me';
+
+            if (!lineId) return;
+
+            const uid = generateUid(lineEmail);
+            currentUser = {
+                email: lineEmail,
+                name: lineName || lineId,
+                picture: linePicture || '',
+                uid: uid
+            };
+            isLoggedIn = true;
+            isGuestMode = false;
+
+            localStorage.setItem('tw_user_email', lineEmail);
+            localStorage.setItem('tw_user_name', currentUser.name);
+            localStorage.setItem('tw_user_picture', currentUser.picture);
+            localStorage.setItem('tw_user_uid', uid);
+            localStorage.setItem('tw_auth_method', 'line');
+
+            updateLandingAuthUI();
+            showToast(`歡迎，${currentUser.name}！`);
+
+            // Clean URL
+            window.history.replaceState({}, '', window.location.pathname);
         }
 
         function handleLogout() {
@@ -1149,6 +1202,19 @@
         // ============================================================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
+
+            // Check for Line OAuth callback
+            const lineError = urlParams.get('line_error');
+            const lineId = urlParams.get('line_id');
+            if (lineId || lineError) {
+                if (lineId) {
+                    handleLineResponse(urlParams);
+                } else if (lineError) {
+                    showToast('Line 登入失敗：' + lineError);
+                }
+                window.history.replaceState({}, '', window.location.pathname + window.location.hash);
+            }
+
             const userParam = urlParams.get('user');
             const guestParam = urlParams.get('guest');
 
