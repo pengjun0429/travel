@@ -517,11 +517,7 @@
         }
 
         function handleStartClick() {
-            if (currentUser) {
-                enterApp();
-            } else {
-                google.accounts.id.prompt();
-            }
+            enterApp();
         }
 
         function handleLogout() {
@@ -541,16 +537,17 @@
         //  ENTER APP (from landing page)
         // ============================================================
         async function enterApp() {
-            if (!currentUser) return showToast("請先登入 Google 帳號");
             showApp();
 
-            const baseUrl = window.location.origin + window.location.pathname;
-            const userUrl = baseUrl + '?user=' + currentUser.uid;
-            window.history.replaceState({}, '', userUrl);
+            if (currentUser) {
+                const baseUrl = window.location.origin + window.location.pathname;
+                const userUrl = baseUrl + '?user=' + currentUser.uid;
+                window.history.replaceState({}, '', userUrl);
 
-            document.getElementById('app-user-avatar').src = currentUser.picture;
-            document.getElementById('app-user-name').textContent = currentUser.name;
-            document.getElementById('btn-share').classList.remove('hidden');
+                document.getElementById('app-user-avatar').src = currentUser.picture;
+                document.getElementById('app-user-name').textContent = currentUser.name;
+                document.getElementById('btn-share').classList.remove('hidden');
+            }
 
             await initApp();
         }
@@ -637,6 +634,10 @@
         }
 
         async function syncToCloud() {
+            if (!currentUser) {
+                showToast("請先登入以同步至雲端");
+                return;
+            }
             showToast("正在同步最新行程至雲端...");
             const result = await fetchFromCloud("save", {
                 uid: currentUser ? currentUser.uid : null,
