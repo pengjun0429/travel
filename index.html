@@ -195,22 +195,7 @@
 
         <div id="loading-overlay" class="fixed inset-0 bg-slate-900/80 flex flex-col items-center justify-center z-50 transition-opacity duration-300">
             <div class="animate-spin text-white text-4xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
-            <p class="text-white text-sm font-medium">正在從雲端同步最新行程與後端白名單...</p>
-        </div>
-
-        <div id="itinerary-auth-overlay" class="fixed inset-0 bg-slate-900 flex items-center justify-center z-40 p-4 hidden">
-            <div class="bg-white rounded-2xl w-full max-w-md p-6 md:p-8 shadow-2xl border border-slate-100 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-sky-50 text-primary mb-4">
-                    <i class="fa-solid fa-lock text-2xl"></i>
-                </div>
-                <h2 class="text-xl font-bold text-dark mb-2">請輸入行程代碼</h2>
-                <p class="text-sm text-slate-500 mb-6">此行程已受密碼保護，請輸入代碼以解鎖內容。</p>
-                <div class="space-y-4">
-                    <input type="password" id="input-trip-code" placeholder="請輸入行程代碼" class="w-full bg-white text-slate-900 border-2 border-slate-200 rounded-xl px-4 py-3 text-center font-medium tracking-widest focus:ring-2 focus:ring-primary focus:border-primary outline-none transition" onkeyup="if(event.key==='Enter') verifyTripCode()">
-                    <button onclick="verifyTripCode()" class="w-full bg-primary hover:bg-sky-600 text-white font-medium py-3 rounded-xl transition shadow-sm">確認解鎖 <i class="fa-solid fa-arrow-right ml-1"></i></button>
-                </div>
-                <p id="trip-code-error" class="text-red-500 text-xs font-medium mt-3 opacity-0 transition-opacity">代碼錯誤，請重新輸入！</p>
-            </div>
+            <p class="text-white text-sm font-medium">正在從雲端同步最新行程...</p>
         </div>
 
         <header class="bg-white shadow-sm z-10 px-6 py-4 flex justify-between items-center shrink-0">
@@ -313,14 +298,10 @@
         <div id="modal-global-config" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
             <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900">變更旅遊主設定</h3>
+                    <h3 class="font-bold text-lg text-slate-900">行程設定</h3>
                     <button onclick="closeModal('modal-global-config')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
-                    <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">行程密碼解鎖代碼 (雲端即時同步)</label>
-                        <input type="text" id="config-trip-code" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 font-bold text-sky-600 focus:ring-2 focus:ring-primary outline-none">
-                    </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">旅遊行程標題名稱</label>
                         <input type="text" id="config-trip-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
@@ -332,7 +313,7 @@
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
                     <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存主設定至雲端</button>
+                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存設定至雲端</button>
                 </div>
             </div>
         </div>
@@ -423,13 +404,11 @@
         let guestUserUid = null;         // uid of the trip owner being viewed as guest
 
         let globalConfig = {
-            tripCode: "九寨溝2026",
-            tripTitle: "帶爸媽去九寨溝 14天之旅",
-            tripDate: "2026.07.03 - 2026.07.16"
+            tripTitle: "我的旅遊行程",
+            tripDate: ""
         };
         let itineraryData = [];
         let currentDayIndex = 0;
-        let allowedEmails = [];
 
         // ============================================================
         //  UTILS
@@ -609,12 +588,10 @@
                 document.getElementById('guest-badge').classList.remove('hidden');
             }
 
-            const cloudConfig = await fetchFromCloud("get");
+            const cloudConfig = await fetchFromCloud("get", { uid: targetUid });
             if (cloudConfig) {
-                globalConfig.tripCode = cloudConfig.tripCode || globalConfig.tripCode;
                 globalConfig.tripTitle = cloudConfig.tripTitle || globalConfig.tripTitle;
                 globalConfig.tripDate = cloudConfig.tripDate || globalConfig.tripDate;
-                if (cloudConfig.allowedEmails) allowedEmails = cloudConfig.allowedEmails;
                 if (cloudConfig.itineraryData && cloudConfig.itineraryData.length > 0) {
                     itineraryData = cloudConfig.itineraryData;
                 }
@@ -637,19 +614,10 @@
             document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
 
             updateHeaderUI();
-            checkTripCodeAuth();
 
             renderTimeline();
             selectDay(0);
             applyPermissions();
-        }
-
-        function checkTripCodeAuth() {
-            if (sessionStorage.getItem('trip_unlocked') === 'true') {
-                document.getElementById('itinerary-auth-overlay').classList.add('hidden');
-            } else {
-                document.getElementById('itinerary-auth-overlay').classList.remove('hidden');
-            }
         }
 
         function updateHeaderUI() {
@@ -661,7 +629,7 @@
         async function syncToCloud() {
             showToast("正在同步最新行程至雲端...");
             const result = await fetchFromCloud("save", {
-                tripCode: globalConfig.tripCode,
+                uid: currentUser ? currentUser.uid : null,
                 tripTitle: globalConfig.tripTitle,
                 tripDate: globalConfig.tripDate,
                 itineraryData: itineraryData
@@ -691,43 +659,19 @@
         }
 
         // ============================================================
-        //  TRIP CODE / VERIFY
-        // ============================================================
-        function verifyTripCode() {
-            const inputCode = document.getElementById('input-trip-code').value.trim();
-            const errorElement = document.getElementById('trip-code-error');
-            if (inputCode === globalConfig.tripCode) {
-                sessionStorage.setItem('trip_unlocked', 'true');
-                errorElement.classList.add('opacity-0');
-                const overlay = document.getElementById('itinerary-auth-overlay');
-                overlay.classList.add('opacity-0', 'pointer-events-none');
-                setTimeout(() => overlay.classList.add('hidden'), 500);
-                showToast("解鎖成功，歡迎查看行程！");
-            } else {
-                errorElement.classList.remove('opacity-0');
-                const overlayBox = document.getElementById('itinerary-auth-overlay').firstElementChild;
-                overlayBox.classList.add('animate-bounce');
-                setTimeout(() => overlayBox.classList.remove('animate-bounce'), 1000);
-            }
-        }
-
-        // ============================================================
         //  GLOBAL CONFIG
         // ============================================================
         function openGlobalConfigModal() {
             if(!isLoggedIn) return;
-            document.getElementById('config-trip-code').value = globalConfig.tripCode;
             document.getElementById('config-trip-title').value = globalConfig.tripTitle;
             document.getElementById('config-trip-date').value = globalConfig.tripDate;
             document.getElementById('modal-global-config').classList.remove('hidden');
         }
 
         async function saveGlobalConfig() {
-            const newCode = document.getElementById('config-trip-code').value.trim();
             const newTitle = document.getElementById('config-trip-title').value.trim();
             const newDate = document.getElementById('config-trip-date').value.trim();
-            if(!newCode || !newTitle) return showToast("代碼與標題不能為空！");
-            globalConfig.tripCode = newCode;
+            if(!newTitle) return showToast("標題不能為空！");
             globalConfig.tripTitle = newTitle;
             globalConfig.tripDate = newDate;
             updateHeaderUI();
@@ -928,7 +872,8 @@
 
         function getFallbackDefaultData() {
             return [
-                { id: "d1", date: "2026-07-03", title: "啟程：高雄飛往成都", hotel: "成都市區精選飯店", food: "機上餐點 / 飯店宵夜", notes: "首日抵達時間較晚，專車接送至飯店後請盡早休息。", activities: [{ id: "d1_a1", time: "13:40", icon: "fa-plane", title: "高雄小港機場 T1 起飛", desc: "搭乘航班前往香港轉機。" }] }
+                { id: "d1", date: new Date().toISOString().slice(0,10), title: "第一天", hotel: "", food: "", notes: "", activities: [] },
+                { id: "d2", date: new Date(Date.now()+86400000).toISOString().slice(0,10), title: "第二天", hotel: "", food: "", notes: "", activities: [] }
             ];
         }
 
