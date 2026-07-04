@@ -219,6 +219,9 @@
                 <button id="btn-share" class="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg transition" onclick="shareItinerary()">
                     <i class="fa-solid fa-share-nodes"></i> 分享行程網址
                 </button>
+                <button id="btn-collab" class="hidden md:flex items-center gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-4 py-2 rounded-lg transition" onclick="openCollabModal()">
+                    <i class="fa-solid fa-users"></i> 共同編輯
+                </button>
                 <div id="auth-section" class="flex items-center gap-3">
                     <div id="app-user-profile" class="flex items-center gap-3">
                         <img id="app-user-avatar" class="w-8 h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
@@ -295,6 +298,38 @@
         <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-50"></div>
 
         <!-- Modals -->
+        <div id="modal-collab" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
+            <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+                <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>共同編輯管理</h3>
+                    <button onclick="closeModal('modal-collab')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+                </div>
+                <div class="p-6 space-y-4">
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">行程擁有者</label>
+                        <p id="collab-owner" class="text-slate-500 text-sm">-</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">新增共同編輯者（Google Email）</label>
+                        <div class="flex gap-2">
+                            <input type="email" id="input-collab-email" placeholder="example@gmail.com" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
+                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">新增</button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">共同編輯者清單</label>
+                        <div id="collab-list" class="space-y-2">
+                            <p class="text-slate-400 text-sm">尚無共同編輯者</p>
+                        </div>
+                    </div>
+                    <p class="text-xs text-slate-400">共同編輯者登入後即可編輯此行程</p>
+                </div>
+                <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
+                    <button onclick="closeModal('modal-collab')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm">關閉</button>
+                </div>
+            </div>
+        </div>
+
         <div id="modal-global-config" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm">
             <div class="bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
@@ -413,6 +448,8 @@
         };
         let itineraryData = [];
         let currentDayIndex = 0;
+        let ownerEmail = '';
+        let collaborators = [];
 
         // ============================================================
         //  UTILS
@@ -604,6 +641,8 @@
             if (cloudConfig) {
                 globalConfig.tripTitle = cloudConfig.tripTitle || globalConfig.tripTitle;
                 globalConfig.tripDate = cloudConfig.tripDate || globalConfig.tripDate;
+                ownerEmail = cloudConfig.ownerEmail || '';
+                collaborators = cloudConfig.collaborators || [];
                 if (cloudConfig.itineraryData && cloudConfig.itineraryData.length > 0) {
                     itineraryData = cloudConfig.itineraryData;
                 }
@@ -619,6 +658,7 @@
 
             if (itineraryData.length === 0) {
                 itineraryData = getFallbackDefaultData();
+                if (currentUser && !ownerEmail) ownerEmail = currentUser.email;
                 await syncToCloud();
             }
 
@@ -645,9 +685,11 @@
             showToast("正在同步最新行程至雲端...");
             const result = await fetchFromCloud("save", {
                 uid: currentUser ? currentUser.uid : null,
+                ownerEmail: ownerEmail,
                 tripTitle: globalConfig.tripTitle,
                 tripDate: globalConfig.tripDate,
-                itineraryData: itineraryData
+                itineraryData: itineraryData,
+                collaborators: collaborators
             });
             if (result && result.status === "success") {
                 showToast("雲端行程同步完成！");
@@ -677,7 +719,7 @@
         //  GLOBAL CONFIG
         // ============================================================
         function openGlobalConfigModal() {
-            if(!isLoggedIn) return;
+            if(!canEdit()) return;
             document.getElementById('config-trip-title').value = globalConfig.tripTitle;
             document.getElementById('config-trip-date').value = globalConfig.tripDate;
             document.getElementById('modal-global-config').classList.remove('hidden');
@@ -697,17 +739,99 @@
         // ============================================================
         //  PERMISSIONS
         // ============================================================
+        function canEdit() {
+            if (!currentUser) return false;
+            if (isGuestMode) return false;
+            if (ownerEmail && currentUser.email === ownerEmail) return true;
+            if (collaborators.includes(currentUser.email)) return true;
+            return false;
+        }
+
+        function isOwner() {
+            return currentUser && ownerEmail && currentUser.email === ownerEmail;
+        }
+
         function applyPermissions() {
             const editElements = document.querySelectorAll('.edit-only');
+            const allowed = canEdit();
             editElements.forEach(el => {
-                if (isLoggedIn && !isGuestMode) el.classList.remove('hidden');
+                if (allowed) el.classList.remove('hidden');
                 else el.classList.add('hidden');
             });
-            if(isLoggedIn && !isGuestMode) {
+            if(allowed) {
                 document.getElementById('btn-global-config').classList.remove('hidden');
+                document.getElementById('btn-collab').classList.remove('hidden');
             } else {
                 document.getElementById('btn-global-config').classList.add('hidden');
+                document.getElementById('btn-collab').classList.add('hidden');
             }
+        }
+
+        function openCollabModal() {
+            if (!currentUser) return showToast("請先登入");
+            document.getElementById('collab-owner').textContent = ownerEmail || currentUser.email;
+            renderCollabList();
+            document.getElementById('modal-collab').classList.remove('hidden');
+        }
+
+        function renderCollabList() {
+            const container = document.getElementById('collab-list');
+            if (collaborators.length === 0) {
+                container.innerHTML = '<p class="text-slate-400 text-sm">尚無共同編輯者</p>';
+                return;
+            }
+            container.innerHTML = collaborators.map(email => `
+                <div class="flex items-center justify-between bg-slate-50 px-3 py-2 rounded-lg">
+                    <span class="text-sm text-slate-700"><i class="fa-solid fa-user mr-2 text-slate-400"></i>${email}</span>
+                    ${isOwner() ? `<button onclick="removeCollaborator('${email}')" class="text-red-400 hover:text-red-600 text-sm"><i class="fa-solid fa-trash"></i></button>` : ''}
+                </div>
+            `).join('');
+        }
+
+        async function addCollaborator() {
+            const input = document.getElementById('input-collab-email');
+            const email = input.value.trim().toLowerCase();
+            if (!email || !email.includes('@')) return showToast("請輸入有效的 Email");
+            if (!currentUser) return showToast("請先登入");
+            if (!isOwner()) return showToast("僅擁有者可管理共同編輯者");
+
+            if (!ownerEmail) {
+                ownerEmail = currentUser.email;
+            }
+
+            collaborators.push(email);
+            input.value = '';
+
+            await fetchFromCloud("save", {
+                uid: currentUser.uid,
+                ownerEmail: ownerEmail,
+                tripTitle: globalConfig.tripTitle,
+                tripDate: globalConfig.tripDate,
+                itineraryData: itineraryData,
+                collaborators: collaborators
+            });
+
+            renderCollabList();
+            showToast(`已邀請 ${email} 共同編輯`);
+        }
+
+        async function removeCollaborator(email) {
+            if (!isOwner()) return;
+            if (!confirm(`確定要移除 ${email} 的編輯權限？`)) return;
+
+            collaborators = collaborators.filter(e => e !== email);
+
+            await fetchFromCloud("save", {
+                uid: currentUser.uid,
+                ownerEmail: ownerEmail,
+                tripTitle: globalConfig.tripTitle,
+                tripDate: globalConfig.tripDate,
+                itineraryData: itineraryData,
+                collaborators: collaborators
+            });
+
+            renderCollabList();
+            showToast(`已移除 ${email}`);
         }
 
         // ============================================================
@@ -795,7 +919,7 @@
         let editingActIndex = -1;
 
         function openDayInfoModal() {
-            if(!isLoggedIn) return showToast("請先登入");
+            if(!canEdit()) return showToast("請先登入以取得編輯權限");
             const day = itineraryData[currentDayIndex];
             document.getElementById('input-date').value = day.date || '';
             document.getElementById('input-hotel').value = day.hotel || '';
@@ -816,7 +940,7 @@
         }
 
         function openActivityModal(isEdit = false, idx = -1) {
-            if(!isLoggedIn) return showToast("請先登入");
+            if(!canEdit()) return showToast("請先登入以取得編輯權限");
             editingActIndex = idx;
             document.getElementById('modal-activity-title').textContent = isEdit ? '編輯景點' : '新增景點';
             if (isEdit && idx >= 0) {
@@ -837,7 +961,7 @@
         function editActivity(idx) { openActivityModal(true, idx); }
 
         async function deleteActivity(idx) {
-            if(!isLoggedIn) return;
+            if(!canEdit()) return;
             if(confirm('確定要刪除這個行程嗎？')) {
                 itineraryData[currentDayIndex].activities.splice(idx, 1);
                 renderActivities(itineraryData[currentDayIndex].activities);
