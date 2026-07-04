@@ -55,17 +55,28 @@ async function handleListTrips(request, env, corsHeaders) {
     const email = url.searchParams.get('email');
     if (!uid) return json(corsHeaders, { error: 'Missing uid' }, 400);
 
-    // Owned trips
-    const owned = await env.DB.prepare('SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, created_at FROM trips WHERE owner_uid = ? ORDER BY created_at DESC').bind(uid).all();
+    // Owned trips (by uid or email match)
+    const ownedByUid = await env.DB.prepare('SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, created_at FROM trips WHERE owner_uid = ? ORDER BY created_at DESC').bind(uid).all();
+    let ownedByEmail = { results: [] };
+    if (email) {
+        ownedByEmail = await env.DB.prepare('SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, created_at FROM trips WHERE owner_email = ? AND owner_uid != ? ORDER BY created_at DESC').bind(email, uid).all();
+    }
+    const owned = [...(ownedByUid.results || []), ...(ownedByEmail.results || [])];
+    const seenOwned = new Set();
+    const ownedUnique = owned.filter(t => { const k = t.trip_id; if (seenOwned.has(k)) return false; seenOwned.add(k); return true; });
 
-    // Shared trips (where user's email is in collaborators JSON array)
+    // Shared trips (by email or uid match)
     let shared = { results: [] };
     if (email) {
-        shared = await env.DB.prepare("SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, collaborators, created_at FROM trips WHERE collaborators LIKE ? AND owner_uid != ? ORDER BY created_at DESC").bind(`%${email}%`, uid).all();
+        const byEmail = await env.DB.prepare("SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, collaborators, created_at FROM trips WHERE collaborators LIKE ? AND owner_uid != ? AND owner_email != ? ORDER BY created_at DESC").bind(`%${email}%`, uid, email).all();
+        const byUid = await env.DB.prepare("SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, collaborators, created_at FROM trips WHERE owner_uid = ? AND owner_email != ? ORDER BY created_at DESC").bind(uid, email).all();
+        const combined = [...(byEmail.results || []), ...(byUid.results || [])];
+        const seenShared = new Set();
+        shared.results = combined.filter(t => { const k = t.trip_id; if (seenShared.has(k) || seenOwned.has(k)) return false; seenShared.add(k); return true; });
     }
 
     return json(corsHeaders, {
-        owned: owned.results || [],
+        owned: ownedUnique,
         shared: (shared.results || []).map(t => ({ ...t, collaborators: undefined }))
     });
 }
