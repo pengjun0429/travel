@@ -66,7 +66,7 @@
 
         #landing-view { transition: opacity 0.5s ease; }
         #app-view { transition: opacity 0.5s ease; }
-        .view-hidden { display: none; }
+        .view-hidden { display: none !important; }
         #ios-tutorial { transition: opacity 0.4s ease, transform 0.4s ease; }
         @media (max-width: 767px) {
             .modal-full { border-radius: 0 !important; max-width: 100% !important; margin: 0 !important; height: 100dvh; display: flex; flex-direction: column; }
@@ -222,7 +222,7 @@
     </div>
 
     <!-- ========== TRIPS VIEW ========== -->
-    <div id="trips-view" class="view-hidden h-full flex flex-col bg-slate-50">
+    <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
@@ -254,11 +254,6 @@
 
     <!-- ========== APP VIEW (hidden initially) ========== -->
     <div id="app-view" class="view-hidden h-full flex flex-col">
-
-        <div id="loading-overlay" class="fixed inset-0 bg-slate-900/80 flex flex-col items-center justify-center z-50 transition-opacity duration-300">
-            <div class="animate-spin text-white text-4xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
-            <p class="text-white text-sm font-medium">正在從雲端同步最新行程...</p>
-        </div>
 
         <header class="bg-white shadow-sm z-10 px-2 md:px-6 py-2 md:py-4 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-1.5 md:gap-3 min-w-0">
@@ -688,7 +683,7 @@
 
         function handleStartClick() {
             document.getElementById('landing-view').classList.add('view-hidden');
-            document.getElementById('trips-view').classList.remove('view-hidden');
+            document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未登入';
             loadTrips();
@@ -700,7 +695,7 @@
         function showTrips() {
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('app-view').classList.add('view-hidden');
-            document.getElementById('trips-view').classList.remove('view-hidden');
+            document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
             loadTrips();
@@ -712,50 +707,63 @@
             container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">載入中...</div>';
             try {
                 const res = await Promise.race([
-                    fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}`),
+                    fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`),
                     new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
                 ]);
                 const data = await res.json();
-                const trips = data.trips || [];
-                document.getElementById('trip-count').textContent = trips.length;
-                if (trips.length === 0) {
-                    container.innerHTML = `
-                        <div class="col-span-full text-center py-16">
-                            <i class="fa-solid fa-suitcase-rolling text-5xl text-slate-300 mb-4"></i>
-                            <p class="text-slate-500 mb-4">還沒有行程，建立你的第一個旅程吧！</p>
-                            <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-6 py-3 rounded-xl font-medium transition shadow-sm">
-                                <i class="fa-solid fa-plus mr-2"></i>新增第一個行程
-                            </button>
-                        </div>`;
-                    return;
+                const owned = data.owned || [];
+                const shared = data.shared || [];
+                document.getElementById('trip-count').textContent = owned.length;
+
+                let html = '';
+
+                // My trips
+                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">我的行程</h3></div>';
+                if (owned.length === 0) {
+                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有行程</p></div>';
+                } else {
+                    html += owned.map(trip => tripCard(trip, false)).join('');
                 }
-                container.innerHTML = trips.map(trip => `
-                    <div class="bg-white rounded-2xl border border-slate-100 hover:shadow-lg transition cursor-pointer group relative" onclick="selectTrip('${trip.trip_id}')">
-                        <div class="p-5">
-                            <div class="flex justify-between items-start mb-3">
-                                <div class="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center">
-                                    <i class="fa-solid fa-suitcase-rolling"></i>
-                                </div>
-                                <button onclick="event.stopPropagation(); deleteTrip('${trip.trip_id}')" class="text-slate-300 hover:text-red-500 transition p-1 opacity-0 group-hover:opacity-100" title="刪除">
-                                    <i class="fa-solid fa-trash text-sm"></i>
-                                </button>
-                            </div>
-                            <h3 class="font-bold text-dark text-lg mb-1 truncate">${trip.trip_title}</h3>
-                            <p class="text-sm text-slate-500">${trip.trip_date || '未設定日期'}</p>
-                            <p class="text-xs text-slate-400 mt-2">建立於 ${trip.created_at ? new Date(trip.created_at).toLocaleDateString('zh-TW') : '-'}</p>
-                        </div>
-                    </div>
-                `).join('');
+
+                // Shared trips
+                if (shared.length > 0) {
+                    html += '<div class="col-span-full mt-6 pt-4 border-t border-slate-200"><h3 class="text-lg font-bold text-dark mb-3"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>共用給我的</h3></div>';
+                    html += shared.map(trip => tripCard(trip, true)).join('');
+                }
+
+                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有行程</p></div>';
             } catch (err) {
                 container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>載入失敗</p><button onclick="loadTrips()" class="mt-2 text-sm underline">重試</button></div>';
             }
         }
 
+        function tripCard(trip, isShared) {
+            return `
+                <div class="bg-white rounded-2xl border ${isShared ? 'border-emerald-200 bg-emerald-50/30' : 'border-slate-100'} hover:shadow-lg transition cursor-pointer group relative" onclick="selectTrip('${trip.trip_id}')">
+                    <div class="p-5">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="w-10 h-10 rounded-xl ${isShared ? 'bg-emerald-100 text-emerald-500' : 'bg-primary/10 text-primary'} flex items-center justify-center">
+                                <i class="fa-solid ${isShared ? 'fa-users' : 'fa-suitcase-rolling'}"></i>
+                            </div>
+                            ${!isShared ? `<button onclick="event.stopPropagation(); deleteTrip('${trip.trip_id}')" class="text-slate-300 hover:text-red-500 transition p-1 opacity-0 group-hover:opacity-100" title="刪除"><i class="fa-solid fa-trash text-sm"></i></button>` : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full font-medium">共用</span>'}
+                        </div>
+                        <h3 class="font-bold text-dark text-lg mb-1 truncate">${trip.trip_title}</h3>
+                        <p class="text-sm text-slate-500">${trip.trip_date || '未設定日期'}</p>
+                        <p class="text-xs text-slate-400 mt-2">${isShared ? '擁有者: ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('zh-TW')}</p>
+                    </div>
+                </div>`;
+        }
+
         async function createTrip() {
             if (!currentUser) return showToast("請先登入");
-            if (parseInt(document.getElementById('trip-count').textContent) >= FREE_TRIP_LIMIT) {
-                return showToast("免費版最多 5 個行程");
-            }
+            // Fetch owned count
+            try {
+                const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`);
+                const data = await res.json();
+                if ((data.owned || []).length >= FREE_TRIP_LIMIT) {
+                    return showToast("免費版最多 5 個行程");
+                }
+            } catch(e) {}
             const title = prompt("行程名稱：", "我的旅遊行程");
             if (!title) return;
             try {
@@ -785,6 +793,7 @@
             currentTripId = tripId;
             localStorage.setItem('tw_current_trip', tripId);
             window.history.replaceState({}, '', window.location.pathname + '?trip=' + tripId);
+            document.getElementById('trips-view').classList.add('hidden');
             showApp();
             document.getElementById('app-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('app-user-name').textContent = currentUser ? currentUser.name : '';
@@ -794,7 +803,7 @@
 
         function showTripsFromApp() {
             document.getElementById('app-view').classList.add('view-hidden');
-            document.getElementById('trips-view').classList.remove('view-hidden');
+            document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
             loadTrips();
@@ -951,8 +960,6 @@
                 if (currentUser && !ownerEmail) ownerEmail = currentUser.email;
                 await syncToCloud();
             }
-
-            document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
             updateHeaderUI();
             renderTimeline();
             selectDay(0);
@@ -1405,6 +1412,14 @@
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
 
+            // Clean old ?user= param silently
+            if (urlParams.get('user')) {
+                urlParams.delete('user');
+                urlParams.delete('guest');
+                const clean = urlParams.toString() ? '?' + urlParams.toString() : '';
+                window.history.replaceState({}, '', window.location.pathname + clean);
+            }
+
             // Line OAuth callback
             const lineId = urlParams.get('line_id');
             const lineError = urlParams.get('line_error');
@@ -1425,34 +1440,7 @@
                 updateLandingAuthUI();
             }
 
-            const tripParam = urlParams.get('trip');
-            const guestParam = urlParams.get('guest');
-
-            // Guest mode: ?trip=xxx&guest=1
-            if (guestParam === '1' && tripParam) {
-                isGuestMode = true;
-                currentTripId = tripParam;
-                showApp();
-                document.getElementById('guest-badge').classList.remove('hidden');
-                document.getElementById('app-user-avatar').src = '';
-                document.getElementById('app-user-name').textContent = '訪客';
-                document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
-                initApp();
-                return;
-            }
-
-            // Logged in with ?trip=xxx → enter that trip
-            if (tripParam && currentUser) {
-                currentTripId = tripParam;
-                showApp();
-                document.getElementById('app-user-avatar').src = currentUser.picture;
-                document.getElementById('app-user-name').textContent = currentUser.name;
-                document.getElementById('btn-share').classList.remove('hidden');
-                initApp();
-                return;
-            }
-
-            // Logged in, no trip param → show landing page
+            // Always show landing page
             showLanding();
         };
     </script>

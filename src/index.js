@@ -53,10 +53,22 @@ export default {
 async function handleListTrips(request, env, corsHeaders) {
     const url = new URL(request.url);
     const uid = url.searchParams.get('uid');
+    const email = url.searchParams.get('email');
     if (!uid) return json(corsHeaders, { error: 'Missing uid' }, 400);
 
-    const results = await env.DB.prepare('SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, created_at FROM trips WHERE owner_uid = ? ORDER BY created_at DESC').bind(uid).all();
-    return json(corsHeaders, { trips: results.results || [] });
+    // Owned trips
+    const owned = await env.DB.prepare('SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, created_at FROM trips WHERE owner_uid = ? ORDER BY created_at DESC').bind(uid).all();
+
+    // Shared trips (where user's email is in collaborators JSON array)
+    let shared = { results: [] };
+    if (email) {
+        shared = await env.DB.prepare("SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, collaborators, created_at FROM trips WHERE collaborators LIKE ? AND owner_uid != ? ORDER BY created_at DESC").bind(`%${email}%`, uid).all();
+    }
+
+    return json(corsHeaders, {
+        owned: owned.results || [],
+        shared: (shared.results || []).map(t => ({ ...t, collaborators: undefined }))
+    });
 }
 
 async function handleGetTrip(request, env, corsHeaders) {
