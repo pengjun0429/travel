@@ -1405,6 +1405,13 @@
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
 
+            // Clean old ?user= param → redirect to clean URL
+            if (urlParams.get('user')) {
+                window.history.replaceState({}, '', window.location.pathname);
+                window.location.reload();
+                return;
+            }
+
             // Line OAuth callback
             const lineId = urlParams.get('line_id');
             const lineError = urlParams.get('line_error');
