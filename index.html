@@ -393,7 +393,7 @@
         // ============================================================
         //  CONFIG
         // ============================================================
-        const GAS_API_URL = "https://script.google.com/macros/s/AKfycbwj5ySfliPEHveD_9QpzkRwDGmWXjrREUbZz58rGwMyAMwZOo0XbyR2zPt12FeranlaLQ/exec";
+        const API_BASE = "https://travel-api.YOUR-SUBDOMAIN.workers.dev"; // 🔁 部署後換成你的 Worker 網址
 
         // ============================================================
         //  STATE
@@ -559,18 +559,28 @@
         //  CLOUD SYNC
         // ============================================================
         async function fetchFromCloud(action, data = null) {
-            if (!GAS_API_URL || GAS_API_URL.includes("請將你部署好的")) {
-                console.warn("GAS_API_URL 未正確設定，切換為本地模擬模式。");
+            if (!API_BASE || API_BASE.includes("YOUR-SUBDOMAIN")) {
+                console.warn("API_BASE 未正確設定，切換為本地儲存模式。");
                 return null;
             }
             try {
-                const response = await fetch(GAS_API_URL, {
-                    method: "POST",
-                    mode: "cors",
-                    headers: { "Content-Type": "text/plain;charset=utf-8" },
-                    body: JSON.stringify({ action, data })
-                });
-                return await response.json();
+                if (action === "get") {
+                    const uid = data?.uid;
+                    if (!uid) return null;
+                    const res = await fetch(`${API_BASE}/api/trip?uid=${encodeURIComponent(uid)}`);
+                    const json = await res.json();
+                    if (json.empty) return null;
+                    return json;
+                }
+                if (action === "save") {
+                    const res = await fetch(`${API_BASE}/api/trip`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(data)
+                    });
+                    return await res.json();
+                }
+                return null;
             } catch (err) {
                 console.error("雲端連線失敗:", err);
                 return null;
