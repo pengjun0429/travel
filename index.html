@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="Rau2K_qrDIQN7a38tlY9VLkJULZxwLdauo1zVGH4dIg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Travelweb">
+    <link rel="apple-touch-icon" href="/icon-192.png">
+    <link rel="manifest" href="/manifest.json">
     <title id="web-title">Travelweb | 出遊網頁規劃</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -49,6 +54,7 @@
         #landing-view { transition: opacity 0.5s ease; }
         #app-view { transition: opacity 0.5s ease; }
         .view-hidden { display: none; }
+        #ios-tutorial { transition: opacity 0.4s ease, transform 0.4s ease; }
         @media (max-width: 767px) {
             .modal-full { border-radius: 0 !important; max-width: 100% !important; margin: 0 !important; height: 100dvh; display: flex; flex-direction: column; }
             .modal-full > div { max-width: 100% !important; height: 100dvh; border-radius: 0; }
@@ -440,6 +446,46 @@
                     <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
                     <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存</button>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- iOS Tutorial -->
+    <div id="ios-tutorial" class="fixed inset-0 bg-black/60 hidden z-[100] flex items-end md:items-center justify-center backdrop-blur-sm">
+        <div class="bg-white rounded-t-2xl md:rounded-2xl w-full max-w-sm mx-4 p-6 pb-10 shadow-2xl animate-fade-in-up">
+            <div class="text-center mb-6">
+                <div class="w-14 h-14 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-3">
+                    <i class="fa-solid fa-plus text-primary text-2xl"></i>
+                </div>
+                <h2 class="text-lg font-bold text-slate-900">加入主畫面</h2>
+                <p class="text-sm text-slate-500 mt-1">將 Travelweb 加入主畫面，像 App 一樣快速開啟</p>
+            </div>
+            <div class="space-y-4">
+                <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
+                    <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">1</div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800">點擊下方「分享」按鈕</p>
+                        <p class="text-xs text-slate-400 mt-0.5">在 Safari 底部選單中</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
+                    <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">2</div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800">滑到下方，點「加入主畫面」</p>
+                        <p class="text-xs text-slate-400 mt-0.5">在分享選單中往下滑</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
+                    <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">3</div>
+                    <div>
+                        <p class="text-sm font-medium text-slate-800">點右上角「加入」</p>
+                        <p class="text-xs text-slate-400 mt-0.5">完成！從主畫面開啟</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 flex gap-2">
+                <button onclick="dismissIOSTutorial()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-sm font-medium transition">稍後再說</button>
+                <button onclick="dismissIOSTutorial()" class="flex-1 bg-primary hover:bg-sky-600 text-white py-3 rounded-xl text-sm font-medium transition">知道了</button>
             </div>
         </div>
     </div>
@@ -1069,6 +1115,34 @@
                 { id: "d2", date: new Date(Date.now()+86400000).toISOString().slice(0,10), title: "第二天", hotel: "", food: "", notes: "", activities: [] }
             ];
         }
+
+        // ============================================================
+        //  iOS HOME SCREEN TUTORIAL
+        // ============================================================
+        function isIOS() {
+            return /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+        }
+
+        function isInStandaloneMode() {
+            return window.navigator.standalone === true;
+        }
+
+        function showIOSTutorial() {
+            if (localStorage.getItem('tw_ios_tutorial_dismissed')) return;
+            document.getElementById('ios-tutorial').classList.remove('hidden');
+        }
+
+        function dismissIOSTutorial() {
+            localStorage.setItem('tw_ios_tutorial_dismissed', 'true');
+            document.getElementById('ios-tutorial').classList.add('hidden');
+        }
+
+        // Detect iOS on load
+        window.addEventListener('DOMContentLoaded', function() {
+            if (isIOS() && !isInStandaloneMode()) {
+                setTimeout(showIOSTutorial, 2000);
+            }
+        });
 
         // ============================================================
         //  ON LOAD — determine initial view
