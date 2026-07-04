@@ -21,11 +21,10 @@ export default {
             return handleListTrips(request, env, corsHeaders);
         }
 
-        // /api/trip — CRUD single trip
+        // /api/trip — POST create or update, PUT update
         if (url.pathname === '/api/trip') {
             if (request.method === 'GET') return handleGetTrip(request, env, corsHeaders);
-            if (request.method === 'POST') return handleCreateTrip(request, env, corsHeaders);
-            if (request.method === 'PUT') return handleUpdateTrip(request, env, corsHeaders);
+            if (request.method === 'POST') return handleCreateOrUpdateTrip(request, env, corsHeaders);
             if (request.method === 'DELETE') return handleDeleteTrip(request, env, corsHeaders);
         }
 
@@ -91,45 +90,33 @@ async function handleGetTrip(request, env, corsHeaders) {
     return json(corsHeaders, { error: 'Missing trip_id or uid' }, 400);
 }
 
-async function handleCreateTrip(request, env, corsHeaders) {
+async function handleCreateOrUpdateTrip(request, env, corsHeaders) {
     const body = await request.json();
-    const { ownerUid, ownerEmail, tripTitle, tripDate, itineraryData, collaborators } = body;
+    const { tripId, ownerUid, ownerEmail, tripTitle, tripDate, itineraryData, collaborators } = body;
 
+    // If tripId exists → update
+    if (tripId) {
+        const dataStr = JSON.stringify(itineraryData || []);
+        const collabStr = JSON.stringify(collaborators || []);
+        await env.DB.prepare(
+            `UPDATE trips SET trip_title = ?, trip_date = ?, itinerary_data = ?, owner_email = ?, collaborators = ?, updated_at = datetime('now') WHERE trip_id = ?`
+        ).bind(tripTitle || '', tripDate || '', dataStr, ownerEmail || '', collabStr, tripId).run();
+        return json(corsHeaders, { status: 'success' });
+    }
+
+    // Otherwise → create
     if (!ownerUid) return json(corsHeaders, { error: 'Missing ownerUid' }, 400);
-
-    // Check trip limit
     const countResult = await env.DB.prepare('SELECT COUNT(*) as cnt FROM trips WHERE owner_uid = ?').bind(ownerUid).first();
     if (countResult && countResult.cnt >= FREE_TRIP_LIMIT) {
         return json(corsHeaders, { error: 'free_limit', message: `免費版最多 ${FREE_TRIP_LIMIT} 個行程` }, 403);
     }
-
-    const tripId = 'trip_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
+    const newTripId = 'trip_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
     const dataStr = JSON.stringify(itineraryData || []);
     const collabStr = JSON.stringify(collaborators || []);
-
     await env.DB.prepare(
-        `INSERT INTO trips (trip_id, owner_uid, owner_email, trip_title, trip_date, itinerary_data, collaborators, created_at, updated_at)
-         VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`
-    ).bind(tripId, ownerUid, ownerEmail || '', tripTitle || '我的旅遊行程', tripDate || '', dataStr, collabStr).run();
-
-    return json(corsHeaders, { status: 'success', tripId });
-}
-
-async function handleUpdateTrip(request, env, corsHeaders) {
-    const body = await request.json();
-    const { tripId, tripTitle, tripDate, itineraryData, ownerEmail, collaborators } = body;
-
-    if (!tripId) return json(corsHeaders, { error: 'Missing tripId' }, 400);
-
-    const dataStr = JSON.stringify(itineraryData || []);
-    const collabStr = JSON.stringify(collaborators || []);
-
-    await env.DB.prepare(
-        `UPDATE trips SET trip_title = ?, trip_date = ?, itinerary_data = ?, owner_email = ?, collaborators = ?, updated_at = datetime('now')
-         WHERE trip_id = ?`
-    ).bind(tripTitle || '', tripDate || '', dataStr, ownerEmail || '', collabStr, tripId).run();
-
-    return json(corsHeaders, { status: 'success' });
+        `INSERT INTO trips (trip_id, owner_uid, owner_email, trip_title, trip_date, itinerary_data, collaborators, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`
+    ).bind(newTripId, ownerUid, ownerEmail || '', tripTitle || '我的旅遊行程', tripDate || '', dataStr, collabStr).run();
+    return json(corsHeaders, { status: 'success', tripId: newTripId });
 }
 
 async function handleDeleteTrip(request, env, corsHeaders) {
