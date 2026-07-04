@@ -759,18 +759,22 @@
                 </div>`;
         }
 
+        let isCreatingTrip = false;
         async function createTrip() {
             if (!currentUser) return showToast("請先登入");
-            // Fetch owned count
+            if (isCreatingTrip) return;
+            isCreatingTrip = true;
             try {
                 const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`);
                 const data = await res.json();
                 if ((data.owned || []).length >= FREE_TRIP_LIMIT) {
-                    return showToast("免費版最多 5 個行程");
+                    showToast("免費版最多 5 個行程");
+                    isCreatingTrip = false;
+                    return;
                 }
             } catch(e) {}
             const title = prompt("行程名稱：", "我的旅遊行程");
-            if (!title) return;
+            if (!title) { isCreatingTrip = false; return; }
             try {
                 const res = await fetch(`${API_BASE}/api/trip`, {
                     method: 'POST',
@@ -785,6 +789,7 @@
                 else if (data.error === 'free_limit') { showToast(data.message); }
                 else { showToast("建立失敗"); }
             } catch (err) { showToast("網路錯誤"); }
+            isCreatingTrip = false;
         }
 
         async function deleteTrip(tripId) {
