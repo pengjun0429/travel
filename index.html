@@ -598,6 +598,7 @@
                 document.getElementById('guest-badge').classList.remove('hidden');
             }
 
+            const targetUid = currentUser ? currentUser.uid : guestUserUid;
             const cloudConfig = await fetchFromCloud("get", { uid: targetUid });
             if (cloudConfig) {
                 globalConfig.tripTitle = cloudConfig.tripTitle || globalConfig.tripTitle;
@@ -608,7 +609,6 @@
             }
 
             // Per-user local data fallback
-            const targetUid = currentUser ? currentUser.uid : guestUserUid;
             if (itineraryData.length === 0 && targetUid) {
                 const saved = localStorage.getItem('tw_data_' + targetUid);
                 if (saved) {
