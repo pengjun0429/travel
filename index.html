@@ -50,18 +50,9 @@
         #app-view { transition: opacity 0.5s ease; }
         .view-hidden { display: none; }
         @media (max-width: 767px) {
-            .btn-mobile-icon { padding: 8px; border-radius: 8px; }
-            .btn-mobile-icon .btn-label { display: none !important; }
             .modal-full { border-radius: 0 !important; max-width: 100% !important; margin: 0 !important; height: 100dvh; display: flex; flex-direction: column; }
             .modal-full > div { max-width: 100% !important; height: 100dvh; border-radius: 0; }
-            .mobile-sidebar { width: 100% !important; border-right: none !important; border-bottom: 1px solid #e2e8f0; flex-shrink: 0; max-height: 80px; }
-            .mobile-sidebar-inner { display: flex !important; flex-direction: row !important; overflow-x: auto; gap: 6px; padding: 8px; white-space: nowrap; }
-            .mobile-sidebar-inner button { flex-shrink: 0; width: auto !important; padding: 6px 12px !important; margin-bottom: 0 !important; border: 1px solid #e2e8f0; }
-            .mobile-sidebar-inner button .md\\:block { display: none !important; }
-            .mobile-sidebar-inner button .w-12 { width: auto !important; height: auto !important; background: none !important; border: none !important; box-shadow: none !important; }
-            .mobile-sidebar-inner button .w-12 span:first-child { display: none; }
-            .mobile-sidebar-inner button .w-12 span:last-child { font-size: 12px; }
-            .main-mobile { height: calc(100dvh - 153px) !important; }
+            .main-mobile { height: calc(100dvh - 112px) !important; }
             body { overflow: hidden; }
         }
     </style>
@@ -213,36 +204,36 @@
             <p class="text-white text-sm font-medium">正在從雲端同步最新行程...</p>
         </div>
 
-        <header class="bg-white shadow-sm z-10 px-3 md:px-6 py-2 md:py-4 flex justify-between items-center shrink-0">
-            <div class="flex items-center gap-2 md:gap-3 min-w-0">
-                <i class="fa-solid fa-mountain-sun text-primary text-lg md:text-2xl shrink-0"></i>
+        <header class="bg-white shadow-sm z-10 px-2 md:px-6 py-2 md:py-4 flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-1.5 md:gap-3 min-w-0">
+                <i class="fa-solid fa-mountain-sun text-primary text-base md:text-2xl shrink-0"></i>
                 <div class="truncate">
-                    <h1 id="main-trip-title" class="text-sm md:text-xl font-bold text-dark truncate">載入中...</h1>
-                    <p id="main-trip-date" class="text-[10px] md:text-xs text-slate-500 truncate">載入中...</p>
+                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">載入中...</h1>
+                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">載入中...</p>
                 </div>
             </div>
-            <div class="flex items-center gap-1 md:gap-2 shrink-0">
-                <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-2 md:px-3 py-1 rounded-full text-[10px] md:text-sm font-medium whitespace-nowrap">
-                    <i class="fa-solid fa-eye"></i> <span class="hidden md:inline">訪客唯讀模式</span>
+            <div class="flex items-center gap-0.5 md:gap-2 shrink-0">
+                <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-1.5 md:px-3 py-1 rounded-full text-[9px] md:text-sm font-medium whitespace-nowrap">
+                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> 訪客唯讀</span>
                 </div>
-                <button id="btn-back-home" class="btn-mobile-icon flex items-center gap-1 md:gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 md:px-3 py-2 rounded-lg transition text-xs md:text-sm" onclick="goToHome()">
-                    <i class="fa-solid fa-house"></i> <span class="btn-label hidden md:inline">首頁</span>
+                <button id="btn-back-home" class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="goToHome()">
+                    <i class="fa-solid fa-house text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">首頁</span>
                 </button>
-                <button id="btn-global-config" class="edit-only hidden btn-mobile-icon flex items-center gap-1 md:gap-2 bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 px-2 md:px-3 py-2 rounded-lg transition text-xs md:text-sm" onclick="openGlobalConfigModal()">
-                    <i class="fa-solid fa-gear"></i> <span class="btn-label hidden md:inline">設定</span>
+                <button id="btn-global-config" class="edit-only hidden items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openGlobalConfigModal()">
+                    <i class="fa-solid fa-gear text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">設定</span>
                 </button>
-                <button id="btn-share" class="hidden btn-mobile-icon items-center gap-1 md:gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-2 md:px-3 py-2 rounded-lg transition text-xs md:text-sm" onclick="shareItinerary()">
-                    <i class="fa-solid fa-share-nodes"></i> <span class="btn-label hidden md:inline">分享</span>
+                <button id="btn-share" class="hidden items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="shareItinerary()">
+                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">分享</span>
                 </button>
-                <button id="btn-collab" class="hidden btn-mobile-icon items-center gap-1 md:gap-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 px-2 md:px-3 py-2 rounded-lg transition text-xs md:text-sm" onclick="openCollabModal()">
-                    <i class="fa-solid fa-users"></i> <span class="btn-label hidden md:inline">共同編輯</span>
+                <button id="btn-collab" class="hidden items-center justify-center bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openCollabModal()">
+                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">共同編輯</span>
                 </button>
-                <div id="auth-section" class="flex items-center gap-1 md:gap-2">
-                    <div id="app-user-profile" class="flex items-center gap-1 md:gap-2">
+                <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
+                    <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
-                        <span id="app-user-name" class="text-xs md:text-sm font-medium text-slate-700 hidden md:inline"></span>
+                        <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
                         <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="登出">
-                            <i class="fa-solid fa-sign-out-alt text-sm md:text-base"></i>
+                            <i class="fa-solid fa-sign-out-alt text-xs md:text-base"></i>
                         </button>
                     </div>
                 </div>
@@ -250,11 +241,11 @@
         </header>
 
         <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
-            <aside class="mobile-sidebar md:w-64 lg:w-72 bg-white border-r border-slate-200 shrink-0">
+            <aside class="w-full md:w-64 lg:w-72 bg-white border-b md:border-b-0 md:border-r border-slate-200 shrink-0 max-h-[72px] md:max-h-none overflow-y-auto md:overflow-y-auto">
                 <div class="p-2 md:p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
                     <h2 class="font-bold text-slate-700">行程總覽</h2>
                 </div>
-                <div id="timeline-container" class="mobile-sidebar-inner flex-1 p-2 md:p-4 space-y-1 md:space-y-1"></div>
+                <div id="timeline-container" class="flex md:flex-col gap-1.5 md:gap-1 overflow-x-auto md:overflow-x-hidden p-2 md:p-4"></div>
             </aside>
 
             <section class="main-mobile flex-1 overflow-y-auto bg-slate-50 relative scroll-smooth flex flex-col" id="detail-section">
@@ -882,16 +873,16 @@
                 const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
                 const shortDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
                 const btn = document.createElement('button');
-                btn.className = `w-full text-left p-3 md:p-4 rounded-xl transition-all duration-200 border-2 mb-2 flex items-center gap-3 ${
+                btn.className = `shrink-0 md:w-full text-left p-2 md:p-4 rounded-xl transition-all duration-200 border-2 mb-0 md:mb-2 flex items-center gap-2 md:gap-3 ${
                     index === currentDayIndex
                     ? 'bg-sky-50 border-primary text-primary shadow-sm'
                     : 'bg-white border-transparent text-slate-600 hover:bg-slate-50'
                 }`;
                 btn.onclick = () => selectDay(index);
                 btn.innerHTML = `
-                    <div class="bg-white/80 shrink-0 w-12 h-12 rounded-lg flex flex-col items-center justify-center border border-slate-100 shadow-sm">
-                        <span class="text-xs font-bold text-slate-400">Day ${index + 1}</span>
-                        <span class="text-sm font-black">${shortDate}</span>
+                    <div class="bg-white/80 shrink-0 w-10 h-10 md:w-12 md:h-12 rounded-lg flex flex-col items-center justify-center border border-slate-100 shadow-sm">
+                        <span class="text-[9px] md:text-xs font-bold text-slate-400">Day ${index + 1}</span>
+                        <span class="text-xs md:text-sm font-black">${shortDate}</span>
                     </div>
                     <div class="hidden md:block overflow-hidden">
                         <div class="text-xs font-bold uppercase tracking-wider mb-0.5 opacity-80">星期${dayOfWeek}</div>
