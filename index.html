@@ -629,8 +629,17 @@
 
         function goToHome() {
             if (confirm('回到行程列表？')) {
-                showTripsFromApp();
+                document.getElementById('app-view').classList.add('view-hidden');
                 window.history.replaceState({}, '', window.location.pathname);
+                if (currentUser) {
+                    document.getElementById('trips-view').classList.remove('hidden');
+                    document.getElementById('trips-user-avatar').src = currentUser.picture;
+                    document.getElementById('trips-user-name').textContent = currentUser.name;
+                    loadTrips();
+                } else {
+                    document.getElementById('landing-view').classList.remove('view-hidden');
+                    showToast('請先登入才能查看共用行程');
+                }
             }
         }
 
