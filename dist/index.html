@@ -122,7 +122,7 @@
                 </p>
                 <div class="animate-fade-in-up-delay-2 flex flex-col items-center gap-4">
                     <button id="btn-start-hero" onclick="handleStartClick()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50 flex items-center gap-2">
-                        <i class="fa-solid fa-rocket"></i> 開始規劃旅程
+                        <i class="fa-solid fa-suitcase-rolling"></i> 開始規劃旅程
                     </button>
                     <div id="landing-hero-user" class="hidden flex flex-col items-center gap-3">
                         <p id="landing-hero-email" class="text-slate-400 text-sm"></p>
@@ -687,11 +687,11 @@
         }
 
         function handleStartClick() {
-            if (!currentUser) {
-                showToast('請先用 Google 或 Line 登入');
-                return;
-            }
-            showTrips();
+            document.getElementById('landing-view').classList.add('view-hidden');
+            document.getElementById('trips-view').classList.remove('view-hidden');
+            document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
+            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未登入';
+            loadTrips();
         }
 
         // ============================================================
@@ -711,7 +711,10 @@
             const container = document.getElementById('trips-list');
             container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">載入中...</div>';
             try {
-                const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}`);
+                const res = await Promise.race([
+                    fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}`),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+                ]);
                 const data = await res.json();
                 const trips = data.trips || [];
                 document.getElementById('trip-count').textContent = trips.length;
@@ -744,7 +747,7 @@
                     </div>
                 `).join('');
             } catch (err) {
-                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12">載入失敗</div>';
+                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>載入失敗</p><button onclick="loadTrips()" class="mt-2 text-sm underline">重試</button></div>';
             }
         }
 
@@ -874,27 +877,27 @@
         async function fetchFromCloud(action, data = null) {
             if (!API_BASE || API_BASE.includes("YOUR-SUBDOMAIN")) return null;
             try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 10000);
+                const fetchWithTimeout = (url, options = {}) => {
+                    return Promise.race([
+                        fetch(url, options),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+                    ]);
+                };
                 if (action === "getTrip") {
                     const params = data.tripId ? `trip_id=${encodeURIComponent(data.tripId)}` : `uid=${encodeURIComponent(data.uid)}`;
-                    const res = await fetch(`${API_BASE}/api/trip?${params}`, { signal: controller.signal });
-                    clearTimeout(timeout);
+                    const res = await fetchWithTimeout(`${API_BASE}/api/trip?${params}`);
                     const json = await res.json();
                     if (json.empty) return null;
                     return json;
                 }
                 if (action === "save") {
-                    const res = await fetch(`${API_BASE}/api/trip`, {
+                    const res = await fetchWithTimeout(`${API_BASE}/api/trip`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(data),
-                        signal: controller.signal
+                        body: JSON.stringify(data)
                     });
-                    clearTimeout(timeout);
                     return await res.json();
                 }
-                clearTimeout(timeout);
                 return null;
             } catch (err) {
                 console.error("雲端連線失敗:", err);
@@ -1411,22 +1414,21 @@
                 window.history.replaceState({}, '', window.location.pathname);
             }
 
-            const tripParam = urlParams.get('trip');
-            const guestParam = urlParams.get('guest');
-
-            // Check stored login state
+            // Restore login state from localStorage
             const savedEmail = localStorage.getItem('tw_user_email');
             const savedName = localStorage.getItem('tw_user_name');
             const savedPicture = localStorage.getItem('tw_user_picture');
             const savedUid = localStorage.getItem('tw_user_uid');
-
             if (savedEmail && savedName && savedUid) {
                 currentUser = { email: savedEmail, name: savedName, picture: savedPicture, uid: savedUid };
                 isLoggedIn = true;
                 updateLandingAuthUI();
             }
 
-            // Guest mode with trip_id
+            const tripParam = urlParams.get('trip');
+            const guestParam = urlParams.get('guest');
+
+            // Guest mode: ?trip=xxx&guest=1
             if (guestParam === '1' && tripParam) {
                 isGuestMode = true;
                 currentTripId = tripParam;
@@ -1434,25 +1436,24 @@
                 document.getElementById('guest-badge').classList.remove('hidden');
                 document.getElementById('app-user-avatar').src = '';
                 document.getElementById('app-user-name').textContent = '訪客';
+                document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
                 initApp();
                 return;
             }
 
-            // Logged in with trip_id
+            // Logged in with ?trip=xxx → enter that trip
             if (tripParam && currentUser) {
                 currentTripId = tripParam;
-                enterApp();
+                showApp();
+                document.getElementById('app-user-avatar').src = currentUser.picture;
+                document.getElementById('app-user-name').textContent = currentUser.name;
+                document.getElementById('btn-share').classList.remove('hidden');
+                initApp();
                 return;
             }
 
-            // Logged in without trip — show trips list
-            if (currentUser) {
-                showTrips();
-                return;
-            }
-
+            // Logged in, no trip param → show landing page
             showLanding();
-            updateLandingAuthUI();
         };
     </script>
 </body>
