@@ -1131,6 +1131,7 @@
             input.value = '';
 
             await fetchFromCloud("save", {
+                tripId: currentTripId,
                 uid: currentUser.uid,
                 ownerEmail: ownerEmail,
                 tripTitle: globalConfig.tripTitle,
@@ -1150,6 +1151,7 @@
             collaborators = collaborators.filter(e => e !== email);
 
             await fetchFromCloud("save", {
+                tripId: currentTripId,
                 uid: currentUser.uid,
                 ownerEmail: ownerEmail,
                 tripTitle: globalConfig.tripTitle,
