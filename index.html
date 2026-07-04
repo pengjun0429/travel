@@ -74,23 +74,24 @@
             </button>
             
             <div id="auth-section" class="flex items-center gap-3">
-                <div id="g-signin-btn-wrapper">
-                    <div id="g_id_onload"
-                         data-client_id="1006606665070-26sq5tv532t84jqa2onivk26fbisnhl4.apps.googleusercontent.com"
-                         data-callback="handleGoogleSignInResponse"
-                         data-auto_prompt="false">
-                    </div>
-                    <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
-                </div>
-                
-                <div id="user-profile" class="hidden flex items-center gap-3">
-                    <img id="user-avatar" class="w-8 h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
-                    <span id="user-name" class="text-sm font-medium text-slate-700"></span>
-                    <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition" title="登出">
-                        <i class="fa-solid fa-sign-out-alt"></i>
-                    </button>
-                </div>
-            </div>
+    <div id="g-signin-btn-wrapper">
+        <div id="g_id_onload"
+             data-client_id="1006606665070-26sq5tv532t84jqa2onivk26fbisnhl4.apps.googleusercontent.com"
+             data-callback="handleGoogleSignInResponse"
+             data-auto_prompt="false"
+             data-itp_support="true">
+        </div>
+        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
+    </div>
+    
+    <div id="user-profile" class="hidden flex items-center gap-3">
+        <img id="user-avatar" class="w-8 h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
+        <span id="user-name" class="text-sm font-medium text-slate-700"></span>
+        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition" title="登出">
+            <i class="fa-solid fa-sign-out-alt"></i>
+        </button>
+    </div>
+</div>
         </div>
     </header>
 
