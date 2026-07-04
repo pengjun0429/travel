@@ -687,14 +687,10 @@
         }
 
         function handleStartClick() {
-            if (!currentUser) {
-                showToast('請先用 Google 或 Line 登入');
-                return;
-            }
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('view-hidden');
-            document.getElementById('trips-user-avatar').src = currentUser.picture || '';
-            document.getElementById('trips-user-name').textContent = currentUser.name || '';
+            document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
+            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未登入';
             loadTrips();
         }
 
@@ -1418,22 +1414,21 @@
                 window.history.replaceState({}, '', window.location.pathname);
             }
 
-            const tripParam = urlParams.get('trip');
-            const guestParam = urlParams.get('guest');
-
-            // Check stored login state
+            // Restore login state from localStorage
             const savedEmail = localStorage.getItem('tw_user_email');
             const savedName = localStorage.getItem('tw_user_name');
             const savedPicture = localStorage.getItem('tw_user_picture');
             const savedUid = localStorage.getItem('tw_user_uid');
-
             if (savedEmail && savedName && savedUid) {
                 currentUser = { email: savedEmail, name: savedName, picture: savedPicture, uid: savedUid };
                 isLoggedIn = true;
                 updateLandingAuthUI();
             }
 
-            // Guest mode with trip_id
+            const tripParam = urlParams.get('trip');
+            const guestParam = urlParams.get('guest');
+
+            // Guest mode: ?trip=xxx&guest=1
             if (guestParam === '1' && tripParam) {
                 isGuestMode = true;
                 currentTripId = tripParam;
@@ -1441,25 +1436,24 @@
                 document.getElementById('guest-badge').classList.remove('hidden');
                 document.getElementById('app-user-avatar').src = '';
                 document.getElementById('app-user-name').textContent = '訪客';
+                document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
                 initApp();
                 return;
             }
 
-            // Logged in with trip_id
+            // Logged in with ?trip=xxx → enter that trip
             if (tripParam && currentUser) {
                 currentTripId = tripParam;
-                enterApp();
+                showApp();
+                document.getElementById('app-user-avatar').src = currentUser.picture;
+                document.getElementById('app-user-name').textContent = currentUser.name;
+                document.getElementById('btn-share').classList.remove('hidden');
+                initApp();
                 return;
             }
 
-            // Logged in without trip — show trips list
-            if (currentUser) {
-                showTrips();
-                return;
-            }
-
+            // Logged in, no trip param → show landing page
             showLanding();
-            updateLandingAuthUI();
         };
     </script>
 </body>
