@@ -124,11 +124,16 @@
                     <button id="btn-start-hero" onclick="handleStartClick()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50 flex items-center gap-2">
                         <i class="fa-solid fa-suitcase-rolling"></i> 開始規劃旅程
                     </button>
-                    <div id="landing-hero-user" class="hidden flex flex-col items-center gap-3">
+                    <div id="landing-hero-user" class="hidden flex-col items-center gap-3">
                         <p id="landing-hero-email" class="text-slate-400 text-sm"></p>
-                        <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
-                            <i class="fa-solid fa-map mr-2"></i> 進入我的行程
-                        </button>
+                        <div class="flex items-center gap-3">
+                            <button onclick="showTrips()" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-medium px-6 py-3 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-list"></i> 我的行程
+                            </button>
+                            <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
+                                <i class="fa-solid fa-map mr-2"></i> 進入行程
+                            </button>
+                        </div>
                     </div>
                     <div class="flex items-center gap-3 text-sm text-slate-500 mt-2">
                         <button onclick="lineLogin()" class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl transition shadow-sm">
@@ -225,6 +230,9 @@
     <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
+                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="回首頁">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
                 <span class="font-bold text-dark">Travelweb</span>
             </div>
@@ -632,13 +640,9 @@
                 document.getElementById('app-view').classList.add('view-hidden');
                 window.history.replaceState({}, '', window.location.pathname);
                 if (currentUser) {
-                    document.getElementById('trips-view').classList.remove('hidden');
-                    document.getElementById('trips-user-avatar').src = currentUser.picture;
-                    document.getElementById('trips-user-name').textContent = currentUser.name;
-                    loadTrips();
+                    showTrips();
                 } else {
                     document.getElementById('landing-view').classList.remove('view-hidden');
-                    showToast('請先登入才能查看共用行程');
                 }
             }
         }
@@ -713,6 +717,11 @@
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
             loadTrips();
+        }
+
+        function hideTrips() {
+            document.getElementById('trips-view').classList.add('hidden');
+            document.getElementById('landing-view').classList.remove('view-hidden');
         }
 
         async function loadTrips() {
