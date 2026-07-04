@@ -301,15 +301,20 @@
 
             <section class="main-mobile flex-1 overflow-y-auto bg-slate-50 relative scroll-smooth flex flex-col" id="detail-section">
                 <div class="max-w-3xl mx-auto w-full p-4 md:p-8 pb-24 flex-1 flex flex-col">
-                    <div class="flex justify-between items-end mb-6">
-                        <div>
-                            <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
-                            <p id="current-day-date" class="text-slate-500 font-medium"></p>
-                        </div>
+                <div class="flex justify-between items-end mb-6">
+                    <div>
+                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
+                        <p id="current-day-date" class="text-slate-500 font-medium"></p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button class="edit-only hidden bg-white border border-slate-200 text-red-500 hover:bg-red-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="deleteCurrentDay()">
+                            <i class="fa-solid fa-trash mr-1"></i> 刪除這天
+                        </button>
                         <button class="edit-only hidden bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="openDayInfoModal()">
                             <i class="fa-solid fa-pen mr-1"></i> 編輯食宿
                         </button>
                     </div>
+                </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
                             <div class="bg-blue-50 text-blue-500 p-3 rounded-lg"><i class="fa-solid fa-bed text-xl"></i></div>
@@ -1309,6 +1314,18 @@
             selectDay(itineraryData.length - 1);
             syncToCloud();
             showToast('已新增 Day ' + itineraryData.length);
+        }
+
+        async function deleteCurrentDay() {
+            if (!canEdit()) return;
+            if (itineraryData.length <= 1) return showToast("至少要保留一天");
+            if (!confirm('確定要刪除 Day ' + (currentDayIndex + 1) + '？此操作無法復原。')) return;
+            itineraryData.splice(currentDayIndex, 1);
+            if (currentDayIndex >= itineraryData.length) currentDayIndex = itineraryData.length - 1;
+            renderTimeline();
+            selectDay(currentDayIndex);
+            syncToCloud();
+            showToast('已刪除');
         }
 
         let fabOpen = false;
