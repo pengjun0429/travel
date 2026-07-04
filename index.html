@@ -874,27 +874,27 @@
         async function fetchFromCloud(action, data = null) {
             if (!API_BASE || API_BASE.includes("YOUR-SUBDOMAIN")) return null;
             try {
-                const controller = new AbortController();
-                const timeout = setTimeout(() => controller.abort(), 10000);
+                const fetchWithTimeout = (url, options = {}) => {
+                    return Promise.race([
+                        fetch(url, options),
+                        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+                    ]);
+                };
                 if (action === "getTrip") {
                     const params = data.tripId ? `trip_id=${encodeURIComponent(data.tripId)}` : `uid=${encodeURIComponent(data.uid)}`;
-                    const res = await fetch(`${API_BASE}/api/trip?${params}`, { signal: controller.signal });
-                    clearTimeout(timeout);
+                    const res = await fetchWithTimeout(`${API_BASE}/api/trip?${params}`);
                     const json = await res.json();
                     if (json.empty) return null;
                     return json;
                 }
                 if (action === "save") {
-                    const res = await fetch(`${API_BASE}/api/trip`, {
+                    const res = await fetchWithTimeout(`${API_BASE}/api/trip`, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(data),
-                        signal: controller.signal
+                        body: JSON.stringify(data)
                     });
-                    clearTimeout(timeout);
                     return await res.json();
                 }
-                clearTimeout(timeout);
                 return null;
             } catch (err) {
                 console.error("雲端連線失敗:", err);
