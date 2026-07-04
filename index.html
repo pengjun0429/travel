@@ -6,6 +6,7 @@
     <title id="web-title">115.7 九寨溝與四川經典 14 日遊</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     
     <script>
         tailwind.config = {
@@ -71,11 +72,19 @@
             <button id="btn-share" class="hidden md:flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 px-4 py-2 rounded-lg transition" onclick="shareItinerary()">
                 <i class="fa-solid fa-share-nodes"></i> 分享行程網址
             </button>
-            <div id="auth-section">
-                <button id="btn-login" class="bg-primary hover:bg-sky-600 text-white px-5 py-2 rounded-lg font-medium transition shadow-sm" onclick="handleLogin()">
-                    <i class="fa-brands fa-google mr-2"></i> 登入編輯
-                </button>
+            
+            <div id="auth-section" class="flex items-center gap-3">
+                <div id="g-signin-btn-wrapper">
+                    <div id="g_id_onload"
+                         data-client_id="1006606665070-26sq5tv532t84jqa2onivk26fbisnhl4.apps.googleusercontent.com"
+                         data-callback="handleGoogleSignInResponse"
+                         data-auto_prompt="false">
+                    </div>
+                    <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
+                </div>
+                
                 <div id="user-profile" class="hidden flex items-center gap-3">
+                    <img id="user-avatar" class="w-8 h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                     <span id="user-name" class="text-sm font-medium text-slate-700"></span>
                     <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition" title="登出">
                         <i class="fa-solid fa-sign-out-alt"></i>
@@ -254,8 +263,11 @@
     </div>
 
     <script>
-        // 🔗 填入你部署好的 Google Apps Script 網頁應用程式網址
+        
         const GAS_API_URL = "https://script.google.com/macros/s/AKfycbw0CMtLFBukGURiZHkoM-MD53Vf4ZXd6ol23vE5EksPQAD5Al-Q6BzCrTRFKZhYcqJWHA/exec";
+
+        // 🛡️ 允許存取並編輯行程的白名單 Email 帳號
+        const ALLOWED_EMAILS = ['admin@gmail.com', 'test@gmail.com', 'pengjun0429@gmail.com']; 
 
         let globalConfig = {
             tripCode: "九寨溝2026",
@@ -265,9 +277,63 @@
         let itineraryData = [];
         let currentDayIndex = 0;
         
-        const ALLOWED_EMAILS = ['admin@gmail.com', 'test@gmail.com', 'pengjun0429@gmail.com']; 
         let isLoggedIn = false;
         let isGuestMode = false;
+
+        // JWT 解碼函式（用來解析 Google 傳回的登入憑證）
+        function decodeJwt(token) {
+            try {
+                const base64Url = token.split('.')[1];
+                const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+                const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+                    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                }).join(''));
+                return JSON.parse(jsonPayload);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        // 核心：處理 Google 登入後的回呼函式
+        function handleGoogleSignInResponse(response) {
+            const payload = decodeJwt(response.credential);
+            if (!payload) return showToast("無法讀取 Google 登入資訊");
+
+            const email = payload.email.trim().toLowerCase();
+            
+            if (ALLOWED_EMAILS.includes(email) && !isGuestMode) {
+                isLoggedIn = true;
+                localStorage.setItem('itinerary_user_email', email);
+                localStorage.setItem('user_profile_name', payload.name);
+                localStorage.setItem('user_profile_picture', payload.picture);
+                
+                showUserProfileUI(payload.name, payload.picture);
+                applyPermissions();
+                showToast(`歡迎回來，${payload.name}！已開通編輯權限。`);
+            } else {
+                showToast("登入成功！但此帳號未列在編輯白名單內，切換為唯讀瀏覽。");
+            }
+        }
+
+        function showUserProfileUI(name, picture) {
+            document.getElementById('g-signin-btn-wrapper').classList.add('hidden');
+            const profile = document.getElementById('user-profile');
+            profile.classList.remove('hidden');
+            document.getElementById('user-avatar').src = picture;
+            document.getElementById('user-name').textContent = name;
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            localStorage.removeItem('itinerary_user_email');
+            localStorage.removeItem('user_profile_name');
+            localStorage.removeItem('user_profile_picture');
+            
+            // 停用自動選取並重新整頁，讓狀態乾淨初始化
+            google.accounts.id.disableAutoSelect();
+            showToast("已成功登出管理權限");
+            setTimeout(() => window.location.reload(), 800);
+        }
 
         async function fetchFromCloud(action, data = null) {
             if (!GAS_API_URL || GAS_API_URL.includes("請將你部署好的")) {
@@ -293,7 +359,7 @@
             if (urlParams.get('guest') === '1') {
                 isGuestMode = true;
                 document.getElementById('guest-badge').classList.remove('hidden');
-                document.getElementById('btn-login').classList.add('hidden');
+                document.getElementById('g-signin-btn-wrapper').classList.add('hidden');
             }
 
             const cloudConfig = await fetchFromCloud("get");
@@ -313,7 +379,6 @@
             }
 
             document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
-
             updateHeaderUI();
 
             if (sessionStorage.getItem('trip_unlocked') === 'true') {
@@ -322,12 +387,14 @@
                 document.getElementById('itinerary-auth-overlay').classList.remove('hidden');
             }
 
-            const savedUser = localStorage.getItem('itinerary_user');
-            if (savedUser && !isGuestMode) {
+            // 檢查本地是否曾有紀錄且在白名單
+            const savedEmail = localStorage.getItem('itinerary_user_email');
+            if (savedEmail && ALLOWED_EMAILS.includes(savedEmail) && !isGuestMode) {
                 isLoggedIn = true;
-                document.getElementById('btn-login').classList.add('hidden');
-                document.getElementById('user-profile').classList.remove('hidden');
-                document.getElementById('user-name').textContent = savedUser;
+                showUserProfileUI(
+                    localStorage.getItem('user_profile_name') || savedEmail,
+                    localStorage.getItem('user_profile_picture') || ""
+                );
             }
 
             renderTimeline();
@@ -414,32 +481,6 @@
             }).catch(() => {
                 prompt("請手動複製以下網址分享：", shareUrl);
             });
-        }
-
-        function handleLogin() {
-            const email = prompt("請輸入您的編輯權限登入 Email：\n(已綁定: pengjun0429@gmail.com)");
-            if (!email) return;
-
-            if (ALLOWED_EMAILS.includes(email.trim().toLowerCase())) {
-                isLoggedIn = true;
-                localStorage.setItem('itinerary_user', email);
-                document.getElementById('btn-login').classList.add('hidden');
-                document.getElementById('user-profile').classList.remove('hidden');
-                document.getElementById('user-name').textContent = email;
-                applyPermissions();
-                showToast("登入成功！已開啟編輯權限");
-            } else {
-                showToast("登入失敗：此帳號不在權限白名單內");
-            }
-        }
-
-        function handleLogout() {
-            isLoggedIn = false;
-            localStorage.removeItem('itinerary_user');
-            document.getElementById('btn-login').classList.remove('hidden');
-            document.getElementById('user-profile').classList.add('hidden');
-            applyPermissions();
-            showToast("已成功登出");
         }
 
         function applyPermissions() {
@@ -577,7 +618,7 @@
             
             selectDay(currentDayIndex);
             closeModal('modal-day-info');
-            await syncToCloud(); // ⬅️ 同步變更後的食宿行程到雲端
+            await syncToCloud();
         }
 
         function openActivityModal(isEdit = false, idx = -1) {
@@ -607,7 +648,7 @@
             if(confirm('確定要刪除這個行程嗎？')) {
                 itineraryData[currentDayIndex].activities.splice(idx, 1);
                 renderActivities(itineraryData[currentDayIndex].activities);
-                await syncToCloud(); // ⬅️ 同步刪除後的景點列表到雲端
+                await syncToCloud();
             }
         }
 
@@ -635,7 +676,7 @@
 
             renderActivities(itineraryData[currentDayIndex].activities);
             closeModal('modal-activity');
-            await syncToCloud(); // ⬅️ 同步新增/編輯後的景點列表到雲端
+            await syncToCloud();
         }
 
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
@@ -678,7 +719,7 @@
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.remove('opacity-0', 'translate-y-10', 'pointer-events-none');
-            toast.classList.add('opacity-100', 'translate-y-0');
+            toast.add = toast.classList.add('opacity-100', 'translate-y-0');
             setTimeout(() => {
                 toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', 'translate-y-10', 'pointer-events-none');
@@ -687,43 +728,43 @@
 
         function getFallbackDefaultData() {
             return [
-                { id: "d1", date: "2026-07-03", title: "啟程：高雄飛往成都", hotel: "成都市區飯店", food: "機上餐點", notes: "首日抵達較晚，直接回飯店休息，儲備體力。",
+                { id: "d1", date: "2026-07-03", title: "啟程：高雄飛往成都", hotel: "成都市區精選飯店", food: "機上餐點 / 飯店宵夜", notes: "首日抵達時間較晚，專車接送至飯店後請盡早休息，為接下來的行程儲備體力。",
                   activities: [
-                      { id: "a1", time: "13:40", icon: "fa-plane", title: "高雄小港機場 T1起飛", desc: "國泰航空 CX423 前往香港轉機 (轉機時間 3h50m)" },
-                      { id: "a2", time: "19:15", icon: "fa-plane", title: "香港 T1起飛", desc: "國泰航空 CX916 前往成都" },
-                      { id: "a3", time: "21:55", icon: "fa-location-dot", title: "抵達成都天府機場 T1", desc: "專車接送至成都市區飯店" }
+                      { id: "d1_a1", time: "13:40", icon: "fa-plane", title: "高雄小港機場 T1 起飛", desc: "搭乘國泰航空 CX423 前往香港轉機。" },
+                      { id: "d1_a2", time: "19:15", icon: "fa-plane", title: "香港 T1 起飛", desc: "搭乘國泰航空 CX916 前往成都。" },
+                      { id: "d1_a3", time: "21:55", icon: "fa-location-dot", title: "抵達成都天府機場 T1", desc: "安排專車接送，前往成都市區飯店辦理入住。" }
                   ]
                 },
-                { id: "d2", date: "2026-07-04", title: "成都市區遊覽", hotel: "成都市區飯店", food: "寬窄巷子小吃、老媽蹄花", notes: "適應四川氣候。",
+                { id: "d2", date: "2026-07-04", title: "成都市區遊覽：三國文化與老成都慢生活", hotel: "成都市區精選飯店", food: "早餐：飯店內｜午餐：成都小吃｜晚餐：老媽蹄花", notes: "今日行程步調輕鬆，主要是適應當地的氣候與飲食，感受成都的慢時光。",
                   activities: [
-                      { id: "a4", time: "09:30", icon: "fa-camera", title: "武侯祠", desc: "三國歷史文化探訪" },
-                      { id: "a5", time: "14:00", icon: "fa-person-walking", title: "錦里古街", desc: "西蜀第一街，體驗採耳與古街風情" }
+                      { id: "d2_a1", time: "09:30", icon: "fa-camera", title: "武侯祠", desc: "探訪諸葛亮與劉備的君臣合祀祠廟，感受濃厚的的三國歷史文化。" },
+                      { id: "d2_a2", time: "14:00", icon: "fa-person-walking", title: "錦里古街", desc: "緊鄰武侯祠的川西古鎮建築群，可以體驗採耳、品嚐三大炮等道地小吃。" }
                   ]
                 },
-                { id: "d3", date: "2026-07-05", title: "成都市區遊覽", hotel: "成都市區飯店", food: "春熙路火鍋", notes: "準備隔天前往高原地區的衣物。",
+                { id: "d3", date: "2026-07-05", title: "網紅景點打卡：大熊貓與時尚太古里", hotel: "成都市區精選飯店", food: "早餐：飯店內｜午餐：川菜家常菜｜晚餐：春熙路火鍋", notes: "看大熊貓一定要早起，因為早上牠們最活躍，下午太熱會都在睡覺。晚上吃火鍋記得點鴛鴦鍋喔！",
                   activities: [
-                      { id: "a6", time: "10:00", icon: "fa-camera", title: "大熊貓繁育研究基地", desc: "早點去人較少，看大熊貓花花" },
-                      { id: "a7", time: "15:00", icon: "fa-person-walking", title: "春熙路 & 太古里", desc: "看 IFS 爬樓大熊貓" }
+                      { id: "d3_a1", time: "08:00", icon: "fa-camera", title: "大熊貓繁育研究基地", desc: "觀賞可愛的國寶大熊貓，有機會看到網紅熊貓「花花」。" },
+                      { id: "d3_a2", time: "15:00", icon: "fa-person-walking", title: "春熙路 & 太古里", desc: "傳統與現代交織的商圈，必看 IFS 頂樓那隻巨大的爬牆大熊貓。" }
                   ]
                 },
-                { id: "d4", date: "2026-07-06", title: "高鐵前往高原", hotel: "松潘或九寨溝口飯店", food: "松潘古城特色美食", notes: "開始進入高海拔地區(約2500m以上)，行動放緩。",
+                { id: "d4", date: "2026-07-06", title: "高鐵前往高原：初探千年松州古城", hotel: "松潘古城或川主寺飯店", food: "早餐：飯店內｜午餐：沿途便餐｜晚餐：犛牛肉湯鍋", notes: "從今天開始進入高原地區（海拔約 2800 公尺以上），請放慢動作、多喝溫水，切勿劇烈運動。",
                   activities: [
-                      { id: "a8", time: "09:00", icon: "fa-train", title: "成都東站 -> 黃龍九寨站", desc: "搭乘動車前往，車程約 1.5 小時" },
-                      { id: "a9", time: "14:00", icon: "fa-camera", title: "松州古城 (松潘)", desc: "千年歷史古鎮，適應海拔" }
+                      { id: "d4_a1", time: "09:00", icon: "fa-train", title: "成都東站 ➔ 黃龍九寨站", desc: "搭乘最新川青鐵路動車，沿途欣賞高原風光，車程大約 1.5 到 2 小時。" },
+                      { id: "d4_a2", time: "14:00", icon: "fa-camera", title: "松州古城（松潘古城）", desc: "歷史悠久的邊防重鎮，登城牆遠眺，感受文成公主進藏的歷史故事。" }
                   ]
                 },
-                { id: "d5", date: "2026-07-07", title: "人間瑤池：黃龍", hotel: "九寨溝口飯店", food: "自備乾糧", notes: "黃龍海拔較高(約3000m+)，建議搭纜車上，步行下。",
+                { id: "d5", date: "2026-07-07", title: "人間瑤池：黃龍風景區", hotel: "九寨溝口特色飯店", food: "早餐：飯店內｜午餐：自備高能量乾糧｜晚餐：藏家迎賓宴", notes: "黃龍海拔較高（最高處五彩池約 3500 公尺），強烈建議搭索道（慢車）上山，再一路沿步道走下山，比較省體力。",
                   activities: [
-                      { id: "a10", time: "08:30", icon: "fa-car", title: "包車前往黃龍風景區", desc: "從高鐵站或松潘出發" },
-                      { id: "a11", time: "10:00", icon: "fa-camera", title: "黃龍五彩池", desc: "世界罕見大型高山鈣華地貌" },
-                      { id: "a12", time: "16:00", icon: "fa-car", title: "前往九寨溝口", desc: "車程約 2-3 小時，入住溝口飯店休息" }
+                      { id: "d5_a1", time: "08:30", icon: "fa-car", title: "專車前往黃龍風景區", desc: "從松潘或川主寺出發，盤山公路風景壯麗。" },
+                      { id: "d5_a2", time: "10:00", icon: "fa-camera", title: "黃龍五彩池 & 鈣華梯田", desc: "欣賞世界級的梯狀鈣華景觀，無數個如寶石般的藍綠色水池交錯。" },
+                      { id: "d5_a3", time: "16:30", icon: "fa-car", title: "專車前往九寨溝口", desc: "下山後乘車前往九寨溝風景區入口旁的飯店，入住準備明天的重頭戲。" }
                   ]
                 },
-                { id: "d6", date: "2026-07-08", title: "童話世界：九寨溝一日遊", hotel: "九寨溝口飯店", food: "諾日朗中心自助餐", notes: "搭乘觀光車。抓大放小，自上而下遊玩。",
+                { id: "d6", date: "2026-07-08", title: "童話世界：九寨溝一日遊（精華路線）", hotel: "九寨溝口特色飯店", food: "早餐：飯店內｜午餐：諾日朗中心自助餐｜晚餐：當地特色中菜", notes: "九寨溝呈現「Y」字型，今日主攻右側的「日則溝」與下面的「樹正溝」，拍照時光線在早上最佳。",
                   activities: [
-                      { id: "a13", time: "08:00", icon: "fa-bus", title: "進入九寨溝景區", desc: "搭乘觀光車前往日則溝頂端" },
-                      { id: "a14", time: "11:00", icon: "fa-camera", title: "五花海 & 珍珠灘瀑布", desc: "五花海是九寨精華，顏色變幻莫測。" },
-                      { id: "a15", time: "14:00", icon: "fa-camera", title: "長海 & 五彩池", desc: "換乘至則查窪溝。長海壯觀，五彩池色彩最鮮艷。" }
+                      { id: "d6_a1", time: "08:00", icon: "fa-location-dot", title: "進入九寨溝風景區", desc: "搭乘景區環保觀光車直奔最上方的景點。" },
+                      { id: "d6_a2", time: "10:30", icon: "fa-camera", title: "五花海 & 珍珠灘瀑布", desc: "五花海是九寨溝的靈魂，湖水色彩斑斕；珍珠灘瀑布是西遊記片頭取景地。" },
+                      { id: "d6_a3", time: "14:30", icon: "fa-camera", title: "諾日朗瀑布 & 樹正群海", desc: "參觀雄偉的諾日朗瀑布，隨後沿著樹正溝慢慢步行下山欣賞群海疊瀑。" }
                   ]
                 }
             ];
