@@ -1,0 +1,13 @@
+{
+    "name": "Travelweb — 出遊網頁規劃",
+    "short_name": "Travelweb",
+    "description": "建立專屬旅遊行程，一鍵分享給親友",
+    "start_url": "/",
+    "display": "standalone",
+    "background_color": "#f8fafc",
+    "theme_color": "#0ea5e9",
+    "icons": [
+        { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+        { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+    ]
+}
