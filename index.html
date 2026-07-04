@@ -302,13 +302,20 @@
                 </div>
             </section>
 
-            <div id="fab-container" class="edit-only hidden fixed bottom-6 right-6 z-30 flex flex-col gap-3">
-                <button onclick="addNewDay()" class="w-12 h-12 bg-white hover:bg-slate-50 text-slate-700 rounded-full shadow-lg border border-slate-200 flex items-center justify-center transition">
-                    <i class="fa-solid fa-calendar-plus"></i>
-                </button>
-                <button onclick="openActivityModal()" class="w-14 h-14 bg-primary hover:bg-sky-600 text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center transition text-xl">
-                    <i class="fa-solid fa-plus"></i>
-                </button>
+            <div id="fab-container" class="edit-only hidden fixed bottom-6 right-6 z-30" onmouseenter="openFab()" onmouseleave="closeFab()">
+                <div class="fab-menu flex flex-col items-end gap-2 mb-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-200">
+                    <button onclick="openActivityModal()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
+                        <i class="fa-solid fa-location-dot text-primary"></i> 新增景點
+                    </button>
+                    <button onclick="addNewDay()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
+                        <i class="fa-solid fa-calendar-plus text-secondary"></i> 新增一天
+                    </button>
+                </div>
+                <div class="flex justify-end">
+                    <button onclick="toggleFab()" class="w-14 h-14 bg-primary hover:bg-sky-600 text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center transition text-xl">
+                        <i id="fab-icon" class="fa-solid fa-plus transition-transform duration-200"></i>
+                    </button>
+                </div>
             </div>
 
             <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
@@ -1075,6 +1082,7 @@
         }
 
         function openActivityModal(isEdit = false, idx = -1) {
+            closeFab();
             if(!canEdit()) return showToast("請先登入以取得編輯權限");
             editingActIndex = idx;
             document.getElementById('modal-activity-title').textContent = isEdit ? '編輯景點' : '新增景點';
@@ -1121,6 +1129,7 @@
         }
 
         function addNewDay() {
+            closeFab();
             if (!canEdit()) return showToast("請先登入");
             const lastDay = itineraryData[itineraryData.length - 1];
             let nextDate = new Date();
@@ -1142,6 +1151,40 @@
             selectDay(itineraryData.length - 1);
             syncToCloud();
             showToast('已新增 Day ' + itineraryData.length);
+        }
+
+        let fabOpen = false;
+        function toggleFab() {
+            fabOpen = !fabOpen;
+            const menu = document.querySelector('.fab-menu');
+            const icon = document.getElementById('fab-icon');
+            if (fabOpen) {
+                menu.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                menu.classList.add('opacity-100', 'translate-y-0');
+                icon.style.transform = 'rotate(45deg)';
+            } else {
+                closeFab();
+            }
+        }
+        function closeFab() {
+            fabOpen = false;
+            const menu = document.querySelector('.fab-menu');
+            const icon = document.getElementById('fab-icon');
+            if (menu) {
+                menu.classList.add('opacity-0', 'translate-y-4', 'pointer-events-none');
+                menu.classList.remove('opacity-100', 'translate-y-0');
+            }
+            if (icon) icon.style.transform = 'rotate(0deg)';
+        }
+        function openFab() {
+            fabOpen = true;
+            const menu = document.querySelector('.fab-menu');
+            const icon = document.getElementById('fab-icon');
+            if (menu) {
+                menu.classList.remove('opacity-0', 'translate-y-4', 'pointer-events-none');
+                menu.classList.add('opacity-100', 'translate-y-0');
+            }
+            if (icon) icon.style.transform = 'rotate(45deg)';
         }
 
         function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
