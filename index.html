@@ -222,7 +222,7 @@
     </div>
 
     <!-- ========== TRIPS VIEW ========== -->
-    <div id="trips-view" class="view-hidden h-full flex flex-col bg-slate-50">
+    <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
@@ -254,11 +254,6 @@
 
     <!-- ========== APP VIEW (hidden initially) ========== -->
     <div id="app-view" class="view-hidden h-full flex flex-col">
-
-        <div id="loading-overlay" class="fixed inset-0 bg-slate-900/80 flex flex-col items-center justify-center z-50 transition-opacity duration-300">
-            <div class="animate-spin text-white text-4xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
-            <p class="text-white text-sm font-medium">正在從雲端同步最新行程...</p>
-        </div>
 
         <header class="bg-white shadow-sm z-10 px-2 md:px-6 py-2 md:py-4 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-1.5 md:gap-3 min-w-0">
@@ -688,7 +683,7 @@
 
         function handleStartClick() {
             document.getElementById('landing-view').classList.add('view-hidden');
-            document.getElementById('trips-view').classList.remove('view-hidden');
+            document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未登入';
             loadTrips();
@@ -700,7 +695,7 @@
         function showTrips() {
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('app-view').classList.add('view-hidden');
-            document.getElementById('trips-view').classList.remove('view-hidden');
+            document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
             loadTrips();
@@ -785,6 +780,7 @@
             currentTripId = tripId;
             localStorage.setItem('tw_current_trip', tripId);
             window.history.replaceState({}, '', window.location.pathname + '?trip=' + tripId);
+            document.getElementById('trips-view').classList.add('hidden');
             showApp();
             document.getElementById('app-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('app-user-name').textContent = currentUser ? currentUser.name : '';
@@ -794,7 +790,7 @@
 
         function showTripsFromApp() {
             document.getElementById('app-view').classList.add('view-hidden');
-            document.getElementById('trips-view').classList.remove('view-hidden');
+            document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
             loadTrips();
@@ -951,8 +947,6 @@
                 if (currentUser && !ownerEmail) ownerEmail = currentUser.email;
                 await syncToCloud();
             }
-
-            document.getElementById('loading-overlay').classList.add('opacity-0', 'pointer-events-none');
             updateHeaderUI();
             renderTimeline();
             selectDay(0);
