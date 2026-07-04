@@ -94,15 +94,18 @@
                     建立專屬的旅遊行程，一鍵分享給親友<br class="hidden md:block">
                     所有人即時查看，輕鬆同步
                 </p>
-                <div class="animate-fade-in-up-delay-2">
+                <div class="animate-fade-in-up-delay-2 flex flex-col items-center gap-4">
+                    <button id="btn-start-hero" onclick="handleStartClick()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50 flex items-center gap-2">
+                        <i class="fa-solid fa-rocket"></i> 開始規劃旅程
+                    </button>
                     <div id="landing-hero-gsignin" class="inline-block">
-                        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular" data-width="280"></div>
+                        <div class="g_id_signin" data-type="standard" data-size="large" data-theme="outline" data-text="signin_with" data-shape="rectangular"></div>
                     </div>
-                    <div id="landing-hero-user" class="hidden">
+                    <div id="landing-hero-user" class="hidden flex flex-col items-center gap-3">
+                        <p id="landing-hero-email" class="text-slate-400 text-sm"></p>
                         <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
                             <i class="fa-solid fa-map mr-2"></i> 進入我的行程
                         </button>
-                        <p id="landing-hero-email" class="text-slate-400 text-sm mt-3"></p>
                     </div>
                 </div>
                 <p class="text-slate-500 text-sm mt-6 animate-fade-in-up-delay-3">
@@ -516,6 +519,7 @@
         function updateLandingAuthUI() {
             if (currentUser) {
                 document.getElementById('landing-g-signin-btn-wrapper').classList.add('hidden');
+                document.getElementById('btn-start-hero').classList.add('hidden');
                 document.getElementById('landing-hero-gsignin').classList.add('hidden');
                 const profile = document.getElementById('landing-user-profile');
                 profile.classList.remove('hidden');
@@ -528,10 +532,19 @@
                 document.getElementById('landing-hero-email').textContent = '已使用 ' + currentUser.email + ' 登入';
             } else {
                 document.getElementById('landing-g-signin-btn-wrapper').classList.remove('hidden');
+                document.getElementById('btn-start-hero').classList.remove('hidden');
                 document.getElementById('landing-hero-gsignin').classList.remove('hidden');
                 document.getElementById('landing-user-profile').classList.add('hidden');
                 document.getElementById('landing-user-profile').style.display = 'none';
                 document.getElementById('landing-hero-user').classList.add('hidden');
+            }
+        }
+
+        function handleStartClick() {
+            if (currentUser) {
+                enterApp();
+            } else {
+                google.accounts.id.prompt();
             }
         }
 
