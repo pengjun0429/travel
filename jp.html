@@ -13,7 +13,7 @@
     <meta property="og:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta property="og:url" content="https://travelweb-8kb.pages.dev">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Travelweb — 出遊網頁規劃">
+    <meta name="twitter:title" content="Travelweb | 旅行プランナー">
     <meta name="twitter:description" content="建立專屬旅遊行程，一鍵共有給親友，支援多人共同編輯與雲端同步。">
     <meta name="twitter:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -78,7 +78,7 @@
         (function() {
             var c = document.cookie.match(/tw_lang=([^;]+)/);
             var lang = c ? c[1] : '';
-            var pages = { ja: '/ja' };
+            var pages = { ja: '/jp' };
             if (pages[lang] && window.location.pathname !== pages[lang] && !window.location.pathname.endsWith(lang + '.html')) {
                 window.location.replace(pages[lang]);
             }
@@ -106,7 +106,7 @@
                 <div class="flex items-center gap-3">
                     <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">中文</button>
                     <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
-                    <button onclick="switchLang('ja')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">日本語</button>
+                    <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">日本語</button>
                     <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">한국어</button>
                     <div id="landing-auth" class="flex items-center gap-3">
                         <div id="landing-g-signin-btn-wrapper">
@@ -130,7 +130,7 @@
                     </div>
                 </div>
                 <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight animate-fade-in-up">
-                    用 <span class="text-primary">Travelweb</span> 規劃旅程
+                    Travelweb で旅程を計画
                 </h1>
                 <p class="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 animate-fade-in-up-delay-1">
                     自分だけの旅程を作成し、友達と共有<br class="hidden md:block">
@@ -665,7 +665,7 @@
 
         function switchLang(lang) {
             document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
-            const pages = { zh: '/', en: '/en', ja: '/ja', ko: '/ko' };
+            const pages = { zh: '/', en: '/en', ja: '/jp', ko: '/ko' };
             window.location.replace(pages[lang] || '/');
         }
 
