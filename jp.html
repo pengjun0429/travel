@@ -8,13 +8,13 @@
     <meta name="keywords" content="旅行,旅程,プラン,共有,クラウド,共同編集">
     <meta name="author" content="pengjun0429">
     <meta property="og:title" content="Travelweb — 旅行プランナー">
-    <meta property="og:description" content="建立專屬旅遊行程，ワンクリック共有給親友，支援多人共同編集與クラウド同期。">
+    <meta property="og:description" content="建立專屬旅遊旅程，ワンクリック友達と共有，複数人編集とクラウド同期。">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta property="og:url" content="https://travelweb-8kb.pages.dev">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Travelweb | 旅行プランナー">
-    <meta name="twitter:description" content="建立專屬旅遊行程，一鍵共有給親友，支援多人共同編輯與雲端同步。">
+    <meta name="twitter:description" content="建立專屬旅遊旅程，一鍵友達と共有，支援多人共同編輯與クラウド同期。">
     <meta name="twitter:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -104,7 +104,7 @@
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">中文</button>
+                    <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">文</button>
                     <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
                     <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">日本語</button>
                     <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">한국어</button>
@@ -147,7 +147,7 @@
                                 <i class="fa-solid fa-list"></i> マイトリップ
                             </button>
                             <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
-                                <i class="fa-solid fa-map mr-2"></i> 進入行程
+                                <i class="fa-solid fa-map mr-2"></i> 旅行を開く
                             </button>
                         </div>
                     </div>
@@ -180,20 +180,20 @@
                             <i class="fa-solid fa-user-gear text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-dark mb-2">自分だけの旅程</h3>
-                        <p class="text-slate-600">ログイン後、自分だけの旅程を作成。毎日の観光地、宿泊、食事を自由に編集。</p>
+                        <p class="text-slate-600">ログイン後、自分だけの旅程を作成。毎日の観光地、宿泊、食事を自由にに編集。</p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-emerald-50 text-secondary flex items-center justify-center mb-5">
                             <i class="fa-solid fa-share-nodes text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">一鍵分享</h3>
+                        <h3 class="text-xl font-bold text-dark mb-2">ワンクリック共有</h3>
                         <p class="text-slate-600">専用URLを生成して共有。ゲストはログイン不要で旅程を閲覧可能。</p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center mb-5">
                             <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">雲端同步</h3>
+                        <h3 class="text-xl font-bold text-dark mb-2">クラウド同期</h3>
                         <p class="text-slate-600">旅程データは自動でクラウド同期。どこでも更新可能、データ紛失の心配なし。</p>
                     </div>
                 </div>
@@ -210,12 +210,12 @@
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">1</div>
                         <h3 class="text-lg font-bold text-dark mb-2">Google 登入</h3>
-                        <p class="text-slate-600 text-sm">使用你的 Google 帳號快速登入，安全又方便。</p>
+                        <p class="text-slate-600 text-sm">あなたの Google アカウントでログイン，安全で便利。</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">2</div>
                         <h3 class="text-lg font-bold text-dark mb-2">旅程を編集</h3>
-                        <p class="text-slate-600 text-sm">毎日の観光地、宿泊、グルメを追加。ルートを自由に調整。</p>
+                        <p class="text-slate-600 text-sm">毎日の観光地、宿泊、グルメを追加。ルートを自由にに調整。</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">3</div>
@@ -262,7 +262,7 @@
             <div class="max-w-4xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold text-dark">我的行程</h2>
+                        <h2 class="text-2xl font-bold text-dark">マイトリップ</h2>
                         <p class="text-sm text-slate-500 mt-1">無料版: 最大5つ（<span id="trip-count">0</span>/5）</p>
                     </div>
                     <div class="flex gap-2">
@@ -270,12 +270,12 @@
                             <i class="fa-solid fa-plus"></i> 新しい旅
                         </button>
                         <button onclick="openAIPlanModal()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> AI 幫我規劃
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> AI AIで計画
                         </button>
                     </div>
                 </div>
                 <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="text-slate-400 col-span-full text-center py-12">読み込み中...</div>
+                    <div class="text-slate-400 col-span-full text-center py-12">読み込み...</div>
                 </div>
             </div>
         </main>
@@ -288,13 +288,13 @@
             <div class="flex items-center gap-1.5 md:gap-3 min-w-0">
                 <i class="fa-solid fa-mountain-sun text-primary text-base md:text-2xl shrink-0"></i>
                 <div class="truncate">
-                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">載入中...</h1>
-                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">載入中...</p>
+                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">読み込み...</h1>
+                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">読み込み...</p>
                 </div>
             </div>
             <div class="flex items-center gap-0.5 md:gap-2 shrink-0">
                 <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-1.5 md:px-3 py-1 rounded-full text-[9px] md:text-sm font-medium whitespace-nowrap">
-                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> 訪客唯讀</span>
+                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> ゲスト</span>
                 </div>
                 <button id="btn-back-home" class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="goToHome()">
                     <i class="fa-solid fa-arrow-left text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">旅の一覧</span>
@@ -323,7 +323,7 @@
         <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
             <aside class="w-full md:w-64 lg:w-72 bg-white border-b md:border-b-0 md:border-r border-slate-200 shrink-0 max-h-[72px] md:max-h-none overflow-y-auto md:overflow-y-auto">
                 <div class="p-2 md:p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
-                    <h2 class="font-bold text-slate-700">行程總覽</h2>
+                    <h2 class="font-bold text-slate-700">旅程概要</h2>
                 </div>
                 <div id="timeline-container" class="flex md:flex-col gap-1.5 md:gap-1 overflow-x-auto md:overflow-x-hidden p-2 md:p-4"></div>
             </aside>
@@ -332,7 +332,7 @@
                 <div class="max-w-3xl mx-auto w-full p-4 md:p-8 pb-24 flex-1 flex flex-col">
                 <div class="flex justify-between items-end mb-6">
                     <div>
-                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
+                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">読み込み...</h2>
                         <p id="current-day-date" class="text-slate-500 font-medium"></p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -378,10 +378,10 @@
             <div id="fab-container" class="edit-only hidden fixed bottom-6 right-6 z-30" onmouseenter="openFab()" onmouseleave="closeFab()">
                 <div class="fab-menu flex flex-col items-end gap-2 mb-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-200">
                     <button onclick="openActivityModal()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-location-dot text-primary"></i> 新增景點
+                        <i class="fa-solid fa-location-dot text-primary"></i> スポット追加
                     </button>
                     <button onclick="addNewDay()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-calendar-plus text-secondary"></i> 新增一天
+                        <i class="fa-solid fa-calendar-plus text-secondary"></i> 日を追加
                     </button>
                 </div>
                 <div class="flex justify-end">
@@ -393,12 +393,12 @@
 
             <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>景點預覽</h3>
+                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>スポットプレビュー</h3>
                     <button class="lg:hidden text-slate-400 hover:text-slate-600" onclick="document.getElementById('map-panel').classList.remove('flex'); document.getElementById('map-panel').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div id="preview-content" class="flex-1 p-5 overflow-y-auto flex flex-col items-center justify-center text-center text-slate-400">
                     <i class="fa-regular fa-compass text-4xl mb-3"></i>
-                    <p>點擊左側行程中的景點<br>即可在此預覽與導航</p>
+                    <p>左側のスポットをクリック<br>プレビューとナビ</p>
                 </div>
             </aside>
         </main>
@@ -414,14 +414,14 @@
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">行程所有者</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">旅程所有者</label>
                         <p id="collab-owner" class="text-slate-500 text-sm">-</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">共同編集者を追加（メール）</label>
                         <div class="flex gap-2">
                             <input type="email" id="input-collab-email" placeholder="example@gmail.com" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
-                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">新增</button>
+                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">追加</button>
                         </div>
                     </div>
                     <div>
@@ -457,7 +457,7 @@
                         <p class="text-xs text-slate-400 mb-1">アカウント情報</p>
                         <p class="text-sm font-medium text-slate-700"><i class="fa-solid fa-envelope mr-1 text-slate-400"></i><span id="config-email">-</span></p>
                         <p class="text-xs text-slate-500 mt-1">ログイン方法: <span id="config-auth-method">-</span></p>
-                        <p class="text-xs text-slate-400 mt-1">同 Email 的登入方式共有同一個行程帳號</p>
+                        <p class="text-xs text-slate-400 mt-1">同 Email のログイン方法共有同一個旅程帳號</p>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
@@ -492,7 +492,7 @@
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">キャンセル</button>
                     <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">変更を保存</button>
                 </div>
             </div>
@@ -535,7 +535,7 @@
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">キャンセル</button>
                     <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">保存</button>
                 </div>
             </div>
@@ -546,28 +546,28 @@
     <div id="modal-ai-plan" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
         <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl flex flex-col">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
-                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-wand-magic-sparkles text-purple-500 mr-2"></i>AI 幫你規劃行程</h3>
+                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-wand-magic-sparkles text-purple-500 mr-2"></i>AI AIで旅程を計画</h3>
                 <button onclick="closeModal('modal-ai-plan')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div class="p-6 space-y-4 overflow-y-auto flex-1" id="ai-plan-body">
                 <div id="ai-plan-input">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">告訴我你想去哪裡</label>
-                    <textarea id="ai-prompt" rows="4" placeholder="例如：東京5天，預算中等，喜歡動漫和美食" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 outline-none text-sm"></textarea>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">行き先を教えてください</label>
+                    <textarea id="ai-prompt" rows="4" placeholder="例：：東京5天，予算，アニメとグルメ" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 outline-none text-sm"></textarea>
                     <button onclick="submitAIPlan()" id="btn-ai-submit" class="w-full mt-3 bg-purple-500 hover:bg-purple-600 text-white py-3 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> 開始規劃
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> 計画開始
                     </button>
                 </div>
                 <div id="ai-plan-loading" class="hidden text-center py-12">
                     <div class="animate-spin text-purple-500 text-4xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
-                    <p class="text-slate-500 text-sm">AI 正在為你規劃行程...</p>
+                    <p class="text-slate-500 text-sm">AI 旅程を計画......</p>
                 </div>
                 <div id="ai-plan-result" class="hidden space-y-4"></div>
                 <div id="ai-plan-error" class="hidden text-red-500 text-sm text-center py-4"></div>
             </div>
             <div id="ai-plan-footer" class="hidden p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2 shrink-0">
-                <button onclick="closeModal('modal-ai-plan')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                <button onclick="closeModal('modal-ai-plan')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">キャンセル</button>
                 <button onclick="applyAIPlan()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg flex items-center gap-2">
-                    <i class="fa-solid fa-check"></i> 套用此行程
+                    <i class="fa-solid fa-check"></i> この旅程を適用
                 </button>
             </div>
         </div>
@@ -629,7 +629,7 @@
         let guestUserUid = null;         // uid of the trip owner being viewed as guest
 
         let globalConfig = {
-            tripTitle: "我的旅遊行程",
+            tripTitle: "我的旅遊旅程",
             tripDate: ""
         };
         let itineraryData = [];
@@ -747,7 +747,7 @@
 
                 const heroUser = document.getElementById('landing-hero-user');
                 heroUser.classList.remove('hidden');
-                document.getElementById('landing-hero-email').textContent = 'ログイン中: ' + currentUser.email + ' 登入';
+                document.getElementById('landing-hero-email').textContent = 'ログイン: ' + currentUser.email + ' 登入';
                 document.getElementById('landing-login-buttons').classList.add('hidden');
             } else {
                 document.getElementById('landing-g-signin-btn-wrapper').classList.remove('hidden');
@@ -787,7 +787,7 @@
         async function loadTrips() {
             if (!currentUser) return;
             const container = document.getElementById('trips-list');
-            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">載入中...</div>';
+            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">読み込み...</div>';
             try {
                 const res = await Promise.race([
                     fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`),
@@ -801,9 +801,9 @@
                 let html = '';
 
                 // My trips
-                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">我的行程</h3></div>';
+                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">マイトリップ</h3></div>';
                 if (owned.length === 0) {
-                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有行程</p></div>';
+                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有旅程</p></div>';
                 } else {
                     html += owned.map(trip => tripCard(trip, false)).join('');
                 }
@@ -814,7 +814,7 @@
                     html += shared.map(trip => tripCard(trip, true)).join('');
                 }
 
-                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有行程</p></div>';
+                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有旅程</p></div>';
             } catch (err) {
                 container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>読み込み失敗</p><button onclick="loadTrips()" class="mt-2 text-sm underline">再試行</button></div>';
             }
@@ -851,7 +851,7 @@
                     return;
                 }
             } catch(e) {}
-            const title = prompt("旅の名前:", "我的旅遊行程");
+            const title = prompt("旅の名前:", "我的旅遊旅程");
             if (!title) { isCreatingTrip = false; return; }
             try {
                 const res = await fetch(`${API_BASE}/api/trip`, {
@@ -934,7 +934,7 @@
             if (suggestion.food) html += `<div class="mb-2"><span class="text-xs text-slate-400">美食：</span><span class="text-sm text-slate-700">${suggestion.food}</span></div>`;
 
             if (suggestion.activities && suggestion.activities.length > 0) {
-                html += '<div class="mt-3 pt-3 border-t border-purple-100"><p class="text-xs text-slate-400 mb-2">建議行程：</p>';
+                html += '<div class="mt-3 pt-3 border-t border-purple-100"><p class="text-xs text-slate-400 mb-2">建議旅程：</p>';
                 suggestion.activities.forEach((act, i) => {
                     html += `<div class="flex items-start gap-2 mb-2">
                         <div class="w-6 h-6 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center shrink-0 text-xs">${i + 1}</div>
@@ -963,7 +963,7 @@
             if (!aiPlanResult || !currentUser) return;
             closeModal('modal-ai-plan');
 
-            const title = aiPlanResult.hotel ? `AI 推薦行程` : 'AI 規劃行程';
+            const title = aiPlanResult.hotel ? `AI 推薦旅程` : 'AI 規劃旅程';
             const itineraryData = [];
 
             if (aiPlanResult.activities && aiPlanResult.activities.length > 0) {
@@ -993,7 +993,7 @@
                 });
                 const data = await res.json();
                 if (data.tripId) {
-                    showToast("AI 行程已建立！");
+                    showToast("AI 旅程已建立！");
                     selectTrip(data.tripId);
                     loadTrips();
                 } else {
@@ -1461,7 +1461,7 @@
             closeFab();
             if(!canEdit()) return showToast("請先登入以取得編輯權限");
             editingActIndex = idx;
-            document.getElementById('modal-activity-title').textContent = isEdit ? 'スポットを編集' : '新增景點';
+            document.getElementById('modal-activity-title').textContent = isEdit ? 'スポットを編集' : 'スポット追加';
             if (isEdit && idx >= 0) {
                 const act = itineraryData[currentDayIndex].activities[idx];
                 document.getElementById('act-time').value = act.time;
@@ -1526,13 +1526,13 @@
             renderTimeline();
             selectDay(itineraryData.length - 1);
             syncToCloud();
-            showToast('已新增 Day ' + itineraryData.length);
+            showToast('已追加 Day ' + itineraryData.length);
         }
 
         async function deleteCurrentDay() {
             if (!canEdit()) return;
-            if (itineraryData.length <= 1) return showToast("最低1日必要です");
-            if (!confirm('確定要刪除 Day ' + (currentDayIndex + 1) + '？この操作は元に戻せません。')) return;
+            if (itineraryData.length <= 1) return showToast("最1日必要です");
+            if (!confirm('削除しますか Day ' + (currentDayIndex + 1) + '？この操作は元に戻せません。')) return;
             itineraryData.splice(currentDayIndex, 1);
             if (currentDayIndex >= itineraryData.length) currentDayIndex = itineraryData.length - 1;
             renderTimeline();
@@ -1591,7 +1591,7 @@
                     <p class="text-slate-600 text-sm leading-relaxed mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">${act.desc || '暫無詳細說明。'}</p>
                     <div class="space-y-2">
                         <a href="${amapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm">
-                            <i class="fa-solid fa-map"></i> 高德地圖導航
+                            <i class="fa-solid fa-map"></i> 德地圖導航
                         </a>
                         <a href="${googleMapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-4 rounded-xl transition text-sm">
                             <i class="fa-solid fa-location-arrow"></i> Google 地圖搜尋

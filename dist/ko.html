@@ -8,13 +8,13 @@
     <meta name="keywords" content="여행,일정,플랜,공유,클라우드,공동편집">
     <meta name="author" content="pengjun0429">
     <meta property="og:title" content="Travelweb — 여행 플래너">
-    <meta property="og:description" content="建立專屬旅遊行程，원클릭 공유給親友，支援多人공동 편집與클라우드 동기화。">
+    <meta property="og:description" content="建立專屬旅遊여행，원클릭 공유給親友，支援多人공동 편집與클라우드 동기화。">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta property="og:url" content="https://travelweb-8kb.pages.dev">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Travelweb — 出遊網頁規劃">
-    <meta name="twitter:description" content="建立專屬旅遊行程，一鍵공유給親友，支援多人共同編輯與雲端同步。">
+    <meta name="twitter:title" content="Travelweb — 여행 플래너">
+    <meta name="twitter:description" content="建立專屬旅遊여행，一鍵공유給親友，支援多人共同編輯與클라우드 동기화。">
     <meta name="twitter:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -106,7 +106,7 @@
                 <div class="flex items-center gap-3">
                     <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">中文</button>
                     <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
-                    <button onclick="switchLang('ja')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">日本語</button>
+                    <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">日本語</button>
                     <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">한국어</button>
                     <div id="landing-auth" class="flex items-center gap-3">
                         <div id="landing-g-signin-btn-wrapper">
@@ -130,7 +130,7 @@
                     </div>
                 </div>
                 <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight animate-fade-in-up">
-                    用 <span class="text-primary">Travelweb</span> 規劃旅程
+                    Travelweb으로 여행 계획
                 </h1>
                 <p class="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 animate-fade-in-up-delay-1">
                     나만의 여행 일정을 만들고 친구와 공유<br class="hidden md:block">
@@ -147,7 +147,7 @@
                                 <i class="fa-solid fa-list"></i> 내 여행
                             </button>
                             <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
-                                <i class="fa-solid fa-map mr-2"></i> 進入行程
+                                <i class="fa-solid fa-map mr-2"></i> 여행 열기
                             </button>
                         </div>
                     </div>
@@ -186,14 +186,14 @@
                         <div class="w-14 h-14 rounded-xl bg-emerald-50 text-secondary flex items-center justify-center mb-5">
                             <i class="fa-solid fa-share-nodes text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">一鍵分享</h3>
+                        <h3 class="text-xl font-bold text-dark mb-2">원클릭 공유</h3>
                         <p class="text-slate-600">전용 URL을 생성하여 공유. 게스트는 로그인 없이 전체 일정을 볼 수 있습니다.</p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center mb-5">
                             <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">雲端同步</h3>
+                        <h3 class="text-xl font-bold text-dark mb-2">클라우드 동기화</h3>
                         <p class="text-slate-600">여행 데이터는 자동으로 클라우드 동기화. 언제 어디서나 업데이트, 데이터 분실 걱정 없음.</p>
                     </div>
                 </div>
@@ -210,7 +210,7 @@
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">1</div>
                         <h3 class="text-lg font-bold text-dark mb-2">Google 登入</h3>
-                        <p class="text-slate-600 text-sm">使用你的 Google 帳號快速登入，安全又方便。</p>
+                        <p class="text-slate-600 text-sm">Google 계정으로 빠르고 안전하게 로그인.</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">2</div>
@@ -262,7 +262,7 @@
             <div class="max-w-4xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold text-dark">我的行程</h2>
+                        <h2 class="text-2xl font-bold text-dark">내 여행</h2>
                         <p class="text-sm text-slate-500 mt-1">무료 버전: 최대 5개（<span id="trip-count">0</span>/5）</p>
                     </div>
                     <div class="flex gap-2">
@@ -270,7 +270,7 @@
                             <i class="fa-solid fa-plus"></i> 새 여행
                         </button>
                         <button onclick="openAIPlanModal()" class="bg-purple-500 hover:bg-purple-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                            <i class="fa-solid fa-wand-magic-sparkles"></i> AI 幫我規劃
+                            <i class="fa-solid fa-wand-magic-sparkles"></i> AI AI로 계획
                         </button>
                     </div>
                 </div>
@@ -288,13 +288,13 @@
             <div class="flex items-center gap-1.5 md:gap-3 min-w-0">
                 <i class="fa-solid fa-mountain-sun text-primary text-base md:text-2xl shrink-0"></i>
                 <div class="truncate">
-                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">載入中...</h1>
-                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">載入中...</p>
+                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">로딩 중...</h1>
+                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">로딩 중...</p>
                 </div>
             </div>
             <div class="flex items-center gap-0.5 md:gap-2 shrink-0">
                 <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-1.5 md:px-3 py-1 rounded-full text-[9px] md:text-sm font-medium whitespace-nowrap">
-                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> 訪客唯讀</span>
+                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> 게스트</span>
                 </div>
                 <button id="btn-back-home" class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="goToHome()">
                     <i class="fa-solid fa-arrow-left text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">여행 목록</span>
@@ -323,7 +323,7 @@
         <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
             <aside class="w-full md:w-64 lg:w-72 bg-white border-b md:border-b-0 md:border-r border-slate-200 shrink-0 max-h-[72px] md:max-h-none overflow-y-auto md:overflow-y-auto">
                 <div class="p-2 md:p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
-                    <h2 class="font-bold text-slate-700">行程總覽</h2>
+                    <h2 class="font-bold text-slate-700">여행 개요</h2>
                 </div>
                 <div id="timeline-container" class="flex md:flex-col gap-1.5 md:gap-1 overflow-x-auto md:overflow-x-hidden p-2 md:p-4"></div>
             </aside>
@@ -332,7 +332,7 @@
                 <div class="max-w-3xl mx-auto w-full p-4 md:p-8 pb-24 flex-1 flex flex-col">
                 <div class="flex justify-between items-end mb-6">
                     <div>
-                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
+                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">로딩 중...</h2>
                         <p id="current-day-date" class="text-slate-500 font-medium"></p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -378,10 +378,10 @@
             <div id="fab-container" class="edit-only hidden fixed bottom-6 right-6 z-30" onmouseenter="openFab()" onmouseleave="closeFab()">
                 <div class="fab-menu flex flex-col items-end gap-2 mb-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-200">
                     <button onclick="openActivityModal()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-location-dot text-primary"></i> 新增景點
+                        <i class="fa-solid fa-location-dot text-primary"></i> 장소 추가
                     </button>
                     <button onclick="addNewDay()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-calendar-plus text-secondary"></i> 新增一天
+                        <i class="fa-solid fa-calendar-plus text-secondary"></i> 하루 추가
                     </button>
                 </div>
                 <div class="flex justify-end">
@@ -393,12 +393,12 @@
 
             <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>景點預覽</h3>
+                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>장소 미리보기</h3>
                     <button class="lg:hidden text-slate-400 hover:text-slate-600" onclick="document.getElementById('map-panel').classList.remove('flex'); document.getElementById('map-panel').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div id="preview-content" class="flex-1 p-5 overflow-y-auto flex flex-col items-center justify-center text-center text-slate-400">
                     <i class="fa-regular fa-compass text-4xl mb-3"></i>
-                    <p>點擊左側行程中的景點<br>即可在此預覽與導航</p>
+                    <p>왼쪽의 장소를 클릭<br>미리보기 및 길찾기</p>
                 </div>
             </aside>
         </main>
@@ -414,14 +414,14 @@
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">行程소유자</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">여행소유자</label>
                         <p id="collab-owner" class="text-slate-500 text-sm">-</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">공동 편집자 추가 (이메일)</label>
                         <div class="flex gap-2">
                             <input type="email" id="input-collab-email" placeholder="example@gmail.com" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
-                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">新增</button>
+                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">추가</button>
                         </div>
                     </div>
                     <div>
@@ -457,7 +457,7 @@
                         <p class="text-xs text-slate-400 mb-1">계정 정보</p>
                         <p class="text-sm font-medium text-slate-700"><i class="fa-solid fa-envelope mr-1 text-slate-400"></i><span id="config-email">-</span></p>
                         <p class="text-xs text-slate-500 mt-1">로그인 방식: <span id="config-auth-method">-</span></p>
-                        <p class="text-xs text-slate-400 mt-1">同 Email 的登入方式공유同一個行程帳號</p>
+                        <p class="text-xs text-slate-400 mt-1">同 Email 의 로그인 방식공유同一個여행帳號</p>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
@@ -492,7 +492,7 @@
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취소</button>
                     <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">변경 저장</button>
                 </div>
             </div>
@@ -535,7 +535,7 @@
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취소</button>
                     <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">저장</button>
                 </div>
             </div>
@@ -546,28 +546,28 @@
     <div id="modal-ai-plan" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
         <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl flex flex-col">
             <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
-                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-wand-magic-sparkles text-purple-500 mr-2"></i>AI 幫你規劃行程</h3>
+                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-wand-magic-sparkles text-purple-500 mr-2"></i>AI AI로 여행 계획</h3>
                 <button onclick="closeModal('modal-ai-plan')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
             </div>
             <div class="p-6 space-y-4 overflow-y-auto flex-1" id="ai-plan-body">
                 <div id="ai-plan-input">
-                    <label class="block text-sm font-medium text-slate-700 mb-1">告訴我你想去哪裡</label>
-                    <textarea id="ai-prompt" rows="4" placeholder="例如：東京5天，預算中等，喜歡動漫和美食" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 outline-none text-sm"></textarea>
+                    <label class="block text-sm font-medium text-slate-700 mb-1">어디로 갈지 알려주세요</label>
+                    <textarea id="ai-prompt" rows="4" placeholder="예: ：東京5天，중간 예산，애니메이션과 맛집" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-purple-500 outline-none text-sm"></textarea>
                     <button onclick="submitAIPlan()" id="btn-ai-submit" class="w-full mt-3 bg-purple-500 hover:bg-purple-600 text-white py-3 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-wand-magic-sparkles"></i> 開始規劃
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> 계획 시작
                     </button>
                 </div>
                 <div id="ai-plan-loading" class="hidden text-center py-12">
                     <div class="animate-spin text-purple-500 text-4xl mb-4"><i class="fa-solid fa-circle-notch"></i></div>
-                    <p class="text-slate-500 text-sm">AI 正在為你規劃行程...</p>
+                    <p class="text-slate-500 text-sm">AI 여행 계획 중......</p>
                 </div>
                 <div id="ai-plan-result" class="hidden space-y-4"></div>
                 <div id="ai-plan-error" class="hidden text-red-500 text-sm text-center py-4"></div>
             </div>
             <div id="ai-plan-footer" class="hidden p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2 shrink-0">
-                <button onclick="closeModal('modal-ai-plan')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                <button onclick="closeModal('modal-ai-plan')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취소</button>
                 <button onclick="applyAIPlan()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg flex items-center gap-2">
-                    <i class="fa-solid fa-check"></i> 套用此行程
+                    <i class="fa-solid fa-check"></i> 이 여행 적용
                 </button>
             </div>
         </div>
@@ -629,7 +629,7 @@
         let guestUserUid = null;         // uid of the trip owner being viewed as guest
 
         let globalConfig = {
-            tripTitle: "我的旅遊行程",
+            tripTitle: "我的旅遊여행",
             tripDate: ""
         };
         let itineraryData = [];
@@ -665,7 +665,7 @@
 
         function switchLang(lang) {
             document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
-            const pages = { zh: '/', en: '/en', ja: '/ja', ko: '/ko' };
+            const pages = { zh: '/', en: '/en', ja: '/jp', ko: '/ko' };
             window.location.replace(pages[lang] || '/');
         }
 
@@ -787,7 +787,7 @@
         async function loadTrips() {
             if (!currentUser) return;
             const container = document.getElementById('trips-list');
-            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">載入中...</div>';
+            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">로딩 중...</div>';
             try {
                 const res = await Promise.race([
                     fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`),
@@ -801,9 +801,9 @@
                 let html = '';
 
                 // My trips
-                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">我的行程</h3></div>';
+                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">내 여행</h3></div>';
                 if (owned.length === 0) {
-                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有行程</p></div>';
+                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有여행</p></div>';
                 } else {
                     html += owned.map(trip => tripCard(trip, false)).join('');
                 }
@@ -814,7 +814,7 @@
                     html += shared.map(trip => tripCard(trip, true)).join('');
                 }
 
-                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有行程</p></div>';
+                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有여행</p></div>';
             } catch (err) {
                 container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>로딩 실패</p><button onclick="loadTrips()" class="mt-2 text-sm underline">다시 시도</button></div>';
             }
@@ -851,7 +851,7 @@
                     return;
                 }
             } catch(e) {}
-            const title = prompt("여행 이름:", "我的旅遊行程");
+            const title = prompt("여행 이름:", "我的旅遊여행");
             if (!title) { isCreatingTrip = false; return; }
             try {
                 const res = await fetch(`${API_BASE}/api/trip`, {
@@ -934,7 +934,7 @@
             if (suggestion.food) html += `<div class="mb-2"><span class="text-xs text-slate-400">美食：</span><span class="text-sm text-slate-700">${suggestion.food}</span></div>`;
 
             if (suggestion.activities && suggestion.activities.length > 0) {
-                html += '<div class="mt-3 pt-3 border-t border-purple-100"><p class="text-xs text-slate-400 mb-2">建議行程：</p>';
+                html += '<div class="mt-3 pt-3 border-t border-purple-100"><p class="text-xs text-slate-400 mb-2">建議여행：</p>';
                 suggestion.activities.forEach((act, i) => {
                     html += `<div class="flex items-start gap-2 mb-2">
                         <div class="w-6 h-6 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center shrink-0 text-xs">${i + 1}</div>
@@ -963,7 +963,7 @@
             if (!aiPlanResult || !currentUser) return;
             closeModal('modal-ai-plan');
 
-            const title = aiPlanResult.hotel ? `AI 推薦行程` : 'AI 規劃行程';
+            const title = aiPlanResult.hotel ? `AI 推薦여행` : 'AI 規劃여행';
             const itineraryData = [];
 
             if (aiPlanResult.activities && aiPlanResult.activities.length > 0) {
@@ -993,7 +993,7 @@
                 });
                 const data = await res.json();
                 if (data.tripId) {
-                    showToast("AI 行程已建立！");
+                    showToast("AI 여행已建立！");
                     selectTrip(data.tripId);
                     loadTrips();
                 } else {
@@ -1461,7 +1461,7 @@
             closeFab();
             if(!canEdit()) return showToast("請先登入以取得編輯權限");
             editingActIndex = idx;
-            document.getElementById('modal-activity-title').textContent = isEdit ? '장소 편집' : '新增景點';
+            document.getElementById('modal-activity-title').textContent = isEdit ? '장소 편집' : '장소 추가';
             if (isEdit && idx >= 0) {
                 const act = itineraryData[currentDayIndex].activities[idx];
                 document.getElementById('act-time').value = act.time;
@@ -1526,13 +1526,13 @@
             renderTimeline();
             selectDay(itineraryData.length - 1);
             syncToCloud();
-            showToast('已新增 Day ' + itineraryData.length);
+            showToast('已추가 Day ' + itineraryData.length);
         }
 
         async function deleteCurrentDay() {
             if (!canEdit()) return;
             if (itineraryData.length <= 1) return showToast("최소 1일은 남겨야 합니다");
-            if (!confirm('確定要刪除 Day ' + (currentDayIndex + 1) + '？이 작업은 되돌릴 수 없습니다.')) return;
+            if (!confirm('삭제할까요 Day ' + (currentDayIndex + 1) + '？이 작업은 되돌릴 수 없습니다.')) return;
             itineraryData.splice(currentDayIndex, 1);
             if (currentDayIndex >= itineraryData.length) currentDayIndex = itineraryData.length - 1;
             renderTimeline();
