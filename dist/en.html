@@ -5,7 +5,7 @@
     <meta name="google-site-verification" content="Rau2K_qrDIQN7a38tlY9VLkJULZxwLdauo1zVGH4dIg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Travelweb - Free travel itinerary planner. Create and share trips with friends. Supports Google & Line login, multi-user editing, cloud sync.">
-    <meta name="keywords" content="旅遊,行程,規劃,旅行,Travel,Itinerary,分享,雲端,共同編輯">
+    <meta name="keywords" content="遊,Trip,Plan,行,Travel,Itinerary,Share,雲端,Collaborate">
     <meta name="author" content="pengjun0429">
     <meta property="og:title" content="Travelweb - Free Trip Planner">
     <meta property="og:description" content="Create and share travel itineraries. Supports multi-user editing and cloud sync.">
@@ -14,7 +14,7 @@
     <meta property="og:url" content="https://travelweb-8kb.pages.dev">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Travelweb - Free Trip Planner">
-    <meta name="twitter:description" content="Create and share travel itineraries. Supports multi-user editing and cloud sync.">建立專屬旅遊行程，One-Click Share給親友，支援多人共同編輯與Cloud Sync。">
+    <meta name="twitter:description" content="Create and share travel itineraries. Supports multi-user editing and cloud sync.">Create and share travel itineraries.One-Click Share給親友，支援多人Collaborate與Cloud Sync。">
     <meta name="twitter:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -125,7 +125,7 @@
                     </div>
                 </div>
                 <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight animate-fade-in-up">
-                    用 <span class="text-primary">Travelweb</span> 規劃旅程
+                    用 <span class="text-primary">Travelweb</span> Plan程
                 </h1>
                 <p class="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 animate-fade-in-up-delay-1">
                     Create your perfect itinerary and share it instantly<br class="hidden md:block">
@@ -142,7 +142,7 @@
                                 <i class="fa-solid fa-list"></i> My Trips
                             </button>
                             <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
-                                <i class="fa-solid fa-map mr-2"></i> 進入行程
+                                <i class="fa-solid fa-map mr-2"></i> 進入Trip
                             </button>
                         </div>
                     </div>
@@ -204,8 +204,8 @@
                     <div class="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-slate-200"></div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">1</div>
-                        <h3 class="text-lg font-bold text-dark mb-2">Google 登入</h3>
-                        <p class="text-slate-600 text-sm">使用你的 Google 帳號快速登入，安全又方便。</p>
+                        <h3 class="text-lg font-bold text-dark mb-2">Google Login</h3>
+                        <p class="text-slate-600 text-sm">使用你的 Google 帳號快速Login，安全又方便。</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">2</div>
@@ -241,7 +241,7 @@
     <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
-                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="回首頁">
+                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="Back to Home">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
@@ -250,7 +250,7 @@
             <div class="flex items-center gap-2">
                 <img id="trips-user-avatar" class="w-7 h-7 rounded-full border border-slate-200" src="" alt="">
                 <span id="trips-user-name" class="text-sm font-medium text-slate-700 hidden md:inline"></span>
-                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="登出"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="Logout"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
             </div>
         </header>
         <main class="flex-1 overflow-y-auto p-4 md:p-8">
@@ -290,19 +290,19 @@
                     <i class="fa-solid fa-arrow-left text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">Back to Trips</span>
                 </button>
                 <button id="btn-global-config" class="edit-only hidden items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openGlobalConfigModal()">
-                    <i class="fa-solid fa-gear text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">設定</span>
+                    <i class="fa-solid fa-gear text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">Settings</span>
                 </button>
                 <button id="btn-share" class="hidden items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="shareItinerary()">
-                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">分享</span>
+                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">Share</span>
                 </button>
                 <button id="btn-collab" class="hidden items-center justify-center bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openCollabModal()">
-                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">共同編輯</span>
+                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">Collaborate</span>
                 </button>
                 <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
                     <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                         <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
-                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="登出">
+                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="Logout">
                             <i class="fa-solid fa-sign-out-alt text-xs md:text-base"></i>
                         </button>
                     </div>
@@ -313,7 +313,7 @@
         <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
             <aside class="w-full md:w-64 lg:w-72 bg-white border-b md:border-b-0 md:border-r border-slate-200 shrink-0 max-h-[72px] md:max-h-none overflow-y-auto md:overflow-y-auto">
                 <div class="p-2 md:p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
-                    <h2 class="font-bold text-slate-700">行程總覽</h2>
+                    <h2 class="font-bold text-slate-700">Trip總覽</h2>
                 </div>
                 <div id="timeline-container" class="flex md:flex-col gap-1.5 md:gap-1 overflow-x-auto md:overflow-x-hidden p-2 md:p-4"></div>
             </aside>
@@ -371,7 +371,7 @@
                         <i class="fa-solid fa-location-dot text-primary"></i> Add Activity
                     </button>
                     <button onclick="addNewDay()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-calendar-plus text-secondary"></i> 新增一天
+                        <i class="fa-solid fa-calendar-plus text-secondary"></i> Add Day
                     </button>
                 </div>
                 <div class="flex justify-end">
@@ -383,7 +383,7 @@
 
             <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>景點預覽</h3>
+                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>Spot Preview</h3>
                     <button class="lg:hidden text-slate-400 hover:text-slate-600" onclick="document.getElementById('map-panel').classList.remove('flex'); document.getElementById('map-panel').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div id="preview-content" class="flex-1 p-5 overflow-y-auto flex flex-col items-center justify-center text-center text-slate-400">
@@ -404,14 +404,14 @@
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">行程擁有者</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Trip Owner</label>
                         <p id="collab-owner" class="text-slate-500 text-sm">-</p>
                     </div>
                     <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">Add Collaborator (Email)</label>
                         <div class="flex gap-2">
                             <input type="email" id="input-collab-email" placeholder="example@gmail.com" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
-                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">新增</button>
+                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">Add</button>
                         </div>
                     </div>
                     <div>
@@ -423,7 +423,7 @@
                     <p class="text-xs text-slate-400">Collaborators can edit after logging in</p>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
-                    <button onclick="closeModal('modal-collab')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm">關閉</button>
+                    <button onclick="closeModal('modal-collab')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm">Close</button>
                 </div>
             </div>
         </div>
@@ -447,11 +447,11 @@
                         <p class="text-xs text-slate-400 mb-1">Account Info</p>
                         <p class="text-sm font-medium text-slate-700"><i class="fa-solid fa-envelope mr-1 text-slate-400"></i><span id="config-email">-</span></p>
                         <p class="text-xs text-slate-500 mt-1">Login: <span id="config-auth-method">-</span></p>
-                        <p class="text-xs text-slate-400 mt-1">同 Email 的登入方式Shared同一個行程帳號</p>
+                        <p class="text-xs text-slate-400 mt-1">同 Email 的Login方式Shared同一個Trip帳號</p>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">Cancel</button>
                     <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">Save to Cloud</button>
                 </div>
             </div>
@@ -460,7 +460,7 @@
         <div id="modal-day-info" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900">編輯今日資訊</h3>
+                    <h3 class="font-bold text-lg text-slate-900">Edit Day Info</h3>
                     <button onclick="closeModal('modal-day-info')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
@@ -469,20 +469,20 @@
                         <input type="date" id="input-date" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">住宿地點</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Accommodation</label>
                         <input type="text" id="input-hotel" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">推薦美食/餐廳</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Food / Restaurant</label>
                         <input type="text" id="input-food" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">旅程日記 / 注意事項</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">Notes / Reminders</label>
                         <textarea id="input-notes" rows="4" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
+                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">Cancel</button>
                     <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">Save Changes</button>
                 </div>
             </div>
@@ -491,7 +491,7 @@
         <div id="modal-activity" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">Add Activity/活動</h3>
+                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">Add Activity</h3>
                     <button onclick="closeModal('modal-activity')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
@@ -504,14 +504,14 @@
                         <div>
                             <label class="block text-sm font-medium text-slate-700 mb-1">Icon</label>
                             <select id="act-icon" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
-                                <option value="fa-location-dot">預設地標</option>
-                                <option value="fa-plane">飛機航班</option>
-                                <option value="fa-train">高鐵/火車</option>
-                                <option value="fa-car">包車/汽車</option>
-                                <option value="fa-ship">遊船</option>
-                                <option value="fa-camera">拍照景點</option>
-                                <option value="fa-utensils">餐飲</option>
-                                <option value="fa-person-walking">徒步</option>
+                                <option value="fa-location-dot">Default</option>
+                                <option value="fa-plane">Flight</option>
+                                <option value="fa-train">Train</option>
+                                <option value="fa-car">Car</option>
+                                <option value="fa-ship">Boat</option>
+                                <option value="fa-camera">Photo</option>
+                                <option value="fa-utensils">Dining</option>
+                                <option value="fa-person-walking">Walking</option>
                             </select>
                         </div>
                     </div>
@@ -525,8 +525,8 @@
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                    <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存</button>
+                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">Cancel</button>
+                    <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">Save</button>
                 </div>
             </div>
         </div>
@@ -705,7 +705,7 @@
 
                 const heroUser = document.getElementById('landing-hero-user');
                 heroUser.classList.remove('hidden');
-                document.getElementById('landing-hero-email').textContent = 'Signed in as ' + currentUser.email + ' 登入';
+                document.getElementById('landing-hero-email').textContent = 'Signed in as ' + currentUser.email + ' Login';
             } else {
                 document.getElementById('landing-g-signin-btn-wrapper').classList.remove('hidden');
                 document.getElementById('btn-start-hero').classList.remove('hidden');
@@ -719,7 +719,7 @@
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未登入';
+            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未Login';
             loadTrips();
         }
 
@@ -759,7 +759,7 @@
                 // My trips
                 html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">My Trips</h3></div>';
                 if (owned.length === 0) {
-                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有行程</p></div>';
+                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有Trip</p></div>';
                 } else {
                     html += owned.map(trip => tripCard(trip, false)).join('');
                 }
@@ -770,7 +770,7 @@
                     html += shared.map(trip => tripCard(trip, true)).join('');
                 }
 
-                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有行程</p></div>';
+                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有Trip</p></div>';
             } catch (err) {
                 container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>Load failed</p><button onclick="loadTrips()" class="mt-2 text-sm underline">Retry</button></div>';
             }
@@ -807,7 +807,7 @@
                     return;
                 }
             } catch(e) {}
-            const title = prompt("行程名稱：", "My Trip");
+            const title = prompt("Trip name:", "My Trip");
             if (!title) { isCreatingTrip = false; return; }
             try {
                 const res = await fetch(`${API_BASE}/api/trip`, {
@@ -827,7 +827,7 @@
         }
 
         async function deleteTrip(tripId) {
-            if (!confirm("確定刪除？無法復原。")) return;
+            if (!confirm("確定Delete？無法復原。")) return;
             await fetch(`${API_BASE}/api/trip?trip_id=${tripId}`, { method: 'DELETE' });
             showToast("Deleted");
             loadTrips();
@@ -1044,7 +1044,7 @@
             navigator.clipboard.writeText(shareUrl).then(() => {
                 showToast("已複製專屬Share URL！");
             }).catch(() => {
-                prompt("請手動複製以下網址分享：", shareUrl);
+                prompt("請手動複製以下網址Share：", shareUrl);
             });
         }
 
@@ -1157,12 +1157,12 @@
             });
 
             renderCollabList();
-            showToast(`已邀請 ${email} 共同編輯`);
+            showToast(`Invited ${email} Collaborate`);
         }
 
         async function removeCollaborator(email) {
             if (!isOwner()) return;
-            if (!confirm(`確定要移除 ${email} 的編輯權限？`)) return;
+            if (!confirm(`Remove ${email} 的Edit權限？`)) return;
 
             collaborators = collaborators.filter(e => e !== email);
 
@@ -1177,7 +1177,7 @@
             });
 
             renderCollabList();
-            showToast(`已移除 ${email}`);
+            showToast(`Removed ${email}`);
         }
 
         // ============================================================
@@ -1265,7 +1265,7 @@
         let editingActIndex = -1;
 
         function openDayInfoModal() {
-            if(!canEdit()) return showToast("Please log in first以取得編輯權限");
+            if(!canEdit()) return showToast("Please log in first以取得Edit權限");
             const day = itineraryData[currentDayIndex];
             document.getElementById('input-date').value = day.date || '';
             document.getElementById('input-hotel').value = day.hotel || '';
@@ -1287,7 +1287,7 @@
 
         function openActivityModal(isEdit = false, idx = -1) {
             closeFab();
-            if(!canEdit()) return showToast("Please log in first以取得編輯權限");
+            if(!canEdit()) return showToast("Please log in first以取得Edit權限");
             editingActIndex = idx;
             document.getElementById('modal-activity-title').textContent = isEdit ? 'Edit Activity' : 'Add Activity';
             if (isEdit && idx >= 0) {
@@ -1354,19 +1354,19 @@
             renderTimeline();
             selectDay(itineraryData.length - 1);
             syncToCloud();
-            showToast('已新增 Day ' + itineraryData.length);
+            showToast('已Add Day ' + itineraryData.length);
         }
 
         async function deleteCurrentDay() {
             if (!canEdit()) return;
             if (itineraryData.length <= 1) return showToast("Keep at least 1 day");
-            if (!confirm('確定要刪除 Day ' + (currentDayIndex + 1) + '？This cannot be undone.')) return;
+            if (!confirm('確定要Delete Day ' + (currentDayIndex + 1) + '？This cannot be undone.')) return;
             itineraryData.splice(currentDayIndex, 1);
             if (currentDayIndex >= itineraryData.length) currentDayIndex = itineraryData.length - 1;
             renderTimeline();
             selectDay(currentDayIndex);
             syncToCloud();
-            showToast('已刪除');
+            showToast('已Delete');
         }
 
         let fabOpen = false;
