@@ -142,16 +142,16 @@
                                 <i class="fa-solid fa-list"></i> My Trips
                             </button>
                             <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
-                                <i class="fa-solid fa-map mr-2"></i> OpenTrip
+                                <i class="fa-solid fa-map mr-2"></i> Open Trip
                             </button>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-500 mt-2">
+                    <div id="landing-login-buttons" class="flex items-center gap-3 text-sm text-slate-500 mt-2">
                         <button onclick="lineLogin()" class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl transition shadow-sm">
                             <i class="fa-brands fa-line text-lg"></i> Line Login
                         </button>
-                        <span class="text-slate-600">或</span>
-                        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
+                        <span class="text-slate-600">or</span>
+                        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin_with" data-shape="rectangular"></div>
                     </div>
                 </div>
                 <p class="text-slate-500 text-sm mt-6 animate-fade-in-up-delay-3">
@@ -205,7 +205,7 @@
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">1</div>
                         <h3 class="text-lg font-bold text-dark mb-2">Google Login</h3>
-                        <p class="text-slate-600 text-sm">使用你的 Google 帳號快速Login，安全又方便。</p>
+                        <p class="text-slate-600 text-sm">Quick and secure login with your Google account.</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">2</div>
@@ -447,7 +447,7 @@
                         <p class="text-xs text-slate-400 mb-1">Account Info</p>
                         <p class="text-sm font-medium text-slate-700"><i class="fa-solid fa-envelope mr-1 text-slate-400"></i><span id="config-email">-</span></p>
                         <p class="text-xs text-slate-500 mt-1">Login: <span id="config-auth-method">-</span></p>
-                        <p class="text-xs text-slate-400 mt-1">同 Email 的Login方式Shared同一個Trip帳號</p>
+                        <p class="text-xs text-slate-400 mt-1">Same email links all login methods</p>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
@@ -705,13 +705,15 @@
 
                 const heroUser = document.getElementById('landing-hero-user');
                 heroUser.classList.remove('hidden');
-                document.getElementById('landing-hero-email').textContent = 'Signed in as ' + currentUser.email + ' Login';
+                document.getElementById('landing-hero-email').textContent = 'Signed in as ' + currentUser.email;
+                document.getElementById('landing-login-buttons').classList.add('hidden');
             } else {
                 document.getElementById('landing-g-signin-btn-wrapper').classList.remove('hidden');
                 document.getElementById('btn-start-hero').classList.remove('hidden');
                 document.getElementById('landing-user-profile').classList.add('hidden');
                 document.getElementById('landing-user-profile').style.display = 'none';
                 document.getElementById('landing-hero-user').classList.add('hidden');
+                document.getElementById('landing-login-buttons').classList.remove('hidden');
             }
         }
 
@@ -719,7 +721,7 @@
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未Login';
+            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : 'Not logged in';
             loadTrips();
         }
 
