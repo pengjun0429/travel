@@ -102,23 +102,7 @@
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <!-- Language Dropdown Selection -->
-                    <div class="relative inline-block text-left animate-fade-in" id="lang-dropdown-container">
-                        <button onclick="toggleLangDropdown(event)" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition flex items-center gap-1.5 focus:outline-none focus:ring-1 focus:ring-white/40" id="lang-dropdown-btn">
-                            <i class="fa-solid fa-globe text-white/80"></i>
-                            <span>Language</span>
-                            <i class="fa-solid fa-chevron-down text-[10px] text-white/60 transition-transform duration-200" id="lang-chevron"></i>
-                        </button>
-                        <div id="lang-dropdown-menu" class="hidden absolute right-0 mt-2 w-36 rounded-xl bg-white text-slate-800 shadow-xl border border-slate-100 py-1 z-50 origin-top-right">
-                            <button onclick="switchLang('zh')" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-50 flex items-center justify-between text-primary" id="btn-lang-zh">
-                                <span>繁體中文</span>
-                                <i class="fa-solid fa-check text-xs"></i>
-                            </button>
-                            <button onclick="switchLang('en')" class="w-full text-left px-4 py-2 text-xs font-medium hover:bg-slate-50 flex items-center justify-between text-slate-600 hover:text-slate-900" id="btn-lang-en">
-                                <span>English</span>
-                            </button>
-                        </div>
-                    </div>
+                    <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
                     <div id="landing-auth" class="flex items-center gap-3">
                         <div id="landing-g-signin-btn-wrapper">
                             <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
@@ -642,34 +626,6 @@
             document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
             window.location.replace(lang === 'en' ? '/en' : '/');
         }
-
-        function toggleLangDropdown(event) {
-            if (event) {
-                event.stopPropagation();
-            }
-            const menu = document.getElementById('lang-dropdown-menu');
-            const chevron = document.getElementById('lang-chevron');
-            if (menu.classList.contains('hidden')) {
-                menu.classList.remove('hidden');
-                chevron?.classList.add('rotate-180');
-            } else {
-                menu.classList.add('hidden');
-                chevron?.classList.remove('rotate-180');
-            }
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const container = document.getElementById('lang-dropdown-container');
-            if (container && !container.contains(event.target)) {
-                const menu = document.getElementById('lang-dropdown-menu');
-                const chevron = document.getElementById('lang-chevron');
-                if (menu && !menu.classList.contains('hidden')) {
-                    menu.classList.add('hidden');
-                    chevron?.classList.remove('rotate-180');
-                }
-            }
-        });
 
         function showToast(message) {
             const toast = document.getElementById('toast');
