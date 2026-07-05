@@ -74,6 +74,14 @@
             body { overflow: hidden; }
         }
     </style>
+    <script>
+        (function() {
+            var lang = document.cookie.replace(/(?:(?:^|.*;\s*)tw_lang\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+            if (lang === 'en' && !window.location.pathname.endsWith('en.html')) {
+                window.location.replace('/en.html');
+            }
+        })();
+    </script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans m-0 h-screen flex flex-col">
 
@@ -93,16 +101,19 @@
                     <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
-                <div id="landing-auth" class="flex items-center gap-3">
-                    <div id="landing-g-signin-btn-wrapper">
-                        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
-                    </div>
-                    <div id="landing-user-profile" class="hidden items-center gap-3">
-                        <img id="landing-user-avatar" class="w-8 h-8 rounded-full border-2 border-white/30 shadow-sm" src="" alt="Avatar">
-                        <span id="landing-user-name" class="text-sm font-medium text-white"></span>
-                        <button onclick="enterApp()" class="bg-primary hover:bg-sky-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition shadow-sm">
-                            進入我的行程 <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
+                <div class="flex items-center gap-3">
+                    <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
+                    <div id="landing-auth" class="flex items-center gap-3">
+                        <div id="landing-g-signin-btn-wrapper">
+                            <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
+                        </div>
+                        <div id="landing-user-profile" class="hidden items-center gap-3">
+                            <img id="landing-user-avatar" class="w-8 h-8 rounded-full border-2 border-white/30 shadow-sm" src="" alt="Avatar">
+                            <span id="landing-user-name" class="text-sm font-medium text-white"></span>
+                            <button onclick="enterApp()" class="bg-primary hover:bg-sky-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition shadow-sm">
+                                進入我的行程 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </nav>
@@ -124,11 +135,16 @@
                     <button id="btn-start-hero" onclick="handleStartClick()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50 flex items-center gap-2">
                         <i class="fa-solid fa-suitcase-rolling"></i> 開始規劃旅程
                     </button>
-                    <div id="landing-hero-user" class="hidden flex flex-col items-center gap-3">
+                    <div id="landing-hero-user" class="hidden flex-col items-center gap-3">
                         <p id="landing-hero-email" class="text-slate-400 text-sm"></p>
-                        <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
-                            <i class="fa-solid fa-map mr-2"></i> 進入我的行程
-                        </button>
+                        <div class="flex items-center gap-3">
+                            <button onclick="showTrips()" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-medium px-6 py-3 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-list"></i> 我的行程
+                            </button>
+                            <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
+                                <i class="fa-solid fa-map mr-2"></i> 進入行程
+                            </button>
+                        </div>
                     </div>
                     <div class="flex items-center gap-3 text-sm text-slate-500 mt-2">
                         <button onclick="lineLogin()" class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl transition shadow-sm">
@@ -225,6 +241,9 @@
     <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
+                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="回首頁">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
                 <span class="font-bold text-dark">Travelweb</span>
             </div>
@@ -374,7 +393,7 @@
             </aside>
         </main>
 
-        <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-50"></div>
+        <div id="toast" class="fixed bottom-5 left-1/2 transform -translate-x-1/2 bg-slate-800 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-300 opacity-0 translate-y-10 pointer-events-none z-[100]"></div>
 
         <!-- Modals -->
         <div id="modal-collab" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
@@ -603,6 +622,11 @@
             return 'u' + Math.abs(hash).toString(36);
         }
 
+        function switchLang(lang) {
+            document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
+            window.location.replace(lang === 'en' ? '/en.html' : '/');
+        }
+
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -629,8 +653,13 @@
 
         function goToHome() {
             if (confirm('回到行程列表？')) {
-                showTripsFromApp();
+                document.getElementById('app-view').classList.add('view-hidden');
                 window.history.replaceState({}, '', window.location.pathname);
+                if (currentUser) {
+                    showTrips();
+                } else {
+                    document.getElementById('landing-view').classList.remove('view-hidden');
+                }
             }
         }
 
@@ -704,6 +733,11 @@
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
             document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
             loadTrips();
+        }
+
+        function hideTrips() {
+            document.getElementById('trips-view').classList.add('hidden');
+            document.getElementById('landing-view').classList.remove('view-hidden');
         }
 
         async function loadTrips() {
@@ -1113,6 +1147,7 @@
             input.value = '';
 
             await fetchFromCloud("save", {
+                tripId: currentTripId,
                 uid: currentUser.uid,
                 ownerEmail: ownerEmail,
                 tripTitle: globalConfig.tripTitle,
@@ -1132,6 +1167,7 @@
             collaborators = collaborators.filter(e => e !== email);
 
             await fetchFromCloud("save", {
+                tripId: currentTripId,
                 uid: currentUser.uid,
                 ownerEmail: ownerEmail,
                 tripTitle: globalConfig.tripTitle,

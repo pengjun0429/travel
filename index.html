@@ -101,18 +101,19 @@
                     <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="switchLang('en')" class="text-white/60 hover:text-white text-sm transition px-2" title="English">🌐</button>
+                <div class="flex items-center gap-3">
+                    <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
                     <div id="landing-auth" class="flex items-center gap-3">
-                    <div id="landing-g-signin-btn-wrapper">
-                        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
-                    </div>
-                    <div id="landing-user-profile" class="hidden items-center gap-3">
-                        <img id="landing-user-avatar" class="w-8 h-8 rounded-full border-2 border-white/30 shadow-sm" src="" alt="Avatar">
-                        <span id="landing-user-name" class="text-sm font-medium text-white"></span>
-                        <button onclick="enterApp()" class="bg-primary hover:bg-sky-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition shadow-sm">
-                            進入我的行程 <i class="fa-solid fa-arrow-right ml-1"></i>
-                        </button>
+                        <div id="landing-g-signin-btn-wrapper">
+                            <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
+                        </div>
+                        <div id="landing-user-profile" class="hidden items-center gap-3">
+                            <img id="landing-user-avatar" class="w-8 h-8 rounded-full border-2 border-white/30 shadow-sm" src="" alt="Avatar">
+                            <span id="landing-user-name" class="text-sm font-medium text-white"></span>
+                            <button onclick="enterApp()" class="bg-primary hover:bg-sky-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition shadow-sm">
+                                進入我的行程 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </nav>
