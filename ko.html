@@ -14,7 +14,7 @@
     <meta property="og:url" content="https://travelweb-8kb.pages.dev">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Travelweb — 여행 플래너">
-    <meta name="twitter:description" content="建立專屬旅遊여행，一鍵공유給親友，支援多人共同編輯與클라우드 동기화。">
+    <meta name="twitter:description" content="나만의 여행 일정을 만들고 친구와 공유하세요. 공동 편집과 클라우드 동기화를 지원합니다.">
     <meta name="twitter:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -303,16 +303,16 @@
                     <i class="fa-solid fa-gear text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">설정</span>
                 </button>
                 <button id="btn-share" class="hidden items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="shareItinerary()">
-                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">分享</span>
+                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">공유</span>
                 </button>
                 <button id="btn-collab" class="hidden items-center justify-center bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openCollabModal()">
-                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">共同編輯</span>
+                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">공동 편집</span>
                 </button>
                 <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
                     <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                         <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
-                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="登出">
+                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="로그아웃">
                             <i class="fa-solid fa-sign-out-alt text-xs md:text-base"></i>
                         </button>
                     </div>
