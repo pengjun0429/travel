@@ -6,47 +6,29 @@
     <title>隱私權政策 - Travelweb</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans line-relaxed">
+<body class="bg-slate-50 text-slate-800 font-sans">
     <div class="max-w-3xl mx-auto px-6 py-12 bg-white shadow-sm my-8 rounded-xl border border-slate-200">
-        <h1 class="text-3xl font-bold text-slate-900 mb-6 border-b pb-4">隱私權政策 (Privacy Policy)</h1>
-        <p class="text-sm text-slate-500 mb-8">更新日期：2026 年 7 月 4 日</p>
-
-        <section class="mb-8">
-            <h2 class="text-xl font-bold text-slate-900 mb-3">1. 關於 Travelweb</h2>
-            <p class="text-slate-600">Travelweb（以下簡稱「本網頁」）是一款提供旅遊行程編輯、瀏覽與雲端同步的工具。我們非常重視您的個人隱私，並嚴格遵守相關資料保護法規。</p>
-        </section>
-
-        <section class="mb-8">
-            <h2 class="text-xl font-bold text-slate-900 mb-3">2. 我們收集的資料</h2>
-            <p class="text-slate-600 mb-2">當您使用 Google 帳號登入本網頁時，我們僅會在取得您的明確同意後，讀取以下必要的基本資訊：</p>
-            <ul class="list-disc list-inside text-slate-600 pl-2 space-y-1">
-                <li>您的 Google 電子郵件地址 (Email)：用於比對雲端試算表的管理員白名單，以驗證您是否擁有編輯權限。</li>
-                <li>您的公開設定檔資訊（名稱、大頭貼）：僅用於網頁右上角的使用者介面顯示，提供個人化的操作體驗。</li>
-            </ul>
-        </section>
-
-        <section class="mb-8">
-            <h2 class="text-xl font-bold text-slate-900 mb-3">3. 資料的使用與儲存方式</h2>
-            <ul class="list-disc list-inside text-slate-600 pl-2 space-y-2">
-                <li><span class="font-semibold text-slate-800">絕不外洩：</span>我們不會將您的個人資料出售、交換、或出租給任何第三方。</li>
-                <li><span class="font-semibold text-slate-800">本地與雲端儲存：</span>您的登入狀態會加密暫存於您的瀏覽器快取 (LocalStorage) 中。您所編輯的行程資料，會透過 API 直接安全地同步至您指定的 Google Apps Script 與 Google 試算表，本網頁後端不會留存任何副本。</li>
-            </ul>
-        </section>
-
-        <section class="mb-8">
-            <h2 class="text-xl font-bold text-slate-900 mb-3">4. 第三方服務</h2>
-            <p class="text-slate-600">本網頁使用 Google OAuth 2.0 驗證服務。關於 Google 如何處理您的資料，請參閱 <a href="https://policies.google.com/privacy" target="_blank" class="text-sky-500 hover:underline">Google 隱私權與條款</a>。</p>
-        </section>
-
-        <section class="mb-8">
-            <h2 class="text-xl font-bold text-slate-900 mb-3">5. 政策變更</h2>
-            <p class="text-slate-600">本隱私權政策可能會不定期更新。任何修訂將會直接發佈於本網頁上，建議您定期查閱。</p>
-        </section>
-
-        <section class="border-t pt-6">
-            <h2 class="text-xl font-bold text-slate-900 mb-3">6. 聯絡我們</h2>
-            <p class="text-slate-600">如果您對本隱私權政策有任何疑問，歡迎聯絡開發者：<a href="mailto:pengjun0429@gmail.com" class="text-sky-500 hover:underline">pengjun0429@gmail.com</a></p>
-        </section>
+        <div id="privacy-content">
+            <div class="text-center py-8 text-slate-400">載入中...</div>
+        </div>
+        <div class="mt-8 pt-6 border-t text-center">
+            <a href="/" class="text-primary hover:underline text-sm">← 返回首頁</a>
+        </div>
     </div>
+    <script>
+        const API_BASE = "https://travel-api.pengjun0429.workers.dev";
+        fetch(`${API_BASE}/api/privacy`)
+            .then(r => r.json())
+            .then(data => {
+                if (data.content) {
+                    document.getElementById('privacy-content').innerHTML = data.content;
+                } else {
+                    document.getElementById('privacy-content').innerHTML = '<h1 class="text-2xl font-bold">隱私權政策</h1><p class="text-slate-500 mt-4">暫無內容。</p>';
+                }
+            })
+            .catch(() => {
+                document.getElementById('privacy-content').innerHTML = '<h1 class="text-2xl font-bold">隱私權政策</h1><p class="text-slate-500 mt-4">載入失敗。</p>';
+            });
+    </script>
 </body>
 </html>

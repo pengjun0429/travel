@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-TW">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="Rau2K_qrDIQN7a38tlY9VLkJULZxwLdauo1zVGH4dIg" />
@@ -78,7 +78,7 @@
         (function() {
             var c = document.cookie.match(/tw_lang=([^;]+)/);
             var lang = c ? c[1] : '';
-            var pages = { en: '/en', ja: '/ja', ko: '/ko' };
+            var pages = { ko: '/ko' };
             if (pages[lang] && window.location.pathname !== pages[lang] && !window.location.pathname.endsWith(lang + '.html')) {
                 window.location.replace(pages[lang]);
             }
@@ -458,9 +458,6 @@
                         <p class="text-xs text-slate-500 mt-1">登入方式：<span id="config-auth-method">-</span></p>
                         <p class="text-xs text-slate-400 mt-1">同 Email 的登入方式共用同一個行程帳號</p>
                     </div>
-                    <button onclick="openPrivacyEditor()" class="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-file-shield"></i> 編輯隱私權政策
-                    </button>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
                     <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
@@ -575,26 +572,6 @@
         </div>
     </div>
 
-    <!-- Privacy Editor Modal -->
-    <div id="modal-privacy" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
-        <div class="modal-full bg-white rounded-2xl w-full max-w-3xl mx-4 overflow-hidden shadow-2xl flex flex-col">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
-                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-file-shield text-primary mr-2"></i>編輯隱私權政策</h3>
-                <button onclick="closeModal('modal-privacy')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 space-y-4 overflow-y-auto flex-1">
-                <p class="text-xs text-slate-400">使用 HTML 格式編輯，會即時顯示在隱私權政策頁面。</p>
-                <textarea id="privacy-editor" rows="20" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-primary outline-none"></textarea>
-            </div>
-            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2 shrink-0">
-                <button onclick="closeModal('modal-privacy')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                <button onclick="savePrivacyPolicy()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg flex items-center gap-2">
-                    <i class="fa-solid fa-check"></i> 儲存
-                </button>
-            </div>
-        </div>
-    </div>
-
     <!-- iOS Tutorial -->
     <div id="ios-tutorial" class="fixed inset-0 bg-black/60 hidden z-[100] flex items-end md:items-center justify-center backdrop-blur-sm">
         <div class="bg-white rounded-t-2xl md:rounded-2xl w-full max-w-sm mx-4 p-6 pb-10 shadow-2xl animate-fade-in-up">
@@ -687,7 +664,7 @@
 
         function switchLang(lang) {
             document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
-            const pages = { en: '/en', ja: '/ja', ko: '/ko' };
+            const pages = { zh: '/', en: '/en', ja: '/ja', ko: '/ko' };
             window.location.replace(pages[lang] || '/');
         }
 
@@ -1324,42 +1301,6 @@
                     ${isOwner() ? `<button onclick="removeCollaborator('${email}')" class="text-red-400 hover:text-red-600 text-sm"><i class="fa-solid fa-trash"></i></button>` : ''}
                 </div>
             `).join('');
-        }
-
-        // ============================================================
-        //  PRIVACY POLICY
-        // ============================================================
-        function openPrivacyEditor() {
-            if (!currentUser) return showToast("請先登入");
-            closeModal('modal-global-config');
-            fetch(`${API_BASE}/api/privacy`)
-                .then(r => r.json())
-                .then(data => {
-                    document.getElementById('privacy-editor').value = data.content || '<h1 class="text-3xl font-bold text-slate-900">隱私權政策 (Privacy Policy)</h1>\n<p class="text-sm text-slate-500 mb-8">更新日期：' + new Date().toISOString().slice(0,10) + '</p>\n\n<section class="mb-8">\n<h2 class="text-xl font-bold text-slate-900 mb-3">關於 Travelweb</h2>\n<p class="text-slate-600">請在此編輯隱私權政策內容。</p>\n</section>';
-                    document.getElementById('modal-privacy').classList.remove('hidden');
-                })
-                .catch(() => showToast("載入失敗"));
-        }
-
-        async function savePrivacyPolicy() {
-            const content = document.getElementById('privacy-editor').value.trim();
-            if (!content) return showToast("內容不能為空");
-            try {
-                const res = await fetch(`${API_BASE}/api/privacy`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content })
-                });
-                const data = await res.json();
-                if (data.status === 'success') {
-                    showToast("已儲存！");
-                    closeModal('modal-privacy');
-                } else {
-                    showToast("儲存失敗");
-                }
-            } catch (err) {
-                showToast("網路錯誤");
-            }
         }
 
         async function addCollaborator() {

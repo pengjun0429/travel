@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Background circle -->
+  <rect width="512" height="512" rx="100" fill="#0ea5e9"/>
+  <!-- Sun -->
+  <circle cx="256" cy="180" r="60" fill="#facc15"/>
+  <!-- Sun rays -->
+  <g stroke="#facc15" stroke-width="6" stroke-linecap="round">
+    <line x1="256" y1="90" x2="256" y2="70"/>
+    <line x1="256" y1="270" x2="256" y2="290"/>
+    <line x1="166" y1="180" x2="146" y2="180"/>
+    <line x1="346" y1="180" x2="366" y2="180"/>
+    <line x1="193" y1="117" x2="179" y2="103"/>
+    <line x1="319" y1="117" x2="333" y2="103"/>
+    <line x1="193" y1="243" x2="179" y2="257"/>
+    <line x1="319" y1="243" x2="333" y2="257"/>
+  </g>
+  <!-- Mountain -->
+  <polygon points="256,250 140,420 372,420" fill="#ffffff"/>
+  <!-- Snow cap -->
+  <polygon points="256,250 220,320 292,320" fill="#e2e8f0"/>
+  <!-- Trees -->
+  <circle cx="140" cy="400" r="30" fill="#166534"/>
+  <circle cx="372" cy="400" r="35" fill="#166534"/>
+  <circle cx="200" cy="410" r="25" fill="#15803d"/>
+  <circle cx="310" cy="410" r="28" fill="#15803d"/>
+</svg>
