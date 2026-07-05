@@ -77,7 +77,7 @@
     <script>
         (function() {
             var lang = document.cookie.replace(/(?:(?:^|.*;\s*)tw_lang\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            if (lang === 'en' && !window.location.pathname.endsWith('en.html')) {
+            if (lang === 'en' && window.location.pathname !== '/en' && !window.location.pathname.endsWith('en.html')) {
                 window.location.replace('/en.html');
             }
         })();
@@ -640,7 +640,7 @@
 
         function switchLang(lang) {
             document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
-            window.location.replace(lang === 'en' ? '/en.html' : '/');
+            window.location.replace(lang === 'en' ? '/en' : '/');
         }
 
         function toggleLangDropdown(event) {
