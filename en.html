@@ -1,20 +1,20 @@
-<!DOCTYPE html>
-<html lang="zh-TW">
+﻿<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="Rau2K_qrDIQN7a38tlY9VLkJULZxwLdauo1zVGH4dIg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Travelweb — 免費旅遊行程規劃工具。建立專屬旅遊行程，一鍵分享給親友，支援 Google 和 Line 登入，多人共同編輯，雲端同步。">
-    <meta name="keywords" content="旅遊,行程,規劃,旅行,Travel,Itinerary,分享,雲端,共同編輯">
+    <meta name="description" content="Travelweb ???祥??銵?閬?撌亙?遣蝡?撅祆???蝔?銝?萄?鈭怎策閬芸?嚗??Google ??Line ?餃嚗?鈭箏?楊頛荔??脩垢?郊??>
+    <meta name="keywords" content="??,銵?,閬?,??,Travel,Itinerary,?澈,?脩垢,?勗?蝺刻摩">
     <meta name="author" content="pengjun0429">
-    <meta property="og:title" content="Travelweb — 出遊網頁規劃">
-    <meta property="og:description" content="建立專屬旅遊行程，一鍵分享給親友，支援多人共同編輯與雲端同步。">
+    <meta property="og:title" content="Travelweb ???粹?蝬脤?閬?">
+    <meta property="og:description" content="撱箇?撠惇??銵?嚗??萄?鈭怎策閬芸?嚗?游?鈭箏?楊頛航??脩垢?郊??>
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta property="og:url" content="https://travelweb-8kb.pages.dev">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Travelweb — 出遊網頁規劃">
-    <meta name="twitter:description" content="建立專屬旅遊行程，一鍵分享給親友，支援多人共同編輯與雲端同步。">
+    <meta name="twitter:title" content="Travelweb ???粹?蝬脤?閬?">
+    <meta name="twitter:description" content="撱箇?撠惇??銵?嚗??萄?鈭怎策閬芸?嚗?游?鈭箏?楊頛航??脩垢?郊??>
     <meta name="twitter:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="/icon-192.png">
     <link rel="manifest" href="/manifest.json">
     <link rel="canonical" href="https://travelweb-8kb.pages.dev">
-    <title id="web-title">Travelweb | 出遊網頁規劃 — 免費旅遊行程規劃與分享</title>
+    <title id="web-title">Travelweb | ?粹?蝬脤?閬? ???祥??銵?閬???鈭?/title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -74,14 +74,7 @@
             body { overflow: hidden; }
         }
     </style>
-    <script>
-        (function() {
-            var lang = document.cookie.replace(/(?:(?:^|.*;\s*)tw_lang\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-            if (lang === 'en' && !window.location.pathname.endsWith('en.html')) {
-                window.location.replace('/en.html');
-            }
-        })();
-    </script>
+    <script>(function(){var c=document.cookie.match(/tw_lang=([^;]+)/);if(!c||c[1]!='en')window.location.replace('/');})();</script>
 </head>
 <body class="bg-slate-100 text-slate-800 font-sans m-0 h-screen flex flex-col">
 
@@ -102,8 +95,9 @@
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
                 <div class="flex items-center gap-2">
-                    <button onclick="switchLang('en')" class="text-white/60 hover:text-white text-sm transition px-2" title="English">🌐</button>
-                    <div id="landing-auth" class="flex items-center gap-3">
+                    <button onclick="switchLang('zh')" class="text-white/60 hover:text-white text-sm transition px-2" title="中文">🌐</button>
+                </div>
+                <div id="landing-auth" class="flex items-center gap-3">
                     <div id="landing-g-signin-btn-wrapper">
                         <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
                     </div>
@@ -111,7 +105,7 @@
                         <img id="landing-user-avatar" class="w-8 h-8 rounded-full border-2 border-white/30 shadow-sm" src="" alt="Avatar">
                         <span id="landing-user-name" class="text-sm font-medium text-white"></span>
                         <button onclick="enterApp()" class="bg-primary hover:bg-sky-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition shadow-sm">
-                            進入我的行程 <i class="fa-solid fa-arrow-right ml-1"></i>
+                            ?脣??銵? <i class="fa-solid fa-arrow-right ml-1"></i>
                         </button>
                     </div>
                 </div>
@@ -124,38 +118,36 @@
                     </div>
                 </div>
                 <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight animate-fade-in-up">
-                    用 <span class="text-primary">Travelweb</span> 規劃旅程
+                    ??<span class="text-primary">Travelweb</span> 閬???
                 </h1>
                 <p class="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 animate-fade-in-up-delay-1">
-                    建立專屬的旅遊行程，一鍵分享給親友<br class="hidden md:block">
-                    所有人即時查看，輕鬆同步
-                </p>
+                    撱箇?撠惇????蝔?銝?萄?鈭怎策閬芸?<br class="hidden md:block">
+                    ??犖?單??亦?嚗?擛?甇?                </p>
                 <div class="animate-fade-in-up-delay-2 flex flex-col items-center gap-4">
                     <button id="btn-start-hero" onclick="handleStartClick()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50 flex items-center gap-2">
-                        <i class="fa-solid fa-suitcase-rolling"></i> 開始規劃旅程
+                        <i class="fa-solid fa-suitcase-rolling"></i> ??閬???
                     </button>
                     <div id="landing-hero-user" class="hidden flex-col items-center gap-3">
                         <p id="landing-hero-email" class="text-slate-400 text-sm"></p>
                         <div class="flex items-center gap-3">
                             <button onclick="showTrips()" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-medium px-6 py-3 rounded-xl transition flex items-center gap-2">
-                                <i class="fa-solid fa-list"></i> 我的行程
+                                <i class="fa-solid fa-list"></i> ??銵?
                             </button>
                             <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
-                                <i class="fa-solid fa-map mr-2"></i> 進入行程
+                                <i class="fa-solid fa-map mr-2"></i> ?脣銵?
                             </button>
                         </div>
                     </div>
                     <div class="flex items-center gap-3 text-sm text-slate-500 mt-2">
                         <button onclick="lineLogin()" class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl transition shadow-sm">
-                            <i class="fa-brands fa-line text-lg"></i> Line 登入
+                            <i class="fa-brands fa-line text-lg"></i> Line ?餃
                         </button>
-                        <span class="text-slate-600">或</span>
+                        <span class="text-slate-600">??/span>
                         <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
                     </div>
                 </div>
                 <p class="text-slate-500 text-sm mt-6 animate-fade-in-up-delay-3">
-                    <i class="fa-solid fa-shield-halved mr-1"></i> 使用 Google 帳號快速登入
-                </p>
+                    <i class="fa-solid fa-shield-halved mr-1"></i> 雿輻 Google 撣唾?敹恍??                </p>
             </div>
 
             <div class="relative z-10 pb-8 text-center animate-fade-in-up-delay-4">
@@ -166,29 +158,29 @@
         <!-- Features Section -->
         <section class="bg-white py-20 px-6">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">為什麼選擇 Travelweb？</h2>
-                <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">讓規劃行程變得簡單、優雅、可分享</p>
+                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">?箔?暻潮??Travelweb嚗?/h2>
+                <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">霈???蝔?敺陛?柴??澈</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-sky-50 text-primary flex items-center justify-center mb-5">
                             <i class="fa-solid fa-user-gear text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">專屬行程</h3>
-                        <p class="text-slate-600">登入後擁有個人獨立的旅遊行程，自由編輯每日景點、住宿、餐飲。</p>
+                        <h3 class="text-xl font-bold text-dark mb-2">撠惇銵?</h3>
+                        <p class="text-slate-600">?餃敺??犖?函?????蝔??芰蝺刻摩瘥?舫???摰踴?憌脯?/p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-emerald-50 text-secondary flex items-center justify-center mb-5">
                             <i class="fa-solid fa-share-nodes text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">一鍵分享</h3>
-                        <p class="text-slate-600">產生專屬網址分享給親友，訪客無需登入即可查看完整行程。</p>
+                        <h3 class="text-xl font-bold text-dark mb-2">銝?萄?鈭?/h3>
+                        <p class="text-slate-600">?Ｙ?撠惇蝬脣??澈蝯西扛??閮芸恥?⊿??餃?喳?亦?摰銵???/p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center mb-5">
                             <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">雲端同步</h3>
-                        <p class="text-slate-600">行程資料自動同步至雲端，隨時隨地更新，不怕遺失。</p>
+                        <h3 class="text-xl font-bold text-dark mb-2">?脩垢?郊</h3>
+                        <p class="text-slate-600">銵?鞈??芸??郊?喲蝡荔??冽??典?湔嚗??憭晞?/p>
                     </div>
                 </div>
             </div>
@@ -197,24 +189,24 @@
         <!-- How It Works -->
         <section class="bg-slate-50 py-20 px-6">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">三步驟開始</h2>
-                <p class="text-slate-500 text-center mb-16">簡單三步，建立你的旅遊行程</p>
+                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">銝郊撽?憪?/h2>
+                <p class="text-slate-500 text-center mb-16">蝪∪銝郊嚗遣蝡?????蝔?/p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
                     <div class="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-slate-200"></div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">1</div>
-                        <h3 class="text-lg font-bold text-dark mb-2">Google 登入</h3>
-                        <p class="text-slate-600 text-sm">使用你的 Google 帳號快速登入，安全又方便。</p>
+                        <h3 class="text-lg font-bold text-dark mb-2">Google ?餃</h3>
+                        <p class="text-slate-600 text-sm">雿輻雿? Google 撣唾?敹恍?伐?摰?靘踴?/p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">2</div>
-                        <h3 class="text-lg font-bold text-dark mb-2">編輯行程</h3>
-                        <p class="text-slate-600 text-sm">新增每日景點、住宿、美食，自由安排旅遊路線。</p>
+                        <h3 class="text-lg font-bold text-dark mb-2">蝺刻摩銵?</h3>
+                        <p class="text-slate-600 text-sm">?啣?瘥?舫???摰踴?憌??芰摰???頝舐???/p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">3</div>
-                        <h3 class="text-lg font-bold text-dark mb-2">分享網址</h3>
-                        <p class="text-slate-600 text-sm">產生專屬網址分享給親友，大家都能看到完整行程。</p>
+                        <h3 class="text-lg font-bold text-dark mb-2">?澈蝬脣?</h3>
+                        <p class="text-slate-600 text-sm">?Ｙ?撠惇蝬脣??澈蝯西扛??憭批振?質?摰銵???/p>
                     </div>
                 </div>
             </div>
@@ -227,9 +219,9 @@
                     <i class="fa-solid fa-mountain-sun text-primary"></i>
                     <span class="text-white font-bold">Travelweb</span>
                 </div>
-                <p>用旅行，創造回憶。</p>
+                <p>?冽?銵??菟??嗚?/p>
                 <div class="mt-4 space-x-4">
-                    <a href="privacy.html" class="hover:text-white transition">隱私權政策</a>
+                    <a href="privacy.html" class="hover:text-white transition">?梁?甈蝑?/a>
                 </div>
                 <p class="mt-6 text-xs">&copy; 2026 Travelweb. All rights reserved.</p>
             </div>
@@ -240,7 +232,7 @@
     <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
-                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="回首頁">
+                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="????>
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
@@ -249,22 +241,22 @@
             <div class="flex items-center gap-2">
                 <img id="trips-user-avatar" class="w-7 h-7 rounded-full border border-slate-200" src="" alt="">
                 <span id="trips-user-name" class="text-sm font-medium text-slate-700 hidden md:inline"></span>
-                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="登出"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="?餃"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
             </div>
         </header>
         <main class="flex-1 overflow-y-auto p-4 md:p-8">
             <div class="max-w-4xl mx-auto">
                 <div class="flex justify-between items-center mb-6">
                     <div>
-                        <h2 class="text-2xl font-bold text-dark">我的行程</h2>
-                        <p class="text-sm text-slate-500 mt-1">免費版最多 5 個行程（<span id="trip-count">0</span>/5）</p>
+                        <h2 class="text-2xl font-bold text-dark">??銵?</h2>
+                        <p class="text-sm text-slate-500 mt-1">?祥??憭?5 ??蝔?<span id="trip-count">0</span>/5嚗?/p>
                     </div>
                     <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                        <i class="fa-solid fa-plus"></i> 新增行程
+                        <i class="fa-solid fa-plus"></i> ?啣?銵?
                     </button>
                 </div>
                 <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="text-slate-400 col-span-full text-center py-12">載入中...</div>
+                    <div class="text-slate-400 col-span-full text-center py-12">頛銝?..</div>
                 </div>
             </div>
         </main>
@@ -277,31 +269,31 @@
             <div class="flex items-center gap-1.5 md:gap-3 min-w-0">
                 <i class="fa-solid fa-mountain-sun text-primary text-base md:text-2xl shrink-0"></i>
                 <div class="truncate">
-                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">載入中...</h1>
-                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">載入中...</p>
+                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">頛銝?..</h1>
+                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">頛銝?..</p>
                 </div>
             </div>
             <div class="flex items-center gap-0.5 md:gap-2 shrink-0">
                 <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-1.5 md:px-3 py-1 rounded-full text-[9px] md:text-sm font-medium whitespace-nowrap">
-                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> 訪客唯讀</span>
+                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> 閮芸恥?航?</span>
                 </div>
                 <button id="btn-back-home" class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="goToHome()">
-                    <i class="fa-solid fa-arrow-left text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">行程列表</span>
+                    <i class="fa-solid fa-arrow-left text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">銵??”</span>
                 </button>
                 <button id="btn-global-config" class="edit-only hidden items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openGlobalConfigModal()">
-                    <i class="fa-solid fa-gear text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">設定</span>
+                    <i class="fa-solid fa-gear text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">閮剖?</span>
                 </button>
                 <button id="btn-share" class="hidden items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="shareItinerary()">
-                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">分享</span>
+                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">?澈</span>
                 </button>
                 <button id="btn-collab" class="hidden items-center justify-center bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openCollabModal()">
-                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">共同編輯</span>
+                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">?勗?蝺刻摩</span>
                 </button>
                 <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
                     <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                         <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
-                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="登出">
+                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="?餃">
                             <i class="fa-solid fa-sign-out-alt text-xs md:text-base"></i>
                         </button>
                     </div>
@@ -312,7 +304,7 @@
         <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
             <aside class="w-full md:w-64 lg:w-72 bg-white border-b md:border-b-0 md:border-r border-slate-200 shrink-0 max-h-[72px] md:max-h-none overflow-y-auto md:overflow-y-auto">
                 <div class="p-2 md:p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
-                    <h2 class="font-bold text-slate-700">行程總覽</h2>
+                    <h2 class="font-bold text-slate-700">銵?蝮質汗</h2>
                 </div>
                 <div id="timeline-container" class="flex md:flex-col gap-1.5 md:gap-1 overflow-x-auto md:overflow-x-hidden p-2 md:p-4"></div>
             </aside>
@@ -321,15 +313,15 @@
                 <div class="max-w-3xl mx-auto w-full p-4 md:p-8 pb-24 flex-1 flex flex-col">
                 <div class="flex justify-between items-end mb-6">
                     <div>
-                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
+                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">頛銝?..</h2>
                         <p id="current-day-date" class="text-slate-500 font-medium"></p>
                     </div>
                     <div class="flex items-center gap-2">
                         <button class="edit-only hidden bg-white border border-slate-200 text-red-500 hover:bg-red-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="deleteCurrentDay()">
-                            <i class="fa-solid fa-trash mr-1"></i> 刪除這天
+                            <i class="fa-solid fa-trash mr-1"></i> ?芷?予
                         </button>
                         <button class="edit-only hidden bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="openDayInfoModal()">
-                            <i class="fa-solid fa-pen mr-1"></i> 編輯食宿
+                            <i class="fa-solid fa-pen mr-1"></i> 蝺刻摩憌挪
                         </button>
                     </div>
                 </div>
@@ -337,28 +329,28 @@
                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
                             <div class="bg-blue-50 text-blue-500 p-3 rounded-lg"><i class="fa-solid fa-bed text-xl"></i></div>
                             <div>
-                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">住宿 (Sleep)</h3>
+                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">雿挪 (Sleep)</h3>
                                 <p id="info-hotel" class="text-slate-700 font-medium"></p>
                             </div>
                         </div>
                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
                             <div class="bg-orange-50 text-orange-500 p-3 rounded-lg"><i class="fa-solid fa-utensils text-xl"></i></div>
                             <div>
-                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">餐飲 (Eat)</h3>
+                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">擗ㄡ (Eat)</h3>
                                 <p id="info-food" class="text-slate-700 font-medium"></p>
                             </div>
                         </div>
                     </div>
                     <div class="mb-6 flex justify-between items-center">
-                        <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-route text-primary mr-2"></i> 今日行程路線</h3>
+                        <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-route text-primary mr-2"></i> 隞銵?頝舐?</h3>
                         <button class="edit-only hidden text-primary hover:text-sky-700 font-medium text-sm" onclick="openActivityModal()">
-                            <i class="fa-solid fa-plus mr-1"></i> 新增景點
+                            <i class="fa-solid fa-plus mr-1"></i> ?啣??舫?
                         </button>
                     </div>
                     <div id="activities-container" class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent"></div>
                     <div class="mt-auto pt-8 bg-yellow-50 p-5 rounded-xl border border-yellow-100 relative"></div>
                     <div class="mt-12 bg-yellow-50 p-5 rounded-xl border border-yellow-100 relative">
-                        <h3 class="text-yellow-800 font-bold mb-2"><i class="fa-solid fa-book-open text-yellow-600 mr-2"></i> 旅程備忘錄</h3>
+                        <h3 class="text-yellow-800 font-bold mb-2"><i class="fa-solid fa-book-open text-yellow-600 mr-2"></i> ??????/h3>
                         <p id="info-notes" class="text-yellow-700 text-sm whitespace-pre-wrap"></p>
                     </div>
                 </div>
@@ -367,11 +359,10 @@
             <div id="fab-container" class="edit-only hidden fixed bottom-6 right-6 z-30" onmouseenter="openFab()" onmouseleave="closeFab()">
                 <div class="fab-menu flex flex-col items-end gap-2 mb-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-200">
                     <button onclick="openActivityModal()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-location-dot text-primary"></i> 新增景點
+                        <i class="fa-solid fa-location-dot text-primary"></i> ?啣??舫?
                     </button>
                     <button onclick="addNewDay()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-calendar-plus text-secondary"></i> 新增一天
-                    </button>
+                        <i class="fa-solid fa-calendar-plus text-secondary"></i> ?啣?銝憭?                    </button>
                 </div>
                 <div class="flex justify-end">
                     <button onclick="toggleFab()" class="w-14 h-14 bg-primary hover:bg-sky-600 text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center transition text-xl">
@@ -382,12 +373,12 @@
 
             <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>景點預覽</h3>
+                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>?舫??汗</h3>
                     <button class="lg:hidden text-slate-400 hover:text-slate-600" onclick="document.getElementById('map-panel').classList.remove('flex'); document.getElementById('map-panel').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div id="preview-content" class="flex-1 p-5 overflow-y-auto flex flex-col items-center justify-center text-center text-slate-400">
                     <i class="fa-regular fa-compass text-4xl mb-3"></i>
-                    <p>點擊左側行程中的景點<br>即可在此預覽與導航</p>
+                    <p>暺?撌血銵?銝剔??舫?<br>?喳?冽迨?汗????/p>
                 </div>
             </aside>
         </main>
@@ -398,31 +389,31 @@
         <div id="modal-collab" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>共同編輯管理</h3>
+                    <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>?勗?蝺刻摩蝞∠?</h3>
                     <button onclick="closeModal('modal-collab')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">行程擁有者</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">銵?????/label>
                         <p id="collab-owner" class="text-slate-500 text-sm">-</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">新增共同編輯者（Google Email）</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?啣??勗?蝺刻摩??Google Email嚗?/label>
                         <div class="flex gap-2">
                             <input type="email" id="input-collab-email" placeholder="example@gmail.com" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
-                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">新增</button>
+                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">?啣?</button>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">共同編輯者清單</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">?勗?蝺刻摩????/label>
                         <div id="collab-list" class="space-y-2">
-                            <p class="text-slate-400 text-sm">尚無共同編輯者</p>
+                            <p class="text-slate-400 text-sm">撠?勗?蝺刻摩??/p>
                         </div>
                     </div>
-                    <p class="text-xs text-slate-400">共同編輯者登入後即可編輯此行程</p>
+                    <p class="text-xs text-slate-400">?勗?蝺刻摩??亙??喳蝺刻摩甇方?蝔?/p>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
-                    <button onclick="closeModal('modal-collab')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm">關閉</button>
+                    <button onclick="closeModal('modal-collab')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm">??</button>
                 </div>
             </div>
         </div>
@@ -430,28 +421,28 @@
         <div id="modal-global-config" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900">行程設定</h3>
+                    <h3 class="font-bold text-lg text-slate-900">銵?閮剖?</h3>
                     <button onclick="closeModal('modal-global-config')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">旅遊行程標題名稱</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">??銵?璅??迂</label>
                         <input type="text" id="config-trip-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">日期區間</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?交????/label>
                         <input type="text" id="config-trip-date" placeholder="2026.07.03 - 2026.07.16" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <p class="text-xs text-slate-400 mb-1">帳號資訊</p>
+                        <p class="text-xs text-slate-400 mb-1">撣唾?鞈?</p>
                         <p class="text-sm font-medium text-slate-700"><i class="fa-solid fa-envelope mr-1 text-slate-400"></i><span id="config-email">-</span></p>
-                        <p class="text-xs text-slate-500 mt-1">登入方式：<span id="config-auth-method">-</span></p>
-                        <p class="text-xs text-slate-400 mt-1">同 Email 的登入方式共用同一個行程帳號</p>
+                        <p class="text-xs text-slate-500 mt-1">?餃?孵?嚗?span id="config-auth-method">-</span></p>
+                        <p class="text-xs text-slate-400 mt-1">??Email ??交撘?典?銝??蝔董??/p>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存設定至雲端</button>
+                    <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">??</button>
+                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">?脣?閮剖??喲蝡?/button>
                 </div>
             </div>
         </div>
@@ -459,30 +450,30 @@
         <div id="modal-day-info" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900">編輯今日資訊</h3>
+                    <h3 class="font-bold text-lg text-slate-900">蝺刻摩隞鞈?</h3>
                     <button onclick="closeModal('modal-day-info')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">日期</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?交?</label>
                         <input type="date" id="input-date" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">住宿地點</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">雿挪?圈?</label>
                         <input type="text" id="input-hotel" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">推薦美食/餐廳</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?刻蝢?/擗輒</label>
                         <input type="text" id="input-food" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">旅程日記 / 注意事項</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">???亥? / 瘜冽?鈭?</label>
                         <textarea id="input-notes" rows="4" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                    <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存變更</button>
+                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">??</button>
+                    <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">?脣?霈</button>
                 </div>
             </div>
         </div>
@@ -490,42 +481,42 @@
         <div id="modal-activity" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">新增景點/活動</h3>
+                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">?啣??舫?/瘣餃?</h3>
                     <button onclick="closeModal('modal-activity')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <input type="hidden" id="act-id">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">時間</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">??</label>
                             <input type="time" id="act-time" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">類型圖示</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">憿??內</label>
                             <select id="act-icon" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
-                                <option value="fa-location-dot">預設地標</option>
-                                <option value="fa-plane">飛機航班</option>
-                                <option value="fa-train">高鐵/火車</option>
-                                <option value="fa-car">包車/汽車</option>
-                                <option value="fa-ship">遊船</option>
-                                <option value="fa-camera">拍照景點</option>
-                                <option value="fa-utensils">餐飲</option>
-                                <option value="fa-person-walking">徒步</option>
+                                <option value="fa-location-dot">?身?唳?</option>
+                                <option value="fa-plane">憌??芰</option>
+                                <option value="fa-train">擃/?怨?</option>
+                                <option value="fa-car">??/瘙質?</option>
+                                <option value="fa-ship">?</option>
+                                <option value="fa-camera">??舫?</option>
+                                <option value="fa-utensils">擗ㄡ</option>
+                                <option value="fa-person-walking">敺郊</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">標題 (景點名稱)</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">璅? (?舫??迂)</label>
                         <input type="text" id="act-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">簡介/玩法建議</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">蝪∩?/?拇?撱箄降</label>
                         <textarea id="act-desc" rows="3" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                    <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存</button>
+                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">??</button>
+                    <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">?脣?</button>
                 </div>
             </div>
         </div>
@@ -538,35 +529,35 @@
                 <div class="w-14 h-14 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-3">
                     <i class="fa-solid fa-plus text-primary text-2xl"></i>
                 </div>
-                <h2 class="text-lg font-bold text-slate-900">加入主畫面</h2>
-                <p class="text-sm text-slate-500 mt-1">將 Travelweb 加入主畫面，像 App 一樣快速開啟</p>
+                <h2 class="text-lg font-bold text-slate-900">?銝餌??/h2>
+                <p class="text-sm text-slate-500 mt-1">撠?Travelweb ?銝餌?ｇ???App 銝璅?翰????/p>
             </div>
             <div class="space-y-4">
                 <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
                     <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">1</div>
                     <div>
-                        <p class="text-sm font-medium text-slate-800">點擊下方「分享」按鈕</p>
-                        <p class="text-xs text-slate-400 mt-0.5">在 Safari 底部選單中</p>
+                        <p class="text-sm font-medium text-slate-800">暺?銝??鈭怒???/p>
+                        <p class="text-xs text-slate-400 mt-0.5">??Safari 摨?詨銝?/p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
                     <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">2</div>
                     <div>
-                        <p class="text-sm font-medium text-slate-800">滑到下方，點「加入主畫面」</p>
-                        <p class="text-xs text-slate-400 mt-0.5">在分享選單中往下滑</p>
+                        <p class="text-sm font-medium text-slate-800">皛銝嚗????乩蜓?恍??/p>
+                        <p class="text-xs text-slate-400 mt-0.5">?典?鈭恍?桐葉敺銝?</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
                     <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">3</div>
                     <div>
-                        <p class="text-sm font-medium text-slate-800">點右上角「加入」</p>
-                        <p class="text-xs text-slate-400 mt-0.5">完成！從主畫面開啟</p>
+                        <p class="text-sm font-medium text-slate-800">暺銝????乓?/p>
+                        <p class="text-xs text-slate-400 mt-0.5">摰?嚗?銝餌?ａ???/p>
                     </div>
                 </div>
             </div>
             <div class="mt-6 flex gap-2">
-                <button onclick="dismissIOSTutorial()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-sm font-medium transition">稍後再說</button>
-                <button onclick="dismissIOSTutorial()" class="flex-1 bg-primary hover:bg-sky-600 text-white py-3 rounded-xl text-sm font-medium transition">知道了</button>
+                <button onclick="dismissIOSTutorial()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-sm font-medium transition">蝔??牧</button>
+                <button onclick="dismissIOSTutorial()" class="flex-1 bg-primary hover:bg-sky-600 text-white py-3 rounded-xl text-sm font-medium transition">?仿?鈭?/button>
             </div>
         </div>
     </div>
@@ -575,7 +566,7 @@
         // ============================================================
         //  CONFIG
         // ============================================================
-        const LINE_CHANNEL_ID = "2010603361"; // Line Developers 的 Channel ID
+        const LINE_CHANNEL_ID = "2010603361"; // Line Developers ??Channel ID
         const API_BASE = "https://travel-api.pengjun0429.workers.dev";
 
         // ============================================================
@@ -587,7 +578,7 @@
         let guestUserUid = null;         // uid of the trip owner being viewed as guest
 
         let globalConfig = {
-            tripTitle: "我的旅遊行程",
+            tripTitle: "????銵?",
             tripDate: ""
         };
         let itineraryData = [];
@@ -621,10 +612,7 @@
             return 'u' + Math.abs(hash).toString(36);
         }
 
-        function switchLang(lang) {
-            document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
-            window.location.replace(lang === 'en' ? '/en.html' : '/');
-        }
+        function switchLang(lang){document.cookie='tw_lang='+lang+';path=/;max-age=31536000';window.location.replace(lang==='en'?'/en.html':'/');}
 
         function showToast(message) {
             const toast = document.getElementById('toast');
@@ -651,7 +639,7 @@
         }
 
         function goToHome() {
-            if (confirm('回到行程列表？')) {
+            if (confirm('?銵??”嚗?)) {
                 document.getElementById('app-view').classList.add('view-hidden');
                 window.history.replaceState({}, '', window.location.pathname);
                 if (currentUser) {
@@ -663,11 +651,11 @@
         }
 
         // ============================================================
-        //  AUTH — shared handler for both landing and app
+        //  AUTH ??shared handler for both landing and app
         // ============================================================
         function handleGoogleSignInResponse(response) {
             const payload = decodeJwt(response.credential);
-            if (!payload) return showToast("無法讀取 Google 登入資訊");
+            if (!payload) return showToast("?⊥?霈??Google ?餃鞈?");
 
             const email = payload.email.trim().toLowerCase();
             const uid = generateUid(email);
@@ -689,7 +677,7 @@
             localStorage.setItem('tw_auth_method', 'google');
 
             updateLandingAuthUI();
-            showToast(`歡迎，${payload.name}！`);
+            showToast(`甇∟?嚗?{payload.name}嚗);
         }
 
         function updateLandingAuthUI() {
@@ -704,7 +692,7 @@
 
                 const heroUser = document.getElementById('landing-hero-user');
                 heroUser.classList.remove('hidden');
-                document.getElementById('landing-hero-email').textContent = '已使用 ' + currentUser.email + ' 登入';
+                document.getElementById('landing-hero-email').textContent = '撌脖蝙??' + currentUser.email + ' ?餃';
             } else {
                 document.getElementById('landing-g-signin-btn-wrapper').classList.remove('hidden');
                 document.getElementById('btn-start-hero').classList.remove('hidden');
@@ -718,7 +706,7 @@
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
             document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未登入';
+            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '?芰??;
             loadTrips();
         }
 
@@ -742,7 +730,7 @@
         async function loadTrips() {
             if (!currentUser) return;
             const container = document.getElementById('trips-list');
-            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">載入中...</div>';
+            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">頛銝?..</div>';
             try {
                 const res = await Promise.race([
                     fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`),
@@ -756,22 +744,22 @@
                 let html = '';
 
                 // My trips
-                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">我的行程</h3></div>';
+                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">??銵?</h3></div>';
                 if (owned.length === 0) {
-                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有行程</p></div>';
+                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>????蝔?/p></div>';
                 } else {
                     html += owned.map(trip => tripCard(trip, false)).join('');
                 }
 
                 // Shared trips
                 if (shared.length > 0) {
-                    html += '<div class="col-span-full mt-6 pt-4 border-t border-slate-200"><h3 class="text-lg font-bold text-dark mb-3"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>共用給我的</h3></div>';
+                    html += '<div class="col-span-full mt-6 pt-4 border-t border-slate-200"><h3 class="text-lg font-bold text-dark mb-3"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>?梁蝯行???/h3></div>';
                     html += shared.map(trip => tripCard(trip, true)).join('');
                 }
 
-                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有行程</p></div>';
+                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">????蝔?/p></div>';
             } catch (err) {
-                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>載入失敗</p><button onclick="loadTrips()" class="mt-2 text-sm underline">重試</button></div>';
+                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>頛憭望?</p><button onclick="loadTrips()" class="mt-2 text-sm underline">?岫</button></div>';
             }
         }
 
@@ -783,30 +771,30 @@
                             <div class="w-10 h-10 rounded-xl ${isShared ? 'bg-emerald-100 text-emerald-500' : 'bg-primary/10 text-primary'} flex items-center justify-center">
                                 <i class="fa-solid ${isShared ? 'fa-users' : 'fa-suitcase-rolling'}"></i>
                             </div>
-                            ${!isShared ? `<button onclick="event.stopPropagation(); deleteTrip('${trip.trip_id}')" class="text-slate-300 hover:text-red-500 transition p-1 opacity-0 group-hover:opacity-100" title="刪除"><i class="fa-solid fa-trash text-sm"></i></button>` : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full font-medium">共用</span>'}
+                            ${!isShared ? `<button onclick="event.stopPropagation(); deleteTrip('${trip.trip_id}')" class="text-slate-300 hover:text-red-500 transition p-1 opacity-0 group-hover:opacity-100" title="?芷"><i class="fa-solid fa-trash text-sm"></i></button>` : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full font-medium">?梁</span>'}
                         </div>
                         <h3 class="font-bold text-dark text-lg mb-1 truncate">${trip.trip_title}</h3>
-                        <p class="text-sm text-slate-500">${trip.trip_date || '未設定日期'}</p>
-                        <p class="text-xs text-slate-400 mt-2">${isShared ? '擁有者: ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('zh-TW')}</p>
+                        <p class="text-sm text-slate-500">${trip.trip_date || '?芾身摰??}</p>
+                        <p class="text-xs text-slate-400 mt-2">${isShared ? '???? ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('zh-TW')}</p>
                     </div>
                 </div>`;
         }
 
         let isCreatingTrip = false;
         async function createTrip() {
-            if (!currentUser) return showToast("請先登入");
+            if (!currentUser) return showToast("隢??餃");
             if (isCreatingTrip) return;
             isCreatingTrip = true;
             try {
                 const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`);
                 const data = await res.json();
                 if ((data.owned || []).length >= FREE_TRIP_LIMIT) {
-                    showToast("免費版最多 5 個行程");
+                    showToast("?祥??憭?5 ??蝔?);
                     isCreatingTrip = false;
                     return;
                 }
             } catch(e) {}
-            const title = prompt("行程名稱：", "我的旅遊行程");
+            const title = prompt("銵??迂嚗?, "????銵?");
             if (!title) { isCreatingTrip = false; return; }
             try {
                 const res = await fetch(`${API_BASE}/api/trip`, {
@@ -820,15 +808,15 @@
                 const data = await res.json();
                 if (data.tripId) { selectTrip(data.tripId); }
                 else if (data.error === 'free_limit') { showToast(data.message); }
-                else { showToast("建立失敗"); }
-            } catch (err) { showToast("網路錯誤"); }
+                else { showToast("撱箇?憭望?"); }
+            } catch (err) { showToast("蝬脰楝?航炊"); }
             isCreatingTrip = false;
         }
 
         async function deleteTrip(tripId) {
-            if (!confirm("確定刪除？無法復原。")) return;
+            if (!confirm("蝣箏??芷嚗瘜儔??)) return;
             await fetch(`${API_BASE}/api/trip?trip_id=${tripId}`, { method: 'DELETE' });
-            showToast("已刪除");
+            showToast("撌脣??);
             loadTrips();
         }
 
@@ -891,7 +879,7 @@
             localStorage.setItem('tw_auth_method', 'line');
 
             updateLandingAuthUI();
-            showToast(`歡迎，${currentUser.name}！`);
+            showToast(`甇∟?嚗?{currentUser.name}嚗);
 
             // Clean URL
             window.history.replaceState({}, '', window.location.pathname);
@@ -905,7 +893,7 @@
             localStorage.removeItem('tw_user_picture');
             localStorage.removeItem('tw_user_uid');
             google.accounts.id.disableAutoSelect();
-            showToast("已登出");
+            showToast("撌脩??);
             showLanding();
             updateLandingAuthUI();
         }
@@ -914,7 +902,7 @@
         //  ENTER APP (from landing page)
         // ============================================================
         async function enterApp() {
-            if (!currentUser) return showToast("請先登入");
+            if (!currentUser) return showToast("隢??餃");
             if (!currentTripId) { showTrips(); return; }
             showApp();
             document.getElementById('app-user-avatar').src = currentUser.picture;
@@ -952,7 +940,7 @@
                 }
                 return null;
             } catch (err) {
-                console.error("雲端連線失敗:", err);
+                console.error("?脩垢???憭望?:", err);
                 return null;
             }
         }
@@ -1027,23 +1015,23 @@
                 collaborators: collaborators
             });
             if (result && result.status === "success") {
-                showToast("已同步至雲端");
+                showToast("撌脣?甇亥?脩垢");
             } else {
                 localStorage.setItem('tw_trip_' + currentTripId, JSON.stringify(itineraryData));
             }
         }
 
         // ============================================================
-        //  SHARE — unique URL per user
+        //  SHARE ??unique URL per user
         // ============================================================
         function shareItinerary() {
-            if (!currentUser || !currentTripId) return showToast("請先登入");
+            if (!currentUser || !currentTripId) return showToast("隢??餃");
             const baseUrl = window.location.origin + window.location.pathname;
             const shareUrl = baseUrl + '?trip=' + currentTripId + '&guest=1';
             navigator.clipboard.writeText(shareUrl).then(() => {
-                showToast("已複製專屬分享網址！");
+                showToast("撌脰?鋆賢?撅砍?鈭怎雯?嚗?);
             }).catch(() => {
-                prompt("請手動複製以下網址分享：", shareUrl);
+                prompt("隢???鋆賭誑銝雯??澈嚗?, shareUrl);
             });
         }
 
@@ -1062,7 +1050,7 @@
         async function saveGlobalConfig() {
             const newTitle = document.getElementById('config-trip-title').value.trim();
             const newDate = document.getElementById('config-trip-date').value.trim();
-            if(!newTitle) return showToast("標題不能為空！");
+            if(!newTitle) return showToast("璅?銝?箇征嚗?);
             globalConfig.tripTitle = newTitle;
             globalConfig.tripDate = newDate;
             updateHeaderUI();
@@ -1111,7 +1099,7 @@
         }
 
         function openCollabModal() {
-            if (!currentUser) return showToast("請先登入");
+            if (!currentUser) return showToast("隢??餃");
             document.getElementById('collab-owner').textContent = ownerEmail || currentUser.email;
             renderCollabList();
             document.getElementById('modal-collab').classList.remove('hidden');
@@ -1120,7 +1108,7 @@
         function renderCollabList() {
             const container = document.getElementById('collab-list');
             if (collaborators.length === 0) {
-                container.innerHTML = '<p class="text-slate-400 text-sm">尚無共同編輯者</p>';
+                container.innerHTML = '<p class="text-slate-400 text-sm">撠?勗?蝺刻摩??/p>';
                 return;
             }
             container.innerHTML = collaborators.map(email => `
@@ -1134,9 +1122,9 @@
         async function addCollaborator() {
             const input = document.getElementById('input-collab-email');
             const email = input.value.trim().toLowerCase();
-            if (!email || !email.includes('@')) return showToast("請輸入有效的 Email");
-            if (!currentUser) return showToast("請先登入");
-            if (!isOwner()) return showToast("僅擁有者可管理共同編輯者");
+            if (!email || !email.includes('@')) return showToast("隢撓?交??? Email");
+            if (!currentUser) return showToast("隢??餃");
+            if (!isOwner()) return showToast("???蝞∠??勗?蝺刻摩??);
 
             if (!ownerEmail) {
                 ownerEmail = currentUser.email;
@@ -1156,12 +1144,12 @@
             });
 
             renderCollabList();
-            showToast(`已邀請 ${email} 共同編輯`);
+            showToast(`撌脤?隢?${email} ?勗?蝺刻摩`);
         }
 
         async function removeCollaborator(email) {
             if (!isOwner()) return;
-            if (!confirm(`確定要移除 ${email} 的編輯權限？`)) return;
+            if (!confirm(`蝣箏?閬宏??${email} ?楊頛舀???`)) return;
 
             collaborators = collaborators.filter(e => e !== email);
 
@@ -1176,7 +1164,7 @@
             });
 
             renderCollabList();
-            showToast(`已移除 ${email}`);
+            showToast(`撌脩宏??${email}`);
         }
 
         // ============================================================
@@ -1187,7 +1175,7 @@
             container.innerHTML = '';
             itineraryData.forEach((day, index) => {
                 const dateObj = new Date(day.date);
-                const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
+                const dayOfWeek = ['??, '銝', '鈭?, '銝?, '??, '鈭?, '??][dateObj.getDay()];
                 const shortDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
                 const btn = document.createElement('button');
                 btn.className = `shrink-0 md:w-full text-left p-2 md:p-4 rounded-xl transition-all duration-200 border-2 mb-0 md:mb-2 flex items-center gap-2 md:gap-3 ${
@@ -1202,7 +1190,7 @@
                         <span class="text-xs md:text-sm font-black">${shortDate}</span>
                     </div>
                     <div class="hidden md:block overflow-hidden">
-                        <div class="text-xs font-bold uppercase tracking-wider mb-0.5 opacity-80">星期${dayOfWeek}</div>
+                        <div class="text-xs font-bold uppercase tracking-wider mb-0.5 opacity-80">??${dayOfWeek}</div>
                         <div class="font-bold truncate text-sm">${day.title}</div>
                     </div>
                 `;
@@ -1216,11 +1204,11 @@
             const day = itineraryData[index];
             document.getElementById('current-day-title').textContent = `Day ${index + 1}: ${day.title}`;
             const dateObj = new Date(day.date);
-            const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
-            document.getElementById('current-day-date').textContent = `${day.date} (星期${dayOfWeek})`;
-            document.getElementById('info-hotel').textContent = day.hotel || '無安排';
-            document.getElementById('info-food').textContent = day.food || '無特別安排';
-            document.getElementById('info-notes').textContent = day.notes || '尚無備忘錄資訊...';
+            const dayOfWeek = ['??, '銝', '鈭?, '銝?, '??, '鈭?, '??][dateObj.getDay()];
+            document.getElementById('current-day-date').textContent = `${day.date} (??${dayOfWeek})`;
+            document.getElementById('info-hotel').textContent = day.hotel || '?∪???;
+            document.getElementById('info-food').textContent = day.food || '?∠?亙???;
+            document.getElementById('info-notes').textContent = day.notes || '撠????閮?..';
             renderActivities(day.activities);
         }
 
@@ -1228,7 +1216,7 @@
             const container = document.getElementById('activities-container');
             container.innerHTML = '';
             if(!activities || activities.length === 0) {
-                container.innerHTML = `<div class="text-slate-400 text-center py-8">尚無景點行程，請點擊新增。</div>`;
+                container.innerHTML = `<div class="text-slate-400 text-center py-8">撠?舫?銵?嚗?暺??啣???/div>`;
                 return;
             }
             activities.forEach((act, idx) => {
@@ -1264,7 +1252,7 @@
         let editingActIndex = -1;
 
         function openDayInfoModal() {
-            if(!canEdit()) return showToast("請先登入以取得編輯權限");
+            if(!canEdit()) return showToast("隢??餃隞亙?敺楊頛舀???);
             const day = itineraryData[currentDayIndex];
             document.getElementById('input-date').value = day.date || '';
             document.getElementById('input-hotel').value = day.hotel || '';
@@ -1286,9 +1274,9 @@
 
         function openActivityModal(isEdit = false, idx = -1) {
             closeFab();
-            if(!canEdit()) return showToast("請先登入以取得編輯權限");
+            if(!canEdit()) return showToast("隢??餃隞亙?敺楊頛舀???);
             editingActIndex = idx;
-            document.getElementById('modal-activity-title').textContent = isEdit ? '編輯景點' : '新增景點';
+            document.getElementById('modal-activity-title').textContent = isEdit ? '蝺刻摩?舫?' : '?啣??舫?';
             if (isEdit && idx >= 0) {
                 const act = itineraryData[currentDayIndex].activities[idx];
                 document.getElementById('act-time').value = act.time;
@@ -1308,7 +1296,7 @@
 
         async function deleteActivity(idx) {
             if(!canEdit()) return;
-            if(confirm('確定要刪除這個行程嗎？')) {
+            if(confirm('蝣箏?閬?日?蝔?嚗?)) {
                 itineraryData[currentDayIndex].activities.splice(idx, 1);
                 renderActivities(itineraryData[currentDayIndex].activities);
                 await syncToCloud();
@@ -1320,7 +1308,7 @@
             const icon = document.getElementById('act-icon').value;
             const title = document.getElementById('act-title').value.trim();
             const desc = document.getElementById('act-desc').value.trim();
-            if(!title) return showToast("標題不能為空");
+            if(!title) return showToast("璅?銝?箇征");
             const newAct = { id: Date.now().toString(), time, icon, title, desc };
             if (!itineraryData[currentDayIndex].activities) itineraryData[currentDayIndex].activities = [];
             if (editingActIndex >= 0) itineraryData[currentDayIndex].activities[editingActIndex] = newAct;
@@ -1333,7 +1321,7 @@
 
         function addNewDay() {
             closeFab();
-            if (!canEdit()) return showToast("請先登入");
+            if (!canEdit()) return showToast("隢??餃");
             const lastDay = itineraryData[itineraryData.length - 1];
             let nextDate = new Date();
             if (lastDay && lastDay.date) {
@@ -1343,7 +1331,7 @@
             const newDay = {
                 id: 'd' + (itineraryData.length + 1),
                 date: nextDate.toISOString().slice(0, 10),
-                title: '第' + (itineraryData.length + 1) + '天',
+                title: '蝚? + (itineraryData.length + 1) + '憭?,
                 hotel: '',
                 food: '',
                 notes: '',
@@ -1353,19 +1341,19 @@
             renderTimeline();
             selectDay(itineraryData.length - 1);
             syncToCloud();
-            showToast('已新增 Day ' + itineraryData.length);
+            showToast('撌脫憓?Day ' + itineraryData.length);
         }
 
         async function deleteCurrentDay() {
             if (!canEdit()) return;
-            if (itineraryData.length <= 1) return showToast("至少要保留一天");
-            if (!confirm('確定要刪除 Day ' + (currentDayIndex + 1) + '？此操作無法復原。')) return;
+            if (itineraryData.length <= 1) return showToast("?喳?閬???憭?);
+            if (!confirm('蝣箏?閬??Day ' + (currentDayIndex + 1) + '嚗迨???⊥?敺拙???)) return;
             itineraryData.splice(currentDayIndex, 1);
             if (currentDayIndex >= itineraryData.length) currentDayIndex = itineraryData.length - 1;
             renderTimeline();
             selectDay(currentDayIndex);
             syncToCloud();
-            showToast('已刪除');
+            showToast('撌脣??);
         }
 
         let fabOpen = false;
@@ -1415,13 +1403,13 @@
             content.innerHTML = `
                 <div class="w-full text-left">
                     <h3 class="text-xl font-bold text-slate-800 mb-2">${act.title}</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">${act.desc || '暫無詳細說明。'}</p>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">${act.desc || '?怎閰喟敦隤芣???}</p>
                     <div class="space-y-2">
                         <a href="${amapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm">
-                            <i class="fa-solid fa-map"></i> 高德地圖導航
+                            <i class="fa-solid fa-map"></i> 擃噸?啣?撠
                         </a>
                         <a href="${googleMapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-4 rounded-xl transition text-sm">
-                            <i class="fa-solid fa-location-arrow"></i> Google 地圖搜尋
+                            <i class="fa-solid fa-location-arrow"></i> Google ?啣???
                         </a>
                     </div>
                 </div>
@@ -1430,8 +1418,8 @@
 
         function getFallbackDefaultData() {
             return [
-                { id: "d1", date: new Date().toISOString().slice(0,10), title: "第一天", hotel: "", food: "", notes: "", activities: [] },
-                { id: "d2", date: new Date(Date.now()+86400000).toISOString().slice(0,10), title: "第二天", hotel: "", food: "", notes: "", activities: [] }
+                { id: "d1", date: new Date().toISOString().slice(0,10), title: "蝚砌?憭?, hotel: "", food: "", notes: "", activities: [] },
+                { id: "d2", date: new Date(Date.now()+86400000).toISOString().slice(0,10), title: "蝚砌?憭?, hotel: "", food: "", notes: "", activities: [] }
             ];
         }
 
@@ -1464,7 +1452,7 @@
         });
 
         // ============================================================
-        //  ON LOAD — determine initial view
+        //  ON LOAD ??determine initial view
         // ============================================================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1482,7 +1470,7 @@
             const lineError = urlParams.get('line_error');
             if (lineId || lineError) {
                 if (lineId) handleLineResponse(urlParams);
-                else if (lineError) showToast('Line 登入失敗');
+                else if (lineError) showToast('Line ?餃憭望?');
                 window.history.replaceState({}, '', window.location.pathname);
             }
 
@@ -1503,3 +1491,5 @@
     </script>
 </body>
 </html>
+
+
