@@ -104,9 +104,9 @@
                 <div class="flex items-center gap-3">
                     <!-- Language Dropdown Selection -->
                     <div class="relative inline-block text-left animate-fade-in" id="lang-dropdown-container">
-                        <button onclick="toggleLangDropdown()" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition flex items-center gap-1.5 focus:outline-none focus:ring-1 focus:ring-white/40" id="lang-dropdown-btn">
+                        <button onclick="toggleLangDropdown(event)" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition flex items-center gap-1.5 focus:outline-none focus:ring-1 focus:ring-white/40" id="lang-dropdown-btn">
                             <i class="fa-solid fa-globe text-white/80"></i>
-                            <span>繁體中文</span>
+                            <span>Language</span>
                             <i class="fa-solid fa-chevron-down text-[10px] text-white/60 transition-transform duration-200" id="lang-chevron"></i>
                         </button>
                         <div id="lang-dropdown-menu" class="hidden absolute right-0 mt-2 w-36 rounded-xl bg-white text-slate-800 shadow-xl border border-slate-100 py-1 z-50 origin-top-right">
@@ -593,7 +593,7 @@
         //  CONFIG
         // ============================================================
         const LINE_CHANNEL_ID = "2010603361"; // Line Developers 的 Channel ID
-        const API_BASE = "";
+        const API_BASE = "https://travel-api.pengjun0429.workers.dev";
 
         // ============================================================
         //  STATE
@@ -643,7 +643,10 @@
             window.location.replace(lang === 'en' ? '/en.html' : '/');
         }
 
-        function toggleLangDropdown() {
+        function toggleLangDropdown(event) {
+            if (event) {
+                event.stopPropagation();
+            }
             const menu = document.getElementById('lang-dropdown-menu');
             const chevron = document.getElementById('lang-chevron');
             if (menu.classList.contains('hidden')) {
