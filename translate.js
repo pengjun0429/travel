@@ -2,6 +2,11 @@ const fs = require('fs');
 let c = fs.readFileSync('C:\\Users\\user\\Desktop\\程式碼\\tripweb\\en.html', 'utf-8');
 const r = (f, t) => { c = c.replaceAll(f, t); };
 
+// Fix corrupted strings first
+c = c.replace(/用 Travelweb[\s\S]*?(?=<|\n|$)/g, 'Plan Your Trip with Travelweb');
+c = c.replace(/<meta name="twitter:description" content="[^"]*">/, '<meta name="twitter:description" content="Create and share travel itineraries. Supports multi-user editing and cloud sync.">');
+c = c.replace(/<meta name="keywords" content="[^"]*">/, '<meta name="keywords" content="Travel,Trip,Itinerary,Planning,Share,Cloud,Collaborate">');
+
 // Settings modal
 r('行程設定', 'Trip Settings');
 r('設定', 'Settings');
