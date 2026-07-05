@@ -3,6 +3,8 @@ const LINE_CHANNEL_SECRET = 'dfd6f08b73d3f2f06c6e0e20e4e8c621';
 const FRONTEND_URL = 'https://travelweb-8kb.pages.dev';
 const FREE_TRIP_LIMIT = 5;
 
+// AI keys are loaded from Worker secrets (GOOGLE_AI_KEYS_JSON, NVIDIA_AI_KEY)
+
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
@@ -26,6 +28,11 @@ export default {
             if (request.method === 'GET') return handleGetTrip(request, env, corsHeaders);
             if (request.method === 'POST') return handleCreateOrUpdateTrip(request, env, corsHeaders);
             if (request.method === 'DELETE') return handleDeleteTrip(request, env, corsHeaders);
+        }
+
+        // /api/ai/suggest — AI trip planning
+        if (url.pathname === '/api/ai/suggest' && request.method === 'POST') {
+            return handleAISuggest(request, env, corsHeaders);
         }
 
         // /auth/line/callback
@@ -201,4 +208,117 @@ function parseIdToken(idToken) {
 
 function json(headers, data, status = 200) {
     return new Response(JSON.stringify(data), { status, headers: { ...headers, 'Content-Type': 'application/json' } });
+}
+
+// ===== AI TRIP PLANNING =====
+async function handleAISuggest(request, env, corsHeaders) {
+    try {
+        const bodyText = await request.text();
+        let body;
+        try { body = JSON.parse(bodyText); } catch (e) {
+            return json(corsHeaders, { error: 'Invalid JSON: ' + bodyText.substring(0, 200) }, 400);
+        }
+        const { prompt, existingActivities, tripTitle, tripDate } = body;
+
+        if (!prompt) return json(corsHeaders, { error: 'Missing prompt' }, 400);
+
+        // Load keys from secrets
+        let googleKeys = [];
+        try { googleKeys = JSON.parse(env.GOOGLE_AI_KEYS_JSON || '[]'); } catch (_) {}
+        const nvidiaKey = env.NVIDIA_AI_KEY || '';
+        const nvidiaModel = 'google/gemma-4-31b-it';
+
+        if (!prompt) return json(corsHeaders, { error: 'Missing prompt' }, 400);
+
+        const systemPrompt = `You are a professional travel planner assistant. The user will give their travel needs and you help plan the itinerary.
+
+Respond ONLY with valid JSON, no other text:
+{
+  "activities": [
+    {
+      "time": "HH:MM (24h format)",
+      "icon": "fa-location-dot or fa-plane or fa-train or fa-car or fa-ship or fa-camera or fa-utensils or fa-person-walking",
+      "title": "Name of the spot or activity (short)",
+      "desc": "Brief description and tips (1-2 sentences)"
+    }
+  ],
+  "hotel": "Recommended accommodation",
+  "food": "Recommended restaurants or food",
+  "notes": "Travel tips and reminders"
+}
+
+Rules:
+- Order activities from morning to evening
+- Arrange 3-6 spots per day
+- Spot names should be concise
+- Descriptions should be practical, including transportation or ticket info
+- Language: Traditional Chinese`;
+
+        const userMessage = tripTitle
+            ? `Trip: ${tripTitle}\nDates: ${tripDate || 'Not specified'}\nExisting plans: ${existingActivities ? JSON.stringify(existingActivities) : 'None'}\nRequest: ${prompt}`
+            : prompt;
+
+        const extractJSON = (text) => {
+            try {
+                const m = text.match(/\{[\s\S]*\}/);
+                return m ? JSON.parse(m[0]) : null;
+            } catch (_) { return null; }
+        };
+
+        // Try NVIDIA API (primary)
+        if (nvidiaKey) {
+            try {
+                const nvRes = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + nvidiaKey },
+                    body: JSON.stringify({
+                        model: nvidiaModel,
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        { role: 'user', content: userMessage }
+                    ],
+                    temperature: 0.7,
+                    max_tokens: 2000,
+                    top_p: 0.95,
+                    seed: 42,
+                    chat_template_kwargs: { enable_thinking: true }
+                })
+            });
+            if (nvRes.ok) {
+                const nvData = await nvRes.json();
+                const nvText = nvData.choices?.[0]?.message?.content || '';
+                if (nvText) {
+                    const sug = extractJSON(nvText);
+                    if (sug) return json(corsHeaders, { success: true, suggestion: sug });
+                }
+            }
+        } catch (_) { /* nvidia failed */ }
+
+        // Fallback: Google Gemini API
+        for (const key of googleKeys) {
+            try {
+                const res = await fetch(
+                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
+                    {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\n' + userMessage }] }],
+                            generationConfig: { temperature: 0.7, maxOutputTokens: 2000 }
+                        })
+                    }
+                );
+                if (res.status === 429 || !res.ok) continue;
+                const data = await res.json();
+                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
+                if (!text) continue;
+                const sug = extractJSON(text);
+                if (sug) return json(corsHeaders, { success: true, suggestion: sug });
+            } catch (_) { /* next */ }
+        }
+
+        return json(corsHeaders, { error: 'AI unavailable' }, 502);
+    } catch (err) {
+        return json(corsHeaders, { error: 'AI error: ' + err.message }, 500);
+    }
 }
