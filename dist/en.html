@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -104,10 +104,10 @@
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">中文</button>
+                    <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">����</button>
                     <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
-                    <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">日本語</button>
-                    <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">한국어</button>
+                    <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">�饻�y</button>
+                    <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">???</button>
                     <div id="landing-auth" class="flex items-center gap-3">
                         <div id="landing-g-signin-btn-wrapper">
                             <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
@@ -263,11 +263,19 @@
                 <div class="flex justify-between items-center mb-6">
                     <div>
                         <h2 class="text-2xl font-bold text-dark">My Trips</h2>
-                        <p class="text-sm text-slate-500 mt-1">Free plan: max 5 trips（<span id="trip-count">0</span>/5）</p>
+                        <p class="text-sm text-slate-500 mt-1" id="trip-limit-info">Free plan: max 5 trips (<span id="trip-count">0</span>/5)</p>
                     </div>
-                    <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                        <i class="fa-solid fa-plus"></i> New Trip
-                    </button>
+                    <div class="flex gap-2">
+                        <button id="btn-premium-badge" class="hidden bg-amber-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-crown"></i> PREMIUM
+                        </button>
+                        <button id="btn-upgrade" onclick="openPricingModal()" class="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
+                            <i class="fa-solid fa-crown"></i> Upgrade
+                        </button>
+                        <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
+                            <i class="fa-solid fa-plus"></i> New Trip
+                        </button>
+                    </div>
                 </div>
                 <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="text-slate-400 col-span-full text-center py-12">Loading...</div>
@@ -304,6 +312,10 @@
                     <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">Collaborate</span>
                 </button>
                 <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
+                    <span id="app-premium-badge" class="hidden text-amber-500 text-xs"><i class="fa-solid fa-crown"></i></span>
+                    <button id="btn-app-upgrade" onclick="openPricingModal()" class="hidden items-center justify-center bg-gradient-to-r from-amber-400 to-orange-500 text-white w-7 h-7 md:w-auto md:h-auto md:px-2.5 md:py-1.5 rounded-lg transition text-xs font-bold shadow-sm" title="Upgrade to PREMIUM">
+                        <i class="fa-solid fa-crown text-[10px] md:text-xs"></i><span class="hidden md:inline md:ml-1">Upgrade</span>
+                    </button>
                     <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                         <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
@@ -318,7 +330,7 @@
         <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
             <aside class="w-full md:w-64 lg:w-72 bg-white border-b md:border-b-0 md:border-r border-slate-200 shrink-0 max-h-[72px] md:max-h-none overflow-y-auto md:overflow-y-auto">
                 <div class="p-2 md:p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
-                    <h2 class="font-bold text-slate-700">Trip總覽</h2>
+                    <h2 class="font-bold text-slate-700">Trip�`��</h2>
                 </div>
                 <div id="timeline-container" class="flex md:flex-col gap-1.5 md:gap-1 overflow-x-auto md:overflow-x-hidden p-2 md:p-4"></div>
             </aside>
@@ -470,7 +482,7 @@
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">日期</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">���</label>
                         <input type="date" id="input-date" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
@@ -503,7 +515,7 @@
                     <input type="hidden" id="act-id">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">時間</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">�ɶ�</label>
                             <input type="time" id="act-time" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                         </div>
                         <div>
@@ -537,6 +549,39 @@
         </div>
     </div>
 
+    <!-- Pricing Modal -->
+    <div id="modal-pricing" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
+        <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-crown text-amber-400 mr-2"></i>Upgrade to PREMIUM</h3>
+                <button onclick="closeModal('modal-pricing')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-amber-300 to-orange-500 rounded-full flex items-center justify-center mb-3 shadow-lg">
+                        <i class="fa-solid fa-crown text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900">Unlock Unlimited Trips</h4>
+                    <p class="text-sm text-slate-500 mt-1">During Beta, contact admin for activation code</p>
+                </div>
+                <div class="bg-slate-50 rounded-xl p-4 text-xs text-slate-500 space-y-1">
+                    <p class="font-medium text-slate-700 mb-2">Bank Transfer Info</p>
+                    <p><span class="text-slate-600">Bank:</span> (Contact admin)</p>
+                    <p><span class="text-slate-600">Account:</span> (Contact admin)</p>
+                    <p><span class="text-slate-600">iPASS MONEY:</span> (Contact admin)</p>
+                    <p class="mt-2 text-slate-400">After transfer, contact admin for activation code</p>
+                </div>
+                <div class="border-t border-slate-100 pt-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">Have an activation code?</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="input-activation-code" placeholder="Enter code" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none text-sm uppercase tracking-widest" maxlength="8">
+                        <button onclick="activateWithCode()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium shrink-0">Activate</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- iOS Tutorial -->
     <div id="ios-tutorial" class="fixed inset-0 bg-black/60 hidden z-[100] flex items-end md:items-center justify-center backdrop-blur-sm">
         <div class="bg-white rounded-t-2xl md:rounded-2xl w-full max-w-sm mx-4 p-6 pb-10 shadow-2xl animate-fade-in-up">
@@ -545,7 +590,7 @@
                     <i class="fa-solid fa-plus text-primary text-2xl"></i>
                 </div>
                 <h2 class="text-lg font-bold text-slate-900">Add to Home Screen</h2>
-                <p class="text-sm text-slate-500 mt-1">將 Travelweb Add to Home Screen，像 App 一樣快速開啟</p>
+                <p class="text-sm text-slate-500 mt-1">�N Travelweb Add to Home Screen�A�� App �@�˧ֳt�}��</p>
             </div>
             <div class="space-y-4">
                 <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
@@ -558,7 +603,7 @@
                 <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
                     <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">2</div>
                     <div>
-                        <p class="text-sm font-medium text-slate-800">滑到下方，點「Add to Home Screen」</p>
+                        <p class="text-sm font-medium text-slate-800">�ƨ�U��A�I�uAdd to Home Screen�v</p>
                         <p class="text-xs text-slate-400 mt-0.5">In the share menu</p>
                     </div>
                 </div>
@@ -581,7 +626,7 @@
         // ============================================================
         //  CONFIG
         // ============================================================
-        const LINE_CHANNEL_ID = "2010603361"; // Line Developers 的 Channel ID
+        const LINE_CHANNEL_ID = "2010603361"; // Line Developers �� Channel ID
         const API_BASE = "https://travel-api.pengjun0429.workers.dev";
 
         // ============================================================
@@ -601,7 +646,10 @@
         let currentTripId = null;
         let ownerEmail = '';
         let collaborators = [];
-        const FREE_Trip_LIMIT = 5;
+        const FREE_TRIP_LIMIT = 5;
+        const PRICE_MONTHLY = 30;
+        const PRICE_YEARLY = 288;
+        let isPremium = false;
 
         // ============================================================
         //  UTILS
@@ -657,7 +705,7 @@
         }
 
         function goToHome() {
-            if (confirm('回到Back to Trips？')) {
+            if (confirm('�^��Back to Trips�H')) {
                 document.getElementById('app-view').classList.add('view-hidden');
                 window.history.replaceState({}, '', window.location.pathname);
                 if (currentUser) {
@@ -669,7 +717,7 @@
         }
 
         // ============================================================
-        //  AUTH — shared handler for both landing and app
+        //  AUTH �X shared handler for both landing and app
         // ============================================================
         function handleGoogleSignInResponse(response) {
             const payload = decodeJwt(response.credential);
@@ -695,7 +743,7 @@
             localStorage.setItem('tw_auth_method', 'google');
 
             updateLandingAuthUI();
-            showToast(`歡迎，${payload.name}！`);
+            showToast(`�w��A${payload.name}�I`);
         }
 
         function updateLandingAuthUI() {
@@ -760,13 +808,30 @@
                 const owned = data.owned || [];
                 const shared = data.shared || [];
                 document.getElementById('trip-count').textContent = owned.length;
+                await checkSubscriptionStatus();
+                const premiumBadge = document.getElementById('btn-premium-badge');
+                const upgradeBtn = document.getElementById('btn-upgrade');
+                const limitInfo = document.getElementById('trip-limit-info');
+                if (isPremium) {
+                    premiumBadge.classList.remove('hidden');
+                    upgradeBtn.classList.add('hidden');
+                    limitInfo.textContent = 'PREMIUM member, unlimited trips';
+                    document.getElementById('app-premium-badge').classList.remove('hidden');
+                    document.getElementById('btn-app-upgrade').classList.add('hidden');
+                } else {
+                    premiumBadge.classList.add('hidden');
+                    upgradeBtn.classList.remove('hidden');
+                    limitInfo.textContent = `Free plan: max ${FREE_TRIP_LIMIT} trips (${owned.length}/${FREE_TRIP_LIMIT})`;
+                    document.getElementById('app-premium-badge').classList.add('hidden');
+                    document.getElementById('btn-app-upgrade').classList.remove('hidden');
+                }
 
                 let html = '';
 
                 // My trips
                 html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">My Trips</h3></div>';
                 if (owned.length === 0) {
-                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有Trip</p></div>';
+                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>�٨S��Trip</p></div>';
                 } else {
                     html += owned.map(trip => tripCard(trip, false)).join('');
                 }
@@ -777,7 +842,7 @@
                     html += shared.map(trip => tripCard(trip, true)).join('');
                 }
 
-                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有Trip</p></div>';
+                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">�٨S��Trip</p></div>';
             } catch (err) {
                 container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>Load failed</p><button onclick="loadTrips()" class="mt-2 text-sm underline">Retry</button></div>';
             }
@@ -795,7 +860,7 @@
                         </div>
                         <h3 class="font-bold text-dark text-lg mb-1 truncate">${trip.trip_title}</h3>
                         <p class="text-sm text-slate-500">${trip.trip_date || 'No date set'}</p>
-                        <p class="text-xs text-slate-400 mt-2">${isShared ? '擁有者: ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('zh-TW')}</p>
+                        <p class="text-xs text-slate-400 mt-2">${isShared ? '�֦���: ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('zh-TW')}</p>
                     </div>
                 </div>`;
         }
@@ -808,9 +873,10 @@
             try {
                 const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`);
                 const data = await res.json();
-                if ((data.owned || []).length >= FREE_Trip_LIMIT) {
-                    showToast("Free plan: max 5 trips");
+                if (!isPremium && (data.owned || []).length >= FREE_TRIP_LIMIT) {
+                    showToast("Free plan: max 5 trips. Upgrade to remove limit.");
                     isCreatingTrip = false;
+                    setTimeout(openPricingModal, 1000);
                     return;
                 }
             } catch(e) {}
@@ -834,7 +900,7 @@
         }
 
         async function deleteTrip(tripId) {
-            if (!confirm("確定Delete？無法復原。")) return;
+            if (!confirm("�T�wDelete�H�L�k�_��C")) return;
             await fetch(`${API_BASE}/api/trip?trip_id=${tripId}`, { method: 'DELETE' });
             showToast("Deleted");
             loadTrips();
@@ -899,7 +965,7 @@
             localStorage.setItem('tw_auth_method', 'line');
 
             updateLandingAuthUI();
-            showToast(`歡迎，${currentUser.name}！`);
+            showToast(`�w��A${currentUser.name}�I`);
 
             // Clean URL
             window.history.replaceState({}, '', window.location.pathname);
@@ -960,7 +1026,7 @@
                 }
                 return null;
             } catch (err) {
-                console.error("雲端連線失敗:", err);
+                console.error("���ݳs�u����:", err);
                 return null;
             }
         }
@@ -1042,16 +1108,16 @@
         }
 
         // ============================================================
-        //  SHARE — unique URL per user
+        //  SHARE �X unique URL per user
         // ============================================================
         function shareItinerary() {
             if (!currentUser || !currentTripId) return showToast("Please log in first");
             const baseUrl = window.location.origin + window.location.pathname;
             const shareUrl = baseUrl + '?trip=' + currentTripId + '&guest=1';
             navigator.clipboard.writeText(shareUrl).then(() => {
-                showToast("已複製專屬Share URL！");
+                showToast("�w�ƻs�M��Share URL�I");
             }).catch(() => {
-                prompt("請手動複製以下網址Share：", shareUrl);
+                prompt("�Ф�ʽƻs�H�U���}Share�G", shareUrl);
             });
         }
 
@@ -1169,7 +1235,7 @@
 
         async function removeCollaborator(email) {
             if (!isOwner()) return;
-            if (!confirm(`Remove ${email} 的Edit權限？`)) return;
+            if (!confirm(`Remove ${email} ��Edit�v���H`)) return;
 
             collaborators = collaborators.filter(e => e !== email);
 
@@ -1195,7 +1261,7 @@
             container.innerHTML = '';
             itineraryData.forEach((day, index) => {
                 const dateObj = new Date(day.date);
-                const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
+                const dayOfWeek = ['��', '�@', '�G', '�T', '�|', '��', '��'][dateObj.getDay()];
                 const shortDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
                 const btn = document.createElement('button');
                 btn.className = `shrink-0 md:w-full text-left p-2 md:p-4 rounded-xl transition-all duration-200 border-2 mb-0 md:mb-2 flex items-center gap-2 md:gap-3 ${
@@ -1210,7 +1276,7 @@
                         <span class="text-xs md:text-sm font-black">${shortDate}</span>
                     </div>
                     <div class="hidden md:block overflow-hidden">
-                        <div class="text-xs font-bold uppercase tracking-wider mb-0.5 opacity-80">星期${dayOfWeek}</div>
+                        <div class="text-xs font-bold uppercase tracking-wider mb-0.5 opacity-80">�P��${dayOfWeek}</div>
                         <div class="font-bold truncate text-sm">${day.title}</div>
                     </div>
                 `;
@@ -1224,8 +1290,8 @@
             const day = itineraryData[index];
             document.getElementById('current-day-title').textContent = `Day ${index + 1}: ${day.title}`;
             const dateObj = new Date(day.date);
-            const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
-            document.getElementById('current-day-date').textContent = `${day.date} (星期${dayOfWeek})`;
+            const dayOfWeek = ['��', '�@', '�G', '�T', '�|', '��', '��'][dateObj.getDay()];
+            document.getElementById('current-day-date').textContent = `${day.date} (�P��${dayOfWeek})`;
             document.getElementById('info-hotel').textContent = day.hotel || 'Not arranged';
             document.getElementById('info-food').textContent = day.food || 'Not arranged';
             document.getElementById('info-notes').textContent = day.notes || 'No notes yet...';
@@ -1272,7 +1338,7 @@
         let editingActIndex = -1;
 
         function openDayInfoModal() {
-            if(!canEdit()) return showToast("Please log in first以取得Edit權限");
+            if(!canEdit()) return showToast("Please log in first�H���oEdit�v��");
             const day = itineraryData[currentDayIndex];
             document.getElementById('input-date').value = day.date || '';
             document.getElementById('input-hotel').value = day.hotel || '';
@@ -1294,7 +1360,7 @@
 
         function openActivityModal(isEdit = false, idx = -1) {
             closeFab();
-            if(!canEdit()) return showToast("Please log in first以取得Edit權限");
+            if(!canEdit()) return showToast("Please log in first�H���oEdit�v��");
             editingActIndex = idx;
             document.getElementById('modal-activity-title').textContent = isEdit ? 'Edit Activity' : 'Add Activity';
             if (isEdit && idx >= 0) {
@@ -1351,7 +1417,7 @@
             const newDay = {
                 id: 'd' + (itineraryData.length + 1),
                 date: nextDate.toISOString().slice(0, 10),
-                title: '第' + (itineraryData.length + 1) + '天',
+                title: '��' + (itineraryData.length + 1) + '��',
                 hotel: '',
                 food: '',
                 notes: '',
@@ -1361,19 +1427,19 @@
             renderTimeline();
             selectDay(itineraryData.length - 1);
             syncToCloud();
-            showToast('已Add Day ' + itineraryData.length);
+            showToast('�wAdd Day ' + itineraryData.length);
         }
 
         async function deleteCurrentDay() {
             if (!canEdit()) return;
             if (itineraryData.length <= 1) return showToast("Keep at least 1 day");
-            if (!confirm('確定要Delete Day ' + (currentDayIndex + 1) + '？This cannot be undone.')) return;
+            if (!confirm('�T�w�nDelete Day ' + (currentDayIndex + 1) + '�HThis cannot be undone.')) return;
             itineraryData.splice(currentDayIndex, 1);
             if (currentDayIndex >= itineraryData.length) currentDayIndex = itineraryData.length - 1;
             renderTimeline();
             selectDay(currentDayIndex);
             syncToCloud();
-            showToast('已Delete');
+            showToast('�wDelete');
         }
 
         let fabOpen = false;
@@ -1444,6 +1510,46 @@
         }
 
         // ============================================================
+        //  SUBSCRIPTION / PREMIUM
+        // ============================================================
+        async function checkSubscriptionStatus() {
+            if (!currentUser) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/subscribe/status?uid=${encodeURIComponent(currentUser.uid)}`);
+                const data = await res.json();
+                isPremium = data.premium || false;
+            } catch(e) { isPremium = false; }
+        }
+
+        function openPricingModal() {
+            document.getElementById('modal-pricing').classList.remove('hidden');
+        }
+
+        async function activateWithCode() {
+            const code = document.getElementById('input-activation-code').value.trim().toUpperCase();
+            if (!code) return showToast("Please enter activation code");
+            if (!currentUser) return showToast("Please login first");
+            try {
+                const res = await fetch(`${API_BASE}/api/subscribe/activate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ uid: currentUser.uid, email: currentUser.email, code })
+                });
+                const data = await res.json();
+                if (data.status === 'success') {
+                    closeModal('modal-pricing');
+                    showToast("Activation successful! Welcome to PREMIUM 🎉");
+                    isPremium = true;
+                    if (typeof loadTrips === 'function') loadTrips();
+                } else {
+                    showToast(data.error || "Activation failed");
+                }
+            } catch(e) {
+                showToast("Network error");
+            }
+        }
+
+        // ============================================================
         //  iOS HOME SCREEN TUTORIAL
         // ============================================================
         function isIOS() {
@@ -1472,7 +1578,7 @@
         });
 
         // ============================================================
-        //  ON LOAD — determine initial view
+        //  ON LOAD �X determine initial view
         // ============================================================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1503,6 +1609,11 @@
                 currentUser = { email: savedEmail, name: savedName, picture: savedPicture, uid: savedUid };
                 isLoggedIn = true;
                 updateLandingAuthUI();
+            }
+
+            // Check subscription status if logged in
+            if (savedEmail && savedName && savedUid) {
+                checkSubscriptionStatus();
             }
 
             // Always show landing page

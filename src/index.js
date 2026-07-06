@@ -3,8 +3,6 @@ const LINE_CHANNEL_SECRET = 'dfd6f08b73d3f2f06c6e0e20e4e8c621';
 const FRONTEND_URL = 'https://travelweb-8kb.pages.dev';
 const FREE_TRIP_LIMIT = 5;
 
-// AI keys are loaded from Worker secrets (GOOGLE_AI_KEYS_JSON, NVIDIA_AI_KEY)
-
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
@@ -23,16 +21,28 @@ export default {
             return handleListTrips(request, env, corsHeaders);
         }
 
-        // /api/trip — POST create or update, PUT update
+        // /api/trip — CRUD
         if (url.pathname === '/api/trip') {
             if (request.method === 'GET') return handleGetTrip(request, env, corsHeaders);
             if (request.method === 'POST') return handleCreateOrUpdateTrip(request, env, corsHeaders);
             if (request.method === 'DELETE') return handleDeleteTrip(request, env, corsHeaders);
         }
 
-        // /api/ai/suggest — AI trip planning
-        if (url.pathname === '/api/ai/suggest' && request.method === 'POST') {
-            return handleAISuggest(request, env, corsHeaders);
+        // /api/privacy — GET/POST privacy policy
+        if (url.pathname === '/api/privacy') {
+            if (request.method === 'GET') return handleGetPrivacy(request, env, corsHeaders);
+            if (request.method === 'POST') return handleSavePrivacy(request, env, corsHeaders);
+        }
+
+        // /api/subscribe/* — subscription endpoints
+        if (url.pathname === '/api/subscribe/status') {
+            return handleSubscribeStatus(request, env, corsHeaders);
+        }
+        if (url.pathname === '/api/subscribe/generate-code') {
+            return handleGenerateCode(request, env, corsHeaders);
+        }
+        if (url.pathname === '/api/subscribe/activate') {
+            return handleActivateCode(request, env, corsHeaders);
         }
 
         // /auth/line/callback
@@ -62,7 +72,6 @@ async function handleListTrips(request, env, corsHeaders) {
     const email = url.searchParams.get('email');
     if (!uid) return json(corsHeaders, { error: 'Missing uid' }, 400);
 
-    // Owned trips (by uid or email match)
     const ownedByUid = await env.DB.prepare('SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, created_at FROM trips WHERE owner_uid = ? ORDER BY created_at DESC').bind(uid).all();
     let ownedByEmail = { results: [] };
     if (email) {
@@ -72,7 +81,6 @@ async function handleListTrips(request, env, corsHeaders) {
     const seenOwned = new Set();
     const ownedUnique = owned.filter(t => { const k = t.trip_id; if (seenOwned.has(k)) return false; seenOwned.add(k); return true; });
 
-    // Shared trips (by email or uid match)
     let shared = { results: [] };
     if (email) {
         const byEmail = await env.DB.prepare("SELECT trip_id, owner_uid, owner_email, trip_title, trip_date, collaborators, created_at FROM trips WHERE collaborators LIKE ? AND owner_uid != ? AND owner_email != ? ORDER BY created_at DESC").bind(`%${email}%`, uid, email).all();
@@ -124,10 +132,9 @@ async function handleCreateOrUpdateTrip(request, env, corsHeaders) {
 
     // Otherwise → create
     if (!ownerUid) return json(corsHeaders, { error: 'Missing ownerUid' }, 400);
-    const countResult = await env.DB.prepare('SELECT COUNT(*) as cnt FROM trips WHERE owner_uid = ?').bind(ownerUid).first();
-    if (countResult && countResult.cnt >= FREE_TRIP_LIMIT) {
-        return json(corsHeaders, { error: 'free_limit', message: `免費版最多 ${FREE_TRIP_LIMIT} 個行程` }, 403);
-    }
+
+    // Beta: free for all, unlimited trips
+
     const newTripId = 'trip_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
     const dataStr = JSON.stringify(itineraryData || []);
     const collabStr = JSON.stringify(collaborators || []);
@@ -157,6 +164,86 @@ function formatTrip(row) {
         collaborators: JSON.parse(row.collaborators || '[]'),
         createdAt: row.created_at
     };
+}
+
+// ===== PRIVACY API =====
+
+async function handleGetPrivacy(request, env, corsHeaders) {
+    const row = await env.DB.prepare("SELECT value FROM settings WHERE key = 'privacy_content'").first();
+    return json(corsHeaders, { content: row ? row.value : '' });
+}
+
+async function handleSavePrivacy(request, env, corsHeaders) {
+    const body = await request.json();
+    const content = body.content;
+    if (!content) return json(corsHeaders, { error: 'Missing content' }, 400);
+    await env.DB.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('privacy_content', ?)").bind(content).run();
+    return json(corsHeaders, { status: 'success' });
+}
+
+// ===== SUBSCRIPTION =====
+
+function isSubscriptionActive(sub) {
+    if (sub.status !== 'active') return false;
+    if (sub.end_date && new Date(sub.end_date) < new Date()) return false;
+    return true;
+}
+
+async function handleSubscribeStatus(request, env, corsHeaders) {
+    const url = new URL(request.url);
+    const uid = url.searchParams.get('uid');
+    if (!uid) return json(corsHeaders, { error: 'Missing uid' }, 400);
+
+    const sub = await env.DB.prepare('SELECT * FROM subscriptions WHERE user_uid = ?').bind(uid).first();
+    if (!sub) return json(corsHeaders, { premium: false });
+
+    const active = isSubscriptionActive(sub);
+    return json(corsHeaders, {
+        premium: active,
+        planType: sub.plan_type,
+        startDate: sub.start_date,
+        endDate: sub.end_date
+    });
+}
+
+async function handleGenerateCode(request, env, corsHeaders) {
+    const auth = request.headers.get('Authorization');
+    const adminKey = env.ADMIN_SECRET;
+    if (!adminKey || auth !== `Bearer ${adminKey}`) {
+        return json(corsHeaders, { error: 'Unauthorized' }, 401);
+    }
+    const body = await request.json();
+    const { plan } = body;
+    if (plan !== 'monthly' && plan !== 'yearly') return json(corsHeaders, { error: 'Invalid plan' }, 400);
+
+    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
+    await env.DB.prepare(
+        "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)"
+    ).bind(`activation_code_${code}`, JSON.stringify({ plan, used: false })).run();
+    return json(corsHeaders, { code });
+}
+
+async function handleActivateCode(request, env, corsHeaders) {
+    const body = await request.json();
+    const { uid, email, code } = body;
+    if (!uid || !email || !code) return json(corsHeaders, { error: 'Missing uid, email, or code' }, 400);
+
+    const row = await env.DB.prepare("SELECT value FROM settings WHERE key = ?").bind(`activation_code_${code}`).first();
+    if (!row) return json(corsHeaders, { error: 'Invalid code' }, 400);
+
+    const data = JSON.parse(row.value);
+    if (data.used) return json(corsHeaders, { error: 'Code already used' }, 400);
+
+    const endDate = data.plan === 'monthly'
+        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+        : new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
+
+    await env.DB.prepare(
+        `INSERT OR REPLACE INTO subscriptions (user_uid, user_email, plan_type, status, start_date, end_date, updated_at) VALUES (?, ?, ?, 'active', datetime('now'), ?, datetime('now'))`
+    ).bind(uid, email, data.plan, endDate).run();
+
+    await env.DB.prepare("DELETE FROM settings WHERE key = ?").bind(`activation_code_${code}`).run();
+    return json(corsHeaders, { status: 'success', plan: data.plan });
 }
 
 // ===== LINE LOGIN =====
@@ -208,117 +295,4 @@ function parseIdToken(idToken) {
 
 function json(headers, data, status = 200) {
     return new Response(JSON.stringify(data), { status, headers: { ...headers, 'Content-Type': 'application/json' } });
-}
-
-// ===== AI TRIP PLANNING =====
-async function handleAISuggest(request, env, corsHeaders) {
-    try {
-        const bodyText = await request.text();
-        let body;
-        try { body = JSON.parse(bodyText); } catch (e) {
-            return json(corsHeaders, { error: 'Invalid JSON: ' + bodyText.substring(0, 200) }, 400);
-        }
-        const { prompt, existingActivities, tripTitle, tripDate } = body;
-
-        if (!prompt) return json(corsHeaders, { error: 'Missing prompt' }, 400);
-
-        // Load keys from secrets
-        let googleKeys = [];
-        try { googleKeys = JSON.parse(env.GOOGLE_AI_KEYS_JSON || '[]'); } catch (_) {}
-        const nvidiaKey = env.NVIDIA_AI_KEY || '';
-        const nvidiaModel = 'google/gemma-4-31b-it';
-
-        if (!prompt) return json(corsHeaders, { error: 'Missing prompt' }, 400);
-
-        const systemPrompt = `You are a professional travel planner assistant. The user will give their travel needs and you help plan the itinerary.
-
-Respond ONLY with valid JSON, no other text:
-{
-  "activities": [
-    {
-      "time": "HH:MM (24h format)",
-      "icon": "fa-location-dot or fa-plane or fa-train or fa-car or fa-ship or fa-camera or fa-utensils or fa-person-walking",
-      "title": "Name of the spot or activity (short)",
-      "desc": "Brief description and tips (1-2 sentences)"
-    }
-  ],
-  "hotel": "Recommended accommodation",
-  "food": "Recommended restaurants or food",
-  "notes": "Travel tips and reminders"
-}
-
-Rules:
-- Order activities from morning to evening
-- Arrange 3-6 spots per day
-- Spot names should be concise
-- Descriptions should be practical, including transportation or ticket info
-- Language: Traditional Chinese`;
-
-        const userMessage = tripTitle
-            ? `Trip: ${tripTitle}\nDates: ${tripDate || 'Not specified'}\nExisting plans: ${existingActivities ? JSON.stringify(existingActivities) : 'None'}\nRequest: ${prompt}`
-            : prompt;
-
-        const extractJSON = (text) => {
-            try {
-                const m = text.match(/\{[\s\S]*\}/);
-                return m ? JSON.parse(m[0]) : null;
-            } catch (_) { return null; }
-        };
-
-        // Try NVIDIA API (primary)
-        if (nvidiaKey) {
-            try {
-                const nvRes = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + nvidiaKey },
-                    body: JSON.stringify({
-                        model: nvidiaModel,
-                    messages: [
-                        { role: 'system', content: systemPrompt },
-                        { role: 'user', content: userMessage }
-                    ],
-                    temperature: 0.7,
-                    max_tokens: 2000,
-                    top_p: 0.95,
-                    seed: 42,
-                    chat_template_kwargs: { enable_thinking: true }
-                })
-            });
-            if (nvRes.ok) {
-                const nvData = await nvRes.json();
-                const nvText = nvData.choices?.[0]?.message?.content || '';
-                if (nvText) {
-                    const sug = extractJSON(nvText);
-                    if (sug) return json(corsHeaders, { success: true, suggestion: sug });
-                }
-            }
-        } catch (_) { /* nvidia failed */ }
-
-        // Fallback: Google Gemini API
-        for (const key of googleKeys) {
-            try {
-                const res = await fetch(
-                    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`,
-                    {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ role: 'user', parts: [{ text: systemPrompt + '\n\n' + userMessage }] }],
-                            generationConfig: { temperature: 0.7, maxOutputTokens: 2000 }
-                        })
-                    }
-                );
-                if (res.status === 429 || !res.ok) continue;
-                const data = await res.json();
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text || '';
-                if (!text) continue;
-                const sug = extractJSON(text);
-                if (sug) return json(corsHeaders, { success: true, suggestion: sug });
-            } catch (_) { /* next */ }
-        }
-
-        return json(corsHeaders, { error: 'AI unavailable' }, 502);
-    } catch (err) {
-        return json(corsHeaders, { error: 'AI error: ' + err.message }, 500);
-    }
 }

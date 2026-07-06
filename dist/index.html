@@ -263,13 +263,19 @@
                 <div class="flex justify-between items-center mb-6">
                     <div>
                         <h2 class="text-2xl font-bold text-dark">我的行程</h2>
-                        <p class="text-sm text-slate-500 mt-1">免費版最多 5 個行程（<span id="trip-count">0</span>/5）</p>
+                        <p class="text-sm text-slate-500 mt-1" id="trip-limit-info">免費版最多 5 個行程（<span id="trip-count">0</span>/5）</p>
                     </div>
                     <div class="flex gap-2">
+                        <button id="btn-premium-badge" class="hidden bg-amber-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
+                            <i class="fa-solid fa-crown"></i> PREMIUM
+                        </button>
+                        <button id="btn-upgrade" onclick="openPricingModal()" class="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
+                            <i class="fa-solid fa-crown"></i> 升級
+                        </button>
                         <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
                             <i class="fa-solid fa-plus"></i> 新增行程
                         </button>
-                                            </div>
+                    </div>
                 </div>
                 <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="text-slate-400 col-span-full text-center py-12">載入中...</div>
@@ -306,6 +312,10 @@
                     <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">共同編輯</span>
                 </button>
                 <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
+                    <span id="app-premium-badge" class="hidden text-amber-500 text-xs"><i class="fa-solid fa-crown"></i></span>
+                    <button id="btn-app-upgrade" onclick="openPricingModal()" class="hidden items-center justify-center bg-gradient-to-r from-amber-400 to-orange-500 text-white w-7 h-7 md:w-auto md:h-auto md:px-2.5 md:py-1.5 rounded-lg transition text-xs font-bold shadow-sm" title="升級 PREMIUM">
+                        <i class="fa-solid fa-crown text-[10px] md:text-xs"></i><span class="hidden md:inline md:ml-1">升級</span>
+                    </button>
                     <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                         <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
@@ -562,6 +572,39 @@
         </div>
     </div>
 
+    <!-- Pricing Modal -->
+    <div id="modal-pricing" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
+        <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-crown text-amber-400 mr-2"></i>升級 PREMIUM</h3>
+                <button onclick="closeModal('modal-pricing')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-6">
+                <div class="text-center">
+                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-amber-300 to-orange-500 rounded-full flex items-center justify-center mb-3 shadow-lg">
+                        <i class="fa-solid fa-crown text-white text-2xl"></i>
+                    </div>
+                    <h4 class="text-xl font-bold text-slate-900">解鎖無限行程</h4>
+                    <p class="text-sm text-slate-500 mt-1">Beta 期間請聯絡管理員取得啟用碼</p>
+                </div>
+                <div class="bg-slate-50 rounded-xl p-4 text-xs text-slate-500 space-y-1">
+                    <p class="font-medium text-slate-700 mb-2">匯款資訊</p>
+                    <p><span class="text-slate-600">銀行：</span>（請聯絡管理員）</p>
+                    <p><span class="text-slate-600">帳號：</span>（請聯絡管理員）</p>
+                    <p><span class="text-slate-600">iPASS MONEY：</span>（請聯絡管理員）</p>
+                    <p class="mt-2 text-slate-400">匯款後請告知管理員，會提供啟用碼</p>
+                </div>
+                <div class="border-t border-slate-100 pt-4">
+                    <label class="block text-sm font-medium text-slate-700 mb-2">已有啟用碼？請輸入</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="input-activation-code" placeholder="輸入啟用碼" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none text-sm uppercase tracking-widest" maxlength="8">
+                        <button onclick="activateWithCode()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium shrink-0">啟用</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- iOS Tutorial -->
     <div id="ios-tutorial" class="fixed inset-0 bg-black/60 hidden z-[100] flex items-end md:items-center justify-center backdrop-blur-sm">
         <div class="bg-white rounded-t-2xl md:rounded-2xl w-full max-w-sm mx-4 p-6 pb-10 shadow-2xl animate-fade-in-up">
@@ -627,6 +670,9 @@
         let ownerEmail = '';
         let collaborators = [];
         const FREE_TRIP_LIMIT = 5;
+        const PRICE_MONTHLY = 30;
+        const PRICE_YEARLY = 288;
+        let isPremium = false;
 
         // ============================================================
         //  UTILS
@@ -786,6 +832,23 @@
                 const owned = data.owned || [];
                 const shared = data.shared || [];
                 document.getElementById('trip-count').textContent = owned.length;
+                await checkSubscriptionStatus();
+                const premiumBadge = document.getElementById('btn-premium-badge');
+                const upgradeBtn = document.getElementById('btn-upgrade');
+                const limitInfo = document.getElementById('trip-limit-info');
+                if (isPremium) {
+                    premiumBadge.classList.remove('hidden');
+                    upgradeBtn.classList.add('hidden');
+                    limitInfo.textContent = 'PREMIUM 會員，無限行程';
+                    document.getElementById('app-premium-badge').classList.remove('hidden');
+                    document.getElementById('btn-app-upgrade').classList.add('hidden');
+                } else {
+                    premiumBadge.classList.add('hidden');
+                    upgradeBtn.classList.remove('hidden');
+                    limitInfo.textContent = `免費版最多 ${FREE_TRIP_LIMIT} 個行程（${owned.length}/${FREE_TRIP_LIMIT}）`;
+                    document.getElementById('app-premium-badge').classList.add('hidden');
+                    document.getElementById('btn-app-upgrade').classList.remove('hidden');
+                }
 
                 let html = '';
 
@@ -834,9 +897,10 @@
             try {
                 const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`);
                 const data = await res.json();
-                if ((data.owned || []).length >= FREE_TRIP_LIMIT) {
-                    showToast("免費版最多 5 個行程");
+                if (!isPremium && (data.owned || []).length >= FREE_TRIP_LIMIT) {
+                    showToast("免費版最多 5 個行程，升級即可解除限制");
                     isCreatingTrip = false;
+                    setTimeout(openPricingModal, 1000);
                     return;
                 }
             } catch(e) {}
@@ -867,131 +931,43 @@
         }
 
         // ============================================================
-        //  AI PLANNING
+        //  SUBSCRIPTION / PREMIUM
         // ============================================================
-        let aiPlanResult = null;
+        async function checkSubscriptionStatus() {
+            if (!currentUser) return;
+            try {
+                const res = await fetch(`${API_BASE}/api/subscribe/status?uid=${encodeURIComponent(currentUser.uid)}`);
+                const data = await res.json();
+                isPremium = data.premium || false;
+            } catch(e) { isPremium = false; }
+        }
 
-        function openAIPlanModal() {
+        function openPricingModal() {
+            document.getElementById('modal-pricing').classList.remove('hidden');
+        }
+
+        async function activateWithCode() {
+            const code = document.getElementById('input-activation-code').value.trim().toUpperCase();
+            if (!code) return showToast("請輸入啟用碼");
             if (!currentUser) return showToast("請先登入");
-            document.getElementById('ai-plan-input').classList.remove('hidden');
-            document.getElementById('ai-plan-loading').classList.add('hidden');
-            document.getElementById('ai-plan-result').classList.add('hidden');
-            document.getElementById('ai-plan-error').classList.add('hidden');
-            document.getElementById('ai-plan-footer').classList.add('hidden');
-            document.getElementById('ai-prompt').value = '';
-            document.getElementById('modal-ai-plan').classList.remove('hidden');
-        }
-
-        async function submitAIPlan() {
-            const prompt = document.getElementById('ai-prompt').value.trim();
-            if (!prompt) return showToast("請輸入想去哪裡");
-
-            document.getElementById('ai-plan-input').classList.add('hidden');
-            document.getElementById('ai-plan-loading').classList.remove('hidden');
-            document.getElementById('ai-plan-error').classList.add('hidden');
-            document.getElementById('btn-ai-submit').disabled = true;
-
             try {
-                const res = await fetch(`${API_BASE}/api/ai/suggest`, {
+                const res = await fetch(`${API_BASE}/api/subscribe/activate`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ prompt })
+                    body: JSON.stringify({ uid: currentUser.uid, email: currentUser.email, code })
                 });
                 const data = await res.json();
-
-                document.getElementById('ai-plan-loading').classList.add('hidden');
-                document.getElementById('btn-ai-submit').disabled = false;
-
-                if (data.success && data.suggestion) {
-                    aiPlanResult = data.suggestion;
-                    showAIResult(data.suggestion);
+                if (data.status === 'success') {
+                    closeModal('modal-pricing');
+                    showToast("啟用成功！歡迎成為 PREMIUM 會員 🎉");
+                    isPremium = true;
+                    if (typeof loadTrips === 'function') loadTrips();
                 } else {
-                    showAIError(data.error || 'AI 暫時無法回應');
+                    showToast(data.error || "啟用失敗");
                 }
-            } catch (err) {
-                document.getElementById('ai-plan-loading').classList.add('hidden');
-                document.getElementById('btn-ai-submit').disabled = false;
-                showAIError('網路錯誤');
-            }
-        }
-
-        function showAIResult(suggestion) {
-            const container = document.getElementById('ai-plan-result');
-            let html = '<div class="bg-purple-50 p-4 rounded-xl border border-purple-100"><p class="text-sm text-purple-700 font-medium mb-2"><i class="fa-solid fa-check-circle mr-1"></i>AI 規劃建議</p>';
-
-            if (suggestion.hotel) html += `<div class="mb-2"><span class="text-xs text-slate-400">住宿：</span><span class="text-sm text-slate-700">${suggestion.hotel}</span></div>`;
-            if (suggestion.food) html += `<div class="mb-2"><span class="text-xs text-slate-400">美食：</span><span class="text-sm text-slate-700">${suggestion.food}</span></div>`;
-
-            if (suggestion.activities && suggestion.activities.length > 0) {
-                html += '<div class="mt-3 pt-3 border-t border-purple-100"><p class="text-xs text-slate-400 mb-2">建議行程：</p>';
-                suggestion.activities.forEach((act, i) => {
-                    html += `<div class="flex items-start gap-2 mb-2">
-                        <div class="w-6 h-6 rounded-full bg-purple-100 text-purple-500 flex items-center justify-center shrink-0 text-xs">${i + 1}</div>
-                        <div><p class="text-sm font-medium text-slate-800">${act.time || ''} ${act.title || ''}</p>
-                        <p class="text-xs text-slate-500">${act.desc || ''}</p></div>
-                    </div>`;
-                });
-                html += '</div>';
-            }
-            if (suggestion.notes) html += `<div class="mt-2 pt-2 border-t border-purple-100"><p class="text-xs text-slate-400">備註：${suggestion.notes}</p></div>`;
-            html += '</div>';
-
-            container.innerHTML = html;
-            container.classList.remove('hidden');
-            document.getElementById('ai-plan-footer').classList.remove('hidden');
-        }
-
-        function showAIError(msg) {
-            const el = document.getElementById('ai-plan-error');
-            el.textContent = msg;
-            el.classList.remove('hidden');
-            document.getElementById('ai-plan-input').classList.remove('hidden');
-        }
-
-        async function applyAIPlan() {
-            if (!aiPlanResult || !currentUser) return;
-            closeModal('modal-ai-plan');
-
-            const title = aiPlanResult.hotel ? `AI 推薦行程` : 'AI 規劃行程';
-            const itineraryData = [];
-
-            if (aiPlanResult.activities && aiPlanResult.activities.length > 0) {
-                itineraryData.push({
-                    id: 'd1',
-                    date: new Date().toISOString().slice(0, 10),
-                    title: '第一天',
-                    hotel: aiPlanResult.hotel || '',
-                    food: aiPlanResult.food || '',
-                    notes: aiPlanResult.notes || '',
-                    activities: aiPlanResult.activities
-                });
-            }
-
-            try {
-                const res = await fetch(`${API_BASE}/api/trip`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        ownerUid: currentUser.uid,
-                        ownerEmail: currentUser.email,
-                        tripTitle: title,
-                        tripDate: '',
-                        itineraryData: itineraryData,
-                        collaborators: []
-                    })
-                });
-                const data = await res.json();
-                if (data.tripId) {
-                    showToast("AI 行程已建立！");
-                    selectTrip(data.tripId);
-                    loadTrips();
-                } else {
-                    showToast("建立失敗");
-                }
-            } catch (err) {
+            } catch(e) {
                 showToast("網路錯誤");
             }
-            aiPlanResult = null;
         }
 
         async function selectTrip(tripId) {
@@ -1693,6 +1669,11 @@
                 currentUser = { email: savedEmail, name: savedName, picture: savedPicture, uid: savedUid };
                 isLoggedIn = true;
                 updateLandingAuthUI();
+            }
+
+            // Check subscription status if logged in
+            if (savedEmail && savedName && savedUid) {
+                checkSubscriptionStatus();
             }
 
             // Always show landing page
