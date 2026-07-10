@@ -1,4 +1,4 @@
-name = "travel-api"
+name = "travel"
 main = "src/index.js"
 compatibility_date = "2024-12-18"
 
