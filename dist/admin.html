@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travelweb 管理後台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: { primary: '#0ea5e9', dark: '#1e293b' }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen flex items-center justify-center p-4">
+    <div id="login-screen" class="bg-white rounded-2xl shadow-xl max-w-sm w-full p-8">
+        <div class="text-center mb-6">
+            <i class="fa-solid fa-mountain-sun text-primary text-3xl mb-2"></i>
+            <h1 class="text-xl font-bold text-dark">管理後台</h1>
+            <p class="text-sm text-slate-500">輸入管理密碼</p>
+        </div>
+        <input type="password" id="admin-password" placeholder="管理密碼" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-primary outline-none text-sm mb-4">
+        <button onclick="login()" class="w-full bg-primary hover:bg-sky-600 text-white py-2.5 rounded-lg font-medium text-sm transition">登入</button>
+        <p id="login-error" class="text-red-500 text-sm text-center mt-3 hidden">密碼錯誤</p>
+    </div>
+
+    <div id="admin-panel" class="hidden bg-white rounded-2xl shadow-xl max-w-lg w-full p-8">
+        <div class="flex justify-between items-center mb-6">
+            <div>
+                <h1 class="text-xl font-bold text-dark"><i class="fa-solid fa-crown text-amber-400 mr-2"></i>啟用碼管理</h1>
+                <p class="text-xs text-slate-400 mt-0.5">產生啟用碼給已匯款的使用者</p>
+            </div>
+            <button onclick="logout()" class="text-slate-400 hover:text-red-500 text-sm"><i class="fa-solid fa-sign-out-alt"></i></button>
+        </div>
+
+        <div class="grid grid-cols-2 gap-3 mb-6">
+            <button onclick="generateCode('monthly')" class="bg-primary hover:bg-sky-600 text-white py-3 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plus"></i> 產生月費碼
+            </button>
+            <button onclick="generateCode('yearly')" class="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white py-3 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-plus"></i> 產生年費碼
+            </button>
+        </div>
+
+        <div id="generating" class="hidden text-center py-4 text-slate-400 text-sm"><i class="fa-solid fa-spinner animate-spin mr-2"></i>產生中...</div>
+
+        <div id="result-area" class="hidden mb-6">
+            <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-center">
+                <p class="text-xs text-emerald-600 mb-1">啟用碼已產生</p>
+                <p id="generated-code" class="text-2xl font-black text-emerald-700 tracking-[0.3em] select-all mb-3"></p>
+                <p id="generated-plan" class="text-xs text-emerald-500 mb-3"></p>
+                <button onclick="copyCode()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium inline-flex items-center gap-2">
+                    <i class="fa-solid fa-copy"></i> 複製啟用碼
+                </button>
+            </div>
+        </div>
+
+        <div id="history-area">
+            <h3 class="text-sm font-bold text-slate-700 mb-2">最近產生的啟用碼</h3>
+            <div id="code-list" class="space-y-2">
+                <p class="text-xs text-slate-400 text-center py-4">尚未產生任何啟用碼</p>
+            </div>
+        </div>
+
+        <div class="mt-6 pt-4 border-t border-slate-100 text-xs text-slate-400 text-center">
+            Travelweb Admin Panel
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = 'https://travel-api.pengjun0429.workers.dev';
+        let adminSecret = '';
+        let codeHistory = JSON.parse(sessionStorage.getItem('tw_admin_codes') || '[]');
+
+        function login() {
+            const pw = document.getElementById('admin-password').value.trim();
+            if (!pw) return;
+            adminSecret = pw;
+            document.getElementById('login-error').classList.add('hidden');
+            sessionStorage.setItem('tw_admin_secret', pw);
+            showPanel();
+        }
+
+        function logout() {
+            adminSecret = '';
+            sessionStorage.removeItem('tw_admin_secret');
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById('login-screen').classList.remove('hidden');
+        }
+
+        function showPanel() {
+            document.getElementById('login-screen').classList.add('hidden');
+            document.getElementById('admin-panel').classList.remove('hidden');
+            renderHistory();
+        }
+
+        async function generateCode(plan) {
+            document.getElementById('generating').classList.remove('hidden');
+            document.getElementById('result-area').classList.add('hidden');
+            try {
+                const res = await fetch(`${API_BASE}/api/subscribe/generate-code`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminSecret}` },
+                    body: JSON.stringify({ plan })
+                });
+                const data = await res.json();
+                if (res.status === 401) {
+                    alert('管理密碼錯誤，請重新登入');
+                    logout();
+                    return;
+                }
+                if (data.code) {
+                    const now = new Date().toLocaleString('zh-TW');
+                    const entry = { code: data.code, plan: plan === 'monthly' ? '月費' : '年費', createdAt: now };
+                    codeHistory.unshift(entry);
+                    if (codeHistory.length > 50) codeHistory = codeHistory.slice(0, 50);
+                    sessionStorage.setItem('tw_admin_codes', JSON.stringify(codeHistory));
+
+                    document.getElementById('generated-code').textContent = data.code;
+                    document.getElementById('generated-plan').textContent = `${plan === 'monthly' ? '月費' : '年費'}方案`;
+                    document.getElementById('result-area').classList.remove('hidden');
+                    renderHistory();
+                } else {
+                    alert('產生失敗：' + (data.error || '未知錯誤'));
+                }
+            } catch(e) {
+                alert('網路錯誤');
+            }
+            document.getElementById('generating').classList.add('hidden');
+        }
+
+        function copyCode() {
+            const code = document.getElementById('generated-code').textContent;
+            navigator.clipboard.writeText(code).then(() => {
+                alert('已複製：' + code);
+            }).catch(() => {
+                prompt('手動複製：', code);
+            });
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('code-list');
+            if (codeHistory.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">尚未產生任何啟用碼</p>';
+                return;
+            }
+            container.innerHTML = codeHistory.map((item, i) => `
+                <div class="flex items-center justify-between bg-slate-50 px-4 py-2.5 rounded-lg">
+                    <div>
+                        <span class="font-mono font-bold text-sm text-slate-800 tracking-wider">${item.code}</span>
+                        <span class="ml-2 text-xs px-1.5 py-0.5 rounded ${item.plan === '月費' ? 'bg-primary/10 text-primary' : 'bg-amber-100 text-amber-600'}">${item.plan}</span>
+                    </div>
+                    <div class="text-xs text-slate-400">${item.createdAt}</div>
+                </div>
+            `).join('');
+        }
+
+        // Auto-login if secret stored
+        const savedSecret = sessionStorage.getItem('tw_admin_secret');
+        if (savedSecret) {
+            adminSecret = savedSecret;
+            showPanel();
+        }
+    </script>
+</body>
+</html>

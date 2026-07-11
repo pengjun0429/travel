@@ -4,17 +4,17 @@
     <meta charset="UTF-8">
     <meta name="google-site-verification" content="Rau2K_qrDIQN7a38tlY9VLkJULZxwLdauo1zVGH4dIg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Travelweb — 무료 여행 플래너. 여행 일정을 만들고 클릭 한 번으로 공유. Google/Line 로그인, 공동 편집, 클라우드 동기화 지원.">
-    <meta name="keywords" content="여행,일정,플랜,공유,클라우드,공동편집">
+    <meta name="description" content="Travelweb ??무�? ?��? ?��??? ?��? ?��???만들�??�릭 ??번으�?공�?. Google/Line 로그?? 공�? ?��?, ?�라?��? ?�기??지??">
+    <meta name="keywords" content="?��?,?��?,?��?,공�?,?�라?��?,공�??��?">
     <meta name="author" content="pengjun0429">
-    <meta property="og:title" content="Travelweb — 여행 플래너">
-    <meta property="og:description" content="建立專屬旅遊여행，원클릭 공유給親友，支援多人공동 편집與클라우드 동기화。">
+    <meta property="og:title" content="Travelweb ???��? ?��???>
+    <meta property="og:description" content="?��????��? ?��???만들�??�릭 ??번으�?공�?. 공�? ?��?�??�라?��? ?�기??지??">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta property="og:url" content="https://travelweb-8kb.pages.dev">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Travelweb — 여행 플래너">
-    <meta name="twitter:description" content="나만의 여행 일정을 만들고 친구와 공유하세요. 공동 편집과 클라우드 동기화를 지원합니다.">
+    <meta name="twitter:title" content="Travelweb ???��? ?��???>
+    <meta name="twitter:description" content="?��????��? ?��???만들�?친구?� 공�??�세?? 공�? ?��?�??�라?��? ?�기?�를 지?�합?�다.">
     <meta name="twitter:image" content="https://travelweb-8kb.pages.dev/icon-512.png">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -22,7 +22,7 @@
     <link rel="apple-touch-icon" href="/icon-180.png">
     <link rel="manifest" href="/manifest.json">
     <link rel="canonical" href="https://travelweb-8kb.pages.dev">
-    <title id="web-title">Travelweb | 여행 플래너 — 무료 여행 일정 만들기</title>
+    <title id="web-title">Travelweb | ?��? ?��?????무�? ?��? ?��? 만들�?/title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -78,7 +78,7 @@
         (function() {
             var c = document.cookie.match(/tw_lang=([^;]+)/);
             var lang = c ? c[1] : '';
-            var pages = { ko: '/ko' };
+            var pages = { en: '/en', jp: '/jp', ko: '/ko' };
             if (pages[lang] && window.location.pathname !== pages[lang] && !window.location.pathname.endsWith(lang + '.html')) {
                 window.location.replace(pages[lang]);
             }
@@ -104,10 +104,10 @@
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">中文</button>
+                    <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">中�?</button>
                     <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
-                    <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">日本語</button>
-                    <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">한국어</button>
+                    <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">?�本�?/button>
+                    <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">?�국??/button>
                     <div id="landing-auth" class="flex items-center gap-3">
                         <div id="landing-g-signin-btn-wrapper">
                             <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
@@ -116,7 +116,7 @@
                             <img id="landing-user-avatar" class="w-8 h-8 rounded-full border-2 border-white/30 shadow-sm" src="" alt="Avatar">
                             <span id="landing-user-name" class="text-sm font-medium text-white"></span>
                             <button onclick="enterApp()" class="bg-primary hover:bg-sky-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition shadow-sm">
-                                내 여행 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                ???��? <i class="fa-solid fa-arrow-right ml-1"></i>
                             </button>
                         </div>
                     </div>
@@ -130,24 +130,24 @@
                     </div>
                 </div>
                 <h1 class="text-4xl md:text-6xl font-black text-white mb-4 tracking-tight animate-fade-in-up">
-                    Travelweb으로 여행 계획
+                    Travelweb?��? ?��? 계�?
                 </h1>
                 <p class="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 animate-fade-in-up-delay-1">
-                    나만의 여행 일정을 만들고 친구와 공유<br class="hidden md:block">
-                    모두가 실시간으로 확인, 간편한 동기화
+                    ?��????��? ?��???만들�?친구?� 공�?<br class="hidden md:block">
+                    모�?가 ?��?간으�??�인, 간편???�기??
                 </p>
                 <div class="animate-fade-in-up-delay-2 flex flex-col items-center gap-4">
                     <button id="btn-start-hero" onclick="handleStartClick()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50 flex items-center gap-2">
-                        <i class="fa-solid fa-suitcase-rolling"></i> 여행 계획 시작
+                        <i class="fa-solid fa-suitcase-rolling"></i> ?��? 계�? ?��?
                     </button>
                     <div id="landing-hero-user" class="hidden flex-col items-center gap-3">
                         <p id="landing-hero-email" class="text-slate-400 text-sm"></p>
                         <div class="flex items-center gap-3">
                             <button onclick="showTrips()" class="bg-white/10 hover:bg-white/20 text-white border border-white/30 font-medium px-6 py-3 rounded-xl transition flex items-center gap-2">
-                                <i class="fa-solid fa-list"></i> 내 여행
+                                <i class="fa-solid fa-list"></i> ???��?
                             </button>
                             <button onclick="enterApp()" class="bg-primary hover:bg-sky-500 text-white font-bold px-8 py-3 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50">
-                                <i class="fa-solid fa-map mr-2"></i> 여행 열기
+                                <i class="fa-solid fa-map mr-2"></i> ?��? ?�기
                             </button>
                         </div>
                     </div>
@@ -155,12 +155,12 @@
                         <button onclick="lineLogin()" class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl transition shadow-sm">
                             <i class="fa-brands fa-line text-lg"></i> Line
                         </button>
-                        <span class="text-slate-600">또는</span>
+                        <span class="text-slate-600">?��?</span>
                         <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
                     </div>
                 </div>
                 <p class="text-slate-500 text-sm mt-6 animate-fade-in-up-delay-3">
-                    <i class="fa-solid fa-shield-halved mr-1"></i> Google 계정으로 빠른 로그인
+                    <i class="fa-solid fa-shield-halved mr-1"></i> Google 계�??��? 빠른 로그??
                 </p>
             </div>
 
@@ -172,29 +172,29 @@
         <!-- Features Section -->
         <section class="bg-white py-20 px-6">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">왜 Travelweb 인가요?</h2>
-                <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">여행 계획을 간단하고 우아하게, 공유 가능하게</p>
+                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">??Travelweb ?��???</h2>
+                <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">?��? 계�???간단?��? ?��??��?, 공�? 가?��?�?/p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-sky-50 text-primary flex items-center justify-center mb-5">
                             <i class="fa-solid fa-user-gear text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">나만의 여행</h3>
-                        <p class="text-slate-600">로그인 후 나만의 여행 일정을 만들고, 매일의 관광지, 숙소, 음식을 자유롭게 편집하세요.</p>
+                        <h3 class="text-xl font-bold text-dark mb-2">?��????��?</h3>
+                        <p class="text-slate-600">로그?????��????��? ?��???만들�? 매일??관광�?, ?��?, ?��????��?롭�? ?��??�세??</p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-emerald-50 text-secondary flex items-center justify-center mb-5">
                             <i class="fa-solid fa-share-nodes text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">원클릭 공유</h3>
-                        <p class="text-slate-600">전용 URL을 생성하여 공유. 게스트는 로그인 없이 전체 일정을 볼 수 있습니다.</p>
+                        <h3 class="text-xl font-bold text-dark mb-2">?�클�?공�?</h3>
+                        <p class="text-slate-600">?�용 URL???�성?�여 공�?. 게스?��? 로그???�이 ?�체 ?��???�????�습?�다.</p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center mb-5">
                             <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">클라우드 동기화</h3>
-                        <p class="text-slate-600">여행 데이터는 자동으로 클라우드 동기화. 언제 어디서나 업데이트, 데이터 분실 걱정 없음.</p>
+                        <h3 class="text-xl font-bold text-dark mb-2">?�라?��? ?�기??/h3>
+                        <p class="text-slate-600">?��? ?�이?��? ?��??��? ?�라?��? ?�기?? ?��? ?��??��? ?�데?�트, ?�이??분실 걱�? ?��?.</p>
                     </div>
                 </div>
             </div>
@@ -203,24 +203,24 @@
         <!-- How It Works -->
         <section class="bg-slate-50 py-20 px-6">
             <div class="max-w-4xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">3단계로 시작</h2>
-                <p class="text-slate-500 text-center mb-16">3단계로 여행 일정 만들기</p>
+                <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">3?��?�??��?</h2>
+                <p class="text-slate-500 text-center mb-16">3?��?�??��? ?��? 만들�?/p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
                     <div class="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-slate-200"></div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">1</div>
-                        <h3 class="text-lg font-bold text-dark mb-2">Google 登入</h3>
-                        <p class="text-slate-600 text-sm">Google 계정으로 빠르고 안전하게 로그인.</p>
+                        <h3 class="text-lg font-bold text-dark mb-2">Google 로그??/h3>
+                        <p class="text-slate-600 text-sm">Google 계�??��? 빠르�??��??��? 로그??</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">2</div>
-                        <h3 class="text-lg font-bold text-dark mb-2">일정 편집</h3>
-                        <p class="text-slate-600 text-sm">매일의 관광지, 숙소, 음식을 추가하고 자유롭게 일정을 구성하세요.</p>
+                        <h3 class="text-lg font-bold text-dark mb-2">?��? ?��?</h3>
+                        <p class="text-slate-600 text-sm">매일??관광�?, ?��?, ?��???추�??��? ?��?롭�? ?��???구성?�세??</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">3</div>
-                        <h3 class="text-lg font-bold text-dark mb-2">URL 공유</h3>
-                        <p class="text-slate-600 text-sm">전용 URL을 생성하여 공유하면 모두가 전체 일정을 볼 수 있습니다.</p>
+                        <h3 class="text-lg font-bold text-dark mb-2">URL 공�?</h3>
+                        <p class="text-slate-600 text-sm">?�용 URL???�성?�여 공�??�면 모�?가 ?�체 ?��???�????�습?�다.</p>
                     </div>
                 </div>
             </div>
@@ -233,9 +233,9 @@
                     <i class="fa-solid fa-mountain-sun text-primary"></i>
                     <span class="text-white font-bold">Travelweb</span>
                 </div>
-                <p>여행이 추억을 만듭니다.</p>
+                <p>?��???추억??만듭?�다.</p>
                 <div class="mt-4 space-x-4">
-                    <a href="privacy.html" class="hover:text-white transition">개인정보처리방침</a>
+                    <a href="privacy.html" class="hover:text-white transition">개인?�보처리방침</a>
                 </div>
                 <p class="mt-6 text-xs">&copy; 2026 Travelweb. All rights reserved.</p>
             </div>
@@ -246,33 +246,48 @@
     <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
-                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="홈으로">
+                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1 hidden md:inline" title="??>
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
                 <span class="font-bold text-dark">Travelweb</span>
             </div>
             <div class="flex items-center gap-2">
-                <img id="trips-user-avatar" class="w-7 h-7 rounded-full border border-slate-200" src="" alt="">
-                <span id="trips-user-name" class="text-sm font-medium text-slate-700 hidden md:inline"></span>
-                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="로그아웃"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
+                <img id="trips-user-avatar" class="w-7 h-7 rounded-full border border-slate-200 hidden" src="" alt="">
+                <span id="trips-user-name" class="text-sm font-medium text-slate-700 hidden"></span>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1 hidden" id="btn-logout" title="로그?��?"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
             </div>
         </header>
         <main class="flex-1 overflow-y-auto p-4 md:p-8">
             <div class="max-w-4xl mx-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold text-dark">내 여행</h2>
-                        <p class="text-sm text-slate-500 mt-1">무료 버전: 최대 5개（<span id="trip-count">0</span>/5）</p>
+                <div id="trips-login-prompt" class="hidden text-center py-16">
+                    <div class="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
                     </div>
-                    <div class="flex gap-2">
-                        <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                            <i class="fa-solid fa-plus"></i> 새 여행
+                    <h2 class="text-2xl font-bold text-dark mb-2">Travelweb???��? 것�? ?��??��???/h2>
+                    <p class="text-slate-500 mb-6">로그?��?�??��? 계�????��??�세??/p>
+                    <div class="flex flex-col items-center gap-3">
+                        <div id="trips-g-signin-btn-wrapper" class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+                        <button onclick="lineLogin()" class="flex items-center justify-center gap-2 bg-[#06c755] hover:bg-[#05b34a] text-white px-6 py-2.5 rounded-full text-sm font-medium transition shadow-sm">
+                            <i class="fa-brands fa-line text-lg"></i> LINE 로그??
                         </button>
                     </div>
                 </div>
-                <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="text-slate-400 col-span-full text-center py-12">로딩 중...</div>
+                <div id="trips-content" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-dark">???��?</h2>
+                            <p class="text-sm text-slate-500 mt-1">Beta - 모�? 무�?�?span id="trip-count">0</span> 개�?</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
+                                <i class="fa-solid fa-plus"></i> ???��?
+                            </button>
+                        </div>
+                    </div>
+                    <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="text-slate-400 col-span-full text-center py-12">로딩 �?..</div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -285,31 +300,31 @@
             <div class="flex items-center gap-1.5 md:gap-3 min-w-0">
                 <i class="fa-solid fa-mountain-sun text-primary text-base md:text-2xl shrink-0"></i>
                 <div class="truncate">
-                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">로딩 중...</h1>
-                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">로딩 중...</p>
+                    <h1 id="main-trip-title" class="text-xs md:text-xl font-bold text-dark truncate">로딩 �?..</h1>
+                    <p id="main-trip-date" class="text-[9px] md:text-xs text-slate-500 truncate">로딩 �?..</p>
                 </div>
             </div>
             <div class="flex items-center gap-0.5 md:gap-2 shrink-0">
                 <div id="guest-badge" class="hidden bg-amber-100 text-amber-700 px-1.5 md:px-3 py-1 rounded-full text-[9px] md:text-sm font-medium whitespace-nowrap">
-                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> 게스트</span>
+                    <i class="fa-solid fa-eye"></i><span class="hidden md:inline"> 게스??/span>
                 </div>
                 <button id="btn-back-home" class="flex items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="goToHome()">
-                    <i class="fa-solid fa-arrow-left text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">여행 목록</span>
+                    <i class="fa-solid fa-arrow-left text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">?��? 목�?</span>
                 </button>
                 <button id="btn-global-config" class="edit-only hidden items-center justify-center bg-amber-50 hover:bg-amber-100 text-amber-700 border border-amber-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openGlobalConfigModal()">
-                    <i class="fa-solid fa-gear text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">설정</span>
+                    <i class="fa-solid fa-gear text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">?��?</span>
                 </button>
                 <button id="btn-share" class="hidden items-center justify-center bg-slate-100 hover:bg-slate-200 text-slate-700 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="shareItinerary()">
-                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">공유</span>
+                    <i class="fa-solid fa-share-nodes text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">공�?</span>
                 </button>
                 <button id="btn-collab" class="hidden items-center justify-center bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 w-8 h-8 md:w-auto md:h-auto md:px-3 md:py-2 rounded-lg transition" onclick="openCollabModal()">
-                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">공동 편집</span>
+                    <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">공�? ?��?</span>
                 </button>
                 <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
                     <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                         <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
-                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="로그아웃">
+                        <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="로그?��?">
                             <i class="fa-solid fa-sign-out-alt text-xs md:text-base"></i>
                         </button>
                     </div>
@@ -320,7 +335,7 @@
         <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
             <aside class="w-full md:w-64 lg:w-72 bg-white border-b md:border-b-0 md:border-r border-slate-200 shrink-0 max-h-[72px] md:max-h-none overflow-y-auto md:overflow-y-auto">
                 <div class="p-2 md:p-4 border-b border-slate-100 sticky top-0 bg-white z-10 hidden md:block">
-                    <h2 class="font-bold text-slate-700">여행 개요</h2>
+                    <h2 class="font-bold text-slate-700">?��? 개�?</h2>
                 </div>
                 <div id="timeline-container" class="flex md:flex-col gap-1.5 md:gap-1 overflow-x-auto md:overflow-x-hidden p-2 md:p-4"></div>
             </aside>
@@ -329,15 +344,15 @@
                 <div class="max-w-3xl mx-auto w-full p-4 md:p-8 pb-24 flex-1 flex flex-col">
                 <div class="flex justify-between items-end mb-6">
                     <div>
-                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">로딩 중...</h2>
+                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">로딩 �?..</h2>
                         <p id="current-day-date" class="text-slate-500 font-medium"></p>
                     </div>
                     <div class="flex items-center gap-2">
                         <button class="edit-only hidden bg-white border border-slate-200 text-red-500 hover:bg-red-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="deleteCurrentDay()">
-                            <i class="fa-solid fa-trash mr-1"></i> 삭제這天
+                            <i class="fa-solid fa-trash mr-1"></i> ?????��?
                         </button>
                         <button class="edit-only hidden bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 px-3 py-1.5 rounded shadow-sm text-sm" onclick="openDayInfoModal()">
-                            <i class="fa-solid fa-pen mr-1"></i> 숙소/식사 편집
+                            <i class="fa-solid fa-pen mr-1"></i> ?��?/?�사 ?��?
                         </button>
                     </div>
                 </div>
@@ -345,28 +360,28 @@
                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
                             <div class="bg-blue-50 text-blue-500 p-3 rounded-lg"><i class="fa-solid fa-bed text-xl"></i></div>
                             <div>
-                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">숙소</h3>
+                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">?��?</h3>
                                 <p id="info-hotel" class="text-slate-700 font-medium"></p>
                             </div>
                         </div>
                         <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-100 flex items-start gap-4">
                             <div class="bg-orange-50 text-orange-500 p-3 rounded-lg"><i class="fa-solid fa-utensils text-xl"></i></div>
                             <div>
-                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">식사</h3>
+                                <h3 class="text-xs text-slate-400 uppercase font-bold tracking-wider mb-1">?�사</h3>
                                 <p id="info-food" class="text-slate-700 font-medium"></p>
                             </div>
                         </div>
                     </div>
                     <div class="mb-6 flex justify-between items-center">
-                        <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-route text-primary mr-2"></i> 오늘의 경로</h3>
+                        <h3 class="text-lg font-bold text-slate-800"><i class="fa-solid fa-route text-primary mr-2"></i> ?��???경�?</h3>
                         <button class="edit-only hidden text-primary hover:text-sky-700 font-medium text-sm" onclick="openActivityModal()">
-                            <i class="fa-solid fa-plus mr-1"></i> 장소 추가
+                            <i class="fa-solid fa-plus mr-1"></i> ?��? 추�?
                         </button>
                     </div>
                     <div id="activities-container" class="space-y-4 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-slate-300 before:to-transparent"></div>
                     <div class="mt-auto pt-8 bg-yellow-50 p-5 rounded-xl border border-yellow-100 relative"></div>
                     <div class="mt-12 bg-yellow-50 p-5 rounded-xl border border-yellow-100 relative">
-                        <h3 class="text-yellow-800 font-bold mb-2"><i class="fa-solid fa-book-open text-yellow-600 mr-2"></i> 여행 메모</h3>
+                        <h3 class="text-yellow-800 font-bold mb-2"><i class="fa-solid fa-book-open text-yellow-600 mr-2"></i> ?��? 메모</h3>
                         <p id="info-notes" class="text-yellow-700 text-sm whitespace-pre-wrap"></p>
                     </div>
                 </div>
@@ -375,10 +390,10 @@
             <div id="fab-container" class="edit-only hidden fixed bottom-6 right-6 z-30" onmouseenter="openFab()" onmouseleave="closeFab()">
                 <div class="fab-menu flex flex-col items-end gap-2 mb-3 opacity-0 translate-y-4 pointer-events-none transition-all duration-200">
                     <button onclick="openActivityModal()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-location-dot text-primary"></i> 장소 추가
+                        <i class="fa-solid fa-location-dot text-primary"></i> ?��? 추�?
                     </button>
                     <button onclick="addNewDay()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
-                        <i class="fa-solid fa-calendar-plus text-secondary"></i> 하루 추가
+                        <i class="fa-solid fa-calendar-plus text-secondary"></i> ?�루 추�?
                     </button>
                 </div>
                 <div class="flex justify-end">
@@ -390,12 +405,12 @@
 
             <aside id="map-panel" class="hidden lg:flex w-80 bg-white border-l border-slate-200 flex-col shrink-0">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>장소 미리보기</h3>
+                    <h3 class="font-bold text-slate-700"><i class="fa-solid fa-map-location-dot mr-2"></i>?��? 미리보기</h3>
                     <button class="lg:hidden text-slate-400 hover:text-slate-600" onclick="document.getElementById('map-panel').classList.remove('flex'); document.getElementById('map-panel').classList.add('hidden')"><i class="fa-solid fa-xmark"></i></button>
                 </div>
                 <div id="preview-content" class="flex-1 p-5 overflow-y-auto flex flex-col items-center justify-center text-center text-slate-400">
                     <i class="fa-regular fa-compass text-4xl mb-3"></i>
-                    <p>왼쪽의 장소를 클릭<br>미리보기 및 길찾기</p>
+                    <p>?�쪽???��?�??�릭<br>미리보기 �?길찾�?/p>
                 </div>
             </aside>
         </main>
@@ -406,31 +421,31 @@
         <div id="modal-collab" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>공동 편집자 관리</h3>
+                    <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>공�? ?��???관�?/h3>
                     <button onclick="closeModal('modal-collab')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">여행소유자</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?��? ?��???/label>
                         <p id="collab-owner" class="text-slate-500 text-sm">-</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">공동 편집자 추가 (이메일)</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">공�? ?��???추�? (?��???</label>
                         <div class="flex gap-2">
                             <input type="email" id="input-collab-email" placeholder="example@gmail.com" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
-                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">추가</button>
+                            <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">추�?</button>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">공동 편집자 목록</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-2">공�? ?��???목�?</label>
                         <div id="collab-list" class="space-y-2">
-                            <p class="text-slate-400 text-sm">공동 편집자가 없습니다</p>
+                            <p class="text-slate-400 text-sm">공�? ?��??��? ?�습?�다</p>
                         </div>
                     </div>
-                    <p class="text-xs text-slate-400">공동 편집자는 로그인 후 편집할 수 있습니다</p>
+                    <p class="text-xs text-slate-400">공�? ?��??��? 로그?????��??????�습?�다</p>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end">
-                    <button onclick="closeModal('modal-collab')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm">닫기</button>
+                    <button onclick="closeModal('modal-collab')" class="px-4 py-2 bg-slate-200 hover:bg-slate-300 text-slate-700 rounded-lg text-sm">?�기</button>
                 </div>
             </div>
         </div>
@@ -438,28 +453,28 @@
         <div id="modal-global-config" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900">여행 설정</h3>
+                    <h3 class="font-bold text-lg text-slate-900">?��? ?��?</h3>
                     <button onclick="closeModal('modal-global-config')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">여행 제목</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?��? ?�목</label>
                         <input type="text" id="config-trip-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">날짜 범위</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?��? 범�?</label>
                         <input type="text" id="config-trip-date" placeholder="2026.07.03 - 2026.07.16" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div class="bg-slate-50 p-4 rounded-xl border border-slate-100">
-                        <p class="text-xs text-slate-400 mb-1">계정 정보</p>
+                        <p class="text-xs text-slate-400 mb-1">계�? ?�보</p>
                         <p class="text-sm font-medium text-slate-700"><i class="fa-solid fa-envelope mr-1 text-slate-400"></i><span id="config-email">-</span></p>
-                        <p class="text-xs text-slate-500 mt-1">로그인 방식: <span id="config-auth-method">-</span></p>
-                        <p class="text-xs text-slate-400 mt-1">同 Email 의 로그인 방식공유同一個여행帳號</p>
+                        <p class="text-xs text-slate-500 mt-1">로그??방�?: <span id="config-auth-method">-</span></p>
+                        <p class="text-xs text-slate-400 mt-1">같�? Email??로그??방�??� ?�일???��? 계�???공�??��???/p>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취소</button>
-                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">클라우드에 저장</button>
+                    <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취�?</button>
+                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">?�라?��????�??/button>
                 </div>
             </div>
         </div>
@@ -467,30 +482,30 @@
         <div id="modal-day-info" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900">오늘 정보 편집</h3>
+                    <h3 class="font-bold text-lg text-slate-900">?��? ?�보 ?��?</h3>
                     <button onclick="closeModal('modal-day-info')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">날짜</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?��?</label>
                         <input type="date" id="input-date" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">숙소</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?��?</label>
                         <input type="text" id="input-hotel" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">추천 맛집/레스토랑</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">추�? 맛�?/?�스?��?</label>
                         <input type="text" id="input-food" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">여행 메모 / 주의사항</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?��? 메모 / 주�??�항</label>
                         <textarea id="input-notes" rows="4" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취소</button>
-                    <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">변경 저장</button>
+                    <button onclick="closeModal('modal-day-info')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취�?</button>
+                    <button onclick="saveDayInfo()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">변�??�??/button>
                 </div>
             </div>
         </div>
@@ -498,42 +513,42 @@
         <div id="modal-activity" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">장소/액티비티 추가</h3>
+                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">?��?/?�티비티 추�?</h3>
                     <button onclick="closeModal('modal-activity')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <input type="hidden" id="act-id">
                     <div class="grid grid-cols-2 gap-4">
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">시간</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">?��?</label>
                             <input type="time" id="act-time" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-slate-700 mb-1">아이콘</label>
+                            <label class="block text-sm font-medium text-slate-700 mb-1">?�이�?/label>
                             <select id="act-icon" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                                 <option value="fa-location-dot">기본</option>
-                                <option value="fa-plane">비행기</option>
+                                <option value="fa-plane">비�?�?/option>
                                 <option value="fa-train">기차</option>
-                                <option value="fa-car">자동차</option>
-                                <option value="fa-ship">배</option>
-                                <option value="fa-camera">사진</option>
-                                <option value="fa-utensils">음식</option>
-                                <option value="fa-person-walking">도보</option>
+                                <option value="fa-car">?��?�?/option>
+                                <option value="fa-ship">�?/option>
+                                <option value="fa-camera">?��?</option>
+                                <option value="fa-utensils">?��?</option>
+                                <option value="fa-person-walking">?�보</option>
                             </select>
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">제목</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?�목</label>
                         <input type="text" id="act-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">설명</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">?��?</label>
                         <textarea id="act-desc" rows="3" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none"></textarea>
                     </div>
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
-                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취소</button>
-                    <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">저장</button>
+                    <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">취�?</button>
+                    <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">?�??/button>
                 </div>
             </div>
         </div>
@@ -546,35 +561,35 @@
                 <div class="w-14 h-14 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-3">
                     <i class="fa-solid fa-plus text-primary text-2xl"></i>
                 </div>
-                <h2 class="text-lg font-bold text-slate-900">홈 화면에 추가</h2>
-                <p class="text-sm text-slate-500 mt-1">Travelweb을 홈 화면에 추가하여 앱처럼 빠르게 실행</p>
+                <h2 class="text-lg font-bold text-slate-900">???�면??추�?</h2>
+                <p class="text-sm text-slate-500 mt-1">Travelweb?????�면??추�??�여 ?��???빠르�??��?</p>
             </div>
             <div class="space-y-4">
                 <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
                     <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">1</div>
                     <div>
-                        <p class="text-sm font-medium text-slate-800">아래의 "공유" 버튼을 탭</p>
-                        <p class="text-xs text-slate-400 mt-0.5">Safari 메뉴에서</p>
+                        <p class="text-sm font-medium text-slate-800">?��???"공�?" 버튼????/p>
+                        <p class="text-xs text-slate-400 mt-0.5">Safari 메뉴?��?</p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
                     <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">2</div>
                     <div>
-                        <p class="text-sm font-medium text-slate-800">아래로 스크롤하여 "홈 화면에 추가"를 탭</p>
-                        <p class="text-xs text-slate-400 mt-0.5">공유 메뉴에서 아래로</p>
+                        <p class="text-sm font-medium text-slate-800">?��?�??�크롤�???"???�면??추�?"�???/p>
+                        <p class="text-xs text-slate-400 mt-0.5">공�? 메뉴?��? ?��?�?/p>
                     </div>
                 </div>
                 <div class="flex items-start gap-3 bg-slate-50 p-4 rounded-xl">
                     <div class="w-7 h-7 rounded-full bg-primary text-white text-xs font-bold flex items-center justify-center shrink-0">3</div>
                     <div>
-                        <p class="text-sm font-medium text-slate-800">오른쪽 상단의 "추가"를 탭</p>
-                        <p class="text-xs text-slate-400 mt-0.5">완료! 홈 화면에서 열기</p>
+                        <p class="text-sm font-medium text-slate-800">?�른�??�단??"추�?"�???/p>
+                        <p class="text-xs text-slate-400 mt-0.5">?��?! ???�면?��? ?�기</p>
                     </div>
                 </div>
             </div>
             <div class="mt-6 flex gap-2">
-                <button onclick="dismissIOSTutorial()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-sm font-medium transition">나중에</button>
-                <button onclick="dismissIOSTutorial()" class="flex-1 bg-primary hover:bg-sky-600 text-white py-3 rounded-xl text-sm font-medium transition">확인</button>
+                <button onclick="dismissIOSTutorial()" class="flex-1 bg-slate-100 hover:bg-slate-200 text-slate-700 py-3 rounded-xl text-sm font-medium transition">?��???/button>
+                <button onclick="dismissIOSTutorial()" class="flex-1 bg-primary hover:bg-sky-600 text-white py-3 rounded-xl text-sm font-medium transition">?�인</button>
             </div>
         </div>
     </div>
@@ -583,7 +598,7 @@
         // ============================================================
         //  CONFIG
         // ============================================================
-        const LINE_CHANNEL_ID = "2010603361"; // Line Developers 的 Channel ID
+        const LINE_CHANNEL_ID = "2010603361"; // Line Developers Channel ID
         const API_BASE = "https://travel-api.pengjun0429.workers.dev";
 
         // ============================================================
@@ -595,7 +610,7 @@
         let guestUserUid = null;         // uid of the trip owner being viewed as guest
 
         let globalConfig = {
-            tripTitle: "我的旅遊여행",
+            tripTitle: "???��?",
             tripDate: ""
         };
         let itineraryData = [];
@@ -631,7 +646,7 @@
 
         function switchLang(lang) {
             document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
-            const pages = { zh: '/', en: '/en', ja: '/jp', ko: '/ko' };
+            const pages = { zh: '/', en: '/en', jp: '/jp', ko: '/ko' };
             window.location.replace(pages[lang] || '/');
         }
 
@@ -660,7 +675,7 @@
         }
 
         function goToHome() {
-            if (confirm('여행 목록으로 돌아갈까요?')) {
+            if (confirm('?��? 목�??��? ?��?갈�???')) {
                 document.getElementById('app-view').classList.add('view-hidden');
                 window.history.replaceState({}, '', window.location.pathname);
                 if (currentUser) {
@@ -672,11 +687,11 @@
         }
 
         // ============================================================
-        //  AUTH — shared handler for both landing and app
+        //  AUTH ??shared handler for both landing and app
         // ============================================================
         function handleGoogleSignInResponse(response) {
             const payload = decodeJwt(response.credential);
-            if (!payload) return showToast("無法讀取 Google 登入資訊");
+            if (!payload) return showToast("Google 로그???�보�??��? ???�습?�다");
 
             const email = payload.email.trim().toLowerCase();
             const uid = generateUid(email);
@@ -698,7 +713,7 @@
             localStorage.setItem('tw_auth_method', 'google');
 
             updateLandingAuthUI();
-            showToast(`歡迎，${payload.name}！`);
+            showToast(`?��??��??? ${payload.name}??`);
         }
 
         function updateLandingAuthUI() {
@@ -713,7 +728,7 @@
 
                 const heroUser = document.getElementById('landing-hero-user');
                 heroUser.classList.remove('hidden');
-                document.getElementById('landing-hero-email').textContent = '로그인: ' + currentUser.email + ' 登入';
+                document.getElementById('landing-hero-email').textContent = '로그?? ' + currentUser.email;
                 document.getElementById('landing-login-buttons').classList.add('hidden');
             } else {
                 document.getElementById('landing-g-signin-btn-wrapper').classList.remove('hidden');
@@ -725,12 +740,32 @@
             }
         }
 
+        function isStandalone() {
+            return window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+        }
+
         function handleStartClick() {
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
-            document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未登入';
+            showTripsLoggedInUI();
             loadTrips();
+        }
+
+        function showTripsLoggedInUI() {
+            const loggedIn = currentUser !== null;
+            document.getElementById('trips-login-prompt').classList.toggle('hidden', loggedIn);
+            document.getElementById('trips-content').classList.toggle('hidden', !loggedIn);
+            if (loggedIn) {
+                document.getElementById('trips-user-avatar').classList.remove('hidden');
+                document.getElementById('trips-user-name').classList.remove('hidden');
+                document.getElementById('btn-logout').classList.remove('hidden');
+                document.getElementById('trips-user-avatar').src = currentUser.picture;
+                document.getElementById('trips-user-name').textContent = currentUser.name;
+            } else {
+                document.getElementById('trips-user-avatar').classList.add('hidden');
+                document.getElementById('trips-user-name').classList.add('hidden');
+                document.getElementById('btn-logout').classList.add('hidden');
+            }
         }
 
         // ============================================================
@@ -740,8 +775,7 @@
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('app-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
-            document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
+            showTripsLoggedInUI();
             loadTrips();
         }
 
@@ -753,12 +787,13 @@
         async function loadTrips() {
             if (!currentUser) return;
             const container = document.getElementById('trips-list');
-            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">로딩 중...</div>';
+            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">로딩 �?..</div>';
             try {
                 const res = await Promise.race([
                     fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000))
                 ]);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
                 const owned = data.owned || [];
                 const shared = data.shared || [];
@@ -767,22 +802,22 @@
                 let html = '';
 
                 // My trips
-                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">내 여행</h3></div>';
+                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">???��?</h3></div>';
                 if (owned.length === 0) {
-                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有여행</p></div>';
+                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>?��? ?��????�습?�다</p></div>';
                 } else {
                     html += owned.map(trip => tripCard(trip, false)).join('');
                 }
 
                 // Shared trips
                 if (shared.length > 0) {
-                    html += '<div class="col-span-full mt-6 pt-4 border-t border-slate-200"><h3 class="text-lg font-bold text-dark mb-3"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>공유받은 여행</h3></div>';
+                    html += '<div class="col-span-full mt-6 pt-4 border-t border-slate-200"><h3 class="text-lg font-bold text-dark mb-3"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>공�?받�? ?��?</h3></div>';
                     html += shared.map(trip => tripCard(trip, true)).join('');
                 }
 
-                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有여행</p></div>';
+                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">?��? ?��????�습?�다</p></div>';
             } catch (err) {
-                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>로딩 실패</p><button onclick="loadTrips()" class="mt-2 text-sm underline">다시 시도</button></div>';
+                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>로딩 ?�패</p><button onclick="loadTrips()" class="mt-2 text-sm underline">?��? ?��?</button></div>';
             }
         }
 
@@ -794,30 +829,30 @@
                             <div class="w-10 h-10 rounded-xl ${isShared ? 'bg-emerald-100 text-emerald-500' : 'bg-primary/10 text-primary'} flex items-center justify-center">
                                 <i class="fa-solid ${isShared ? 'fa-users' : 'fa-suitcase-rolling'}"></i>
                             </div>
-                            ${!isShared ? `<button onclick="event.stopPropagation(); deleteTrip('${trip.trip_id}')" class="text-slate-300 hover:text-red-500 transition p-1 opacity-0 group-hover:opacity-100" title="刪除"><i class="fa-solid fa-trash text-sm"></i></button>` : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full font-medium">共用</span>'}
+                            ${!isShared ? `<button onclick="event.stopPropagation(); deleteTrip('${trip.trip_id}')" class="text-slate-300 hover:text-red-500 transition p-1 opacity-0 group-hover:opacity-100" title="?��?"><i class="fa-solid fa-trash text-sm"></i></button>` : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full font-medium">공�???/span>'}
                         </div>
                         <h3 class="font-bold text-dark text-lg mb-1 truncate">${trip.trip_title}</h3>
-                        <p class="text-sm text-slate-500">${trip.trip_date || '날짜 미설정'}</p>
-                        <p class="text-xs text-slate-400 mt-2">${isShared ? '소유자: ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('zh-TW')}</p>
+                        <p class="text-sm text-slate-500">${trip.trip_date || '?��? 미설??}</p>
+                        <p class="text-xs text-slate-400 mt-2">${isShared ? '?��??? ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('ko-KR')}</p>
                     </div>
                 </div>`;
         }
 
         let isCreatingTrip = false;
         async function createTrip() {
-            if (!currentUser) return showToast("로그인해 주세요");
+            if (!currentUser) return showToast("로그?�해 주세??);
             if (isCreatingTrip) return;
             isCreatingTrip = true;
             try {
                 const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`);
                 const data = await res.json();
                 if ((data.owned || []).length >= FREE_TRIP_LIMIT) {
-                    showToast("무료 버전은 최대 5개입니다");
+                    showToast("무�? 버�??� 최�? 5개�??�다");
                     isCreatingTrip = false;
                     return;
                 }
             } catch(e) {}
-            const title = prompt("여행 이름:", "我的旅遊여행");
+            const title = prompt("?��? ?��?:", "???��?");
             if (!title) { isCreatingTrip = false; return; }
             try {
                 const res = await fetch(`${API_BASE}/api/trip`, {
@@ -831,15 +866,15 @@
                 const data = await res.json();
                 if (data.tripId) { selectTrip(data.tripId); }
                 else if (data.error === 'free_limit') { showToast(data.message); }
-                else { showToast("생성 실패"); }
-            } catch (err) { showToast("네트워크 오류"); }
+                else { showToast("?�성 ?�패"); }
+            } catch (err) { showToast("?�트?�크 ?��?"); }
             isCreatingTrip = false;
         }
 
         async function deleteTrip(tripId) {
-            if (!confirm("삭제할까요? 되돌릴 수 없습니다.")) return;
+            if (!confirm("?��??��??? ?��?�????�습?�다.")) return;
             await fetch(`${API_BASE}/api/trip?trip_id=${tripId}`, { method: 'DELETE' });
-            showToast("삭제되었습니다");
+            showToast("?��??��??��???);
             loadTrips();
         }
 
@@ -902,7 +937,7 @@
             localStorage.setItem('tw_auth_method', 'line');
 
             updateLandingAuthUI();
-            showToast(`歡迎，${currentUser.name}！`);
+            showToast(`?��??��??? ${currentUser.name}??`);
 
             // Clean URL
             window.history.replaceState({}, '', window.location.pathname);
@@ -916,7 +951,7 @@
             localStorage.removeItem('tw_user_picture');
             localStorage.removeItem('tw_user_uid');
             google.accounts.id.disableAutoSelect();
-            showToast("로그아웃되었습니다");
+            showToast("로그?��??��??��???);
             showLanding();
             updateLandingAuthUI();
         }
@@ -925,7 +960,7 @@
         //  ENTER APP (from landing page)
         // ============================================================
         async function enterApp() {
-            if (!currentUser) return showToast("請先登入");
+            if (!currentUser) return showToast("로그?�이 ?��??��???);
             if (!currentTripId) { showTrips(); return; }
             showApp();
             document.getElementById('app-user-avatar').src = currentUser.picture;
@@ -963,7 +998,7 @@
                 }
                 return null;
             } catch (err) {
-                console.error("雲端連線失敗:", err);
+                console.error("?�라?��? ?�결 ?�패:", err);
                 return null;
             }
         }
@@ -1038,23 +1073,23 @@
                 collaborators: collaborators
             });
             if (result && result.status === "success") {
-                showToast("클라우드에 동기화됨");
+                showToast("?�라?��????�기?�됨");
             } else {
                 localStorage.setItem('tw_trip_' + currentTripId, JSON.stringify(itineraryData));
             }
         }
 
         // ============================================================
-        //  SHARE — unique URL per user
+        //  SHARE ??unique URL per user
         // ============================================================
         function shareItinerary() {
-            if (!currentUser || !currentTripId) return showToast("請先登入");
+            if (!currentUser || !currentTripId) return showToast("로그?�이 ?��??��???);
             const baseUrl = window.location.origin + window.location.pathname;
             const shareUrl = baseUrl + '?trip=' + currentTripId + '&guest=1';
             navigator.clipboard.writeText(shareUrl).then(() => {
-                showToast("공유 URL을 복사했습니다!");
+                showToast("공�? URL??복사?�습?�다!");
             }).catch(() => {
-                prompt("請手動複製以下網址分享：", shareUrl);
+                prompt("?��? URL??복사?�여 공�??�세??", shareUrl);
             });
         }
 
@@ -1073,7 +1108,7 @@
         async function saveGlobalConfig() {
             const newTitle = document.getElementById('config-trip-title').value.trim();
             const newDate = document.getElementById('config-trip-date').value.trim();
-            if(!newTitle) return showToast("標題不能為空！");
+            if(!newTitle) return showToast("?�목???�력?�세??");
             globalConfig.tripTitle = newTitle;
             globalConfig.tripDate = newDate;
             updateHeaderUI();
@@ -1122,7 +1157,7 @@
         }
 
         function openCollabModal() {
-            if (!currentUser) return showToast("請先登入");
+            if (!currentUser) return showToast("로그?�이 ?��??��???);
             document.getElementById('collab-owner').textContent = ownerEmail || currentUser.email;
             renderCollabList();
             document.getElementById('modal-collab').classList.remove('hidden');
@@ -1131,7 +1166,7 @@
         function renderCollabList() {
             const container = document.getElementById('collab-list');
             if (collaborators.length === 0) {
-                container.innerHTML = '<p class="text-slate-400 text-sm">尚無共同編輯者</p>';
+                container.innerHTML = '<p class="text-slate-400 text-sm">공�? ?��??��? ?�습?�다</p>';
                 return;
             }
             container.innerHTML = collaborators.map(email => `
@@ -1145,9 +1180,9 @@
         async function addCollaborator() {
             const input = document.getElementById('input-collab-email');
             const email = input.value.trim().toLowerCase();
-            if (!email || !email.includes('@')) return showToast("유효한 이메일을 입력하세요");
-            if (!currentUser) return showToast("請先登入");
-            if (!isOwner()) return showToast("소유자만 공동 편집자를 관리할 수 있습니다");
+            if (!email || !email.includes('@')) return showToast("?�효???��??��? ?�력?�세??);
+            if (!currentUser) return showToast("로그?�이 ?��??��???);
+            if (!isOwner()) return showToast("?��??��? 공�? ?��??�를 관리�? ???�습?�다");
 
             if (!ownerEmail) {
                 ownerEmail = currentUser.email;
@@ -1167,12 +1202,12 @@
             });
 
             renderCollabList();
-            showToast(`已邀請 ${email} 共同編輯`);
+            showToast(`${email} ?��? 공�? ?��??��? 초�??�습?�다`);
         }
 
         async function removeCollaborator(email) {
             if (!isOwner()) return;
-            if (!confirm(`삭제:  ${email}  님의 편집 권한을?`)) return;
+            if (!confirm(`${email} ?��? ?��? 권�????��??��???`)) return;
 
             collaborators = collaborators.filter(e => e !== email);
 
@@ -1187,7 +1222,7 @@
             });
 
             renderCollabList();
-            showToast(`已移除 ${email}`);
+            showToast(`${email} ?��? ?�거?�습?�다`);
         }
 
         // ============================================================
@@ -1198,7 +1233,7 @@
             container.innerHTML = '';
             itineraryData.forEach((day, index) => {
                 const dateObj = new Date(day.date);
-                const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
+                const dayOfWeek = ['??, '??, '??, '??, '�?, '�?, '??][dateObj.getDay()];
                 const shortDate = `${dateObj.getMonth() + 1}/${dateObj.getDate()}`;
                 const btn = document.createElement('button');
                 btn.className = `shrink-0 md:w-full text-left p-2 md:p-4 rounded-xl transition-all duration-200 border-2 mb-0 md:mb-2 flex items-center gap-2 md:gap-3 ${
@@ -1213,7 +1248,7 @@
                         <span class="text-xs md:text-sm font-black">${shortDate}</span>
                     </div>
                     <div class="hidden md:block overflow-hidden">
-                        <div class="text-xs font-bold uppercase tracking-wider mb-0.5 opacity-80">星期${dayOfWeek}</div>
+                        <div class="text-xs font-bold uppercase tracking-wider mb-0.5 opacity-80">${dayOfWeek}?�일</div>
                         <div class="font-bold truncate text-sm">${day.title}</div>
                     </div>
                 `;
@@ -1227,11 +1262,11 @@
             const day = itineraryData[index];
             document.getElementById('current-day-title').textContent = `Day ${index + 1}: ${day.title}`;
             const dateObj = new Date(day.date);
-            const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
-            document.getElementById('current-day-date').textContent = `${day.date} (星期${dayOfWeek})`;
-            document.getElementById('info-hotel').textContent = day.hotel || '미정';
-            document.getElementById('info-food').textContent = day.food || '미정';
-            document.getElementById('info-notes').textContent = day.notes || '메모가 아직 없습니다...';
+            const dayOfWeek = ['??, '??, '??, '??, '�?, '�?, '??][dateObj.getDay()];
+            document.getElementById('current-day-date').textContent = `${day.date} (${dayOfWeek}?�일)`;
+            document.getElementById('info-hotel').textContent = day.hotel || '미�?';
+            document.getElementById('info-food').textContent = day.food || '미�?';
+            document.getElementById('info-notes').textContent = day.notes || '메모가 ?��? ?�습?�다...';
             renderActivities(day.activities);
         }
 
@@ -1239,7 +1274,7 @@
             const container = document.getElementById('activities-container');
             container.innerHTML = '';
             if(!activities || activities.length === 0) {
-                container.innerHTML = `<div class="text-slate-400 text-center py-8">액티비티가 없습니다. 추가를 클릭하세요.</div>`;
+                container.innerHTML = `<div class="text-slate-400 text-center py-8">?�티비티가 ?�습?�다. 추�?�??�릭?�세??</div>`;
                 return;
             }
             activities.forEach((act, idx) => {
@@ -1275,7 +1310,7 @@
         let editingActIndex = -1;
 
         function openDayInfoModal() {
-            if(!canEdit()) return showToast("편집하려면 로그인하세요");
+            if(!canEdit()) return showToast("?��??�려�?로그?��??��?");
             const day = itineraryData[currentDayIndex];
             document.getElementById('input-date').value = day.date || '';
             document.getElementById('input-hotel').value = day.hotel || '';
@@ -1297,9 +1332,9 @@
 
         function openActivityModal(isEdit = false, idx = -1) {
             closeFab();
-            if(!canEdit()) return showToast("請先登入以取得編輯權限");
+            if(!canEdit()) return showToast("로그?�이 ?��??��???);
             editingActIndex = idx;
-            document.getElementById('modal-activity-title').textContent = isEdit ? '장소 편집' : '장소 추가';
+            document.getElementById('modal-activity-title').textContent = isEdit ? '?��? ?��?' : '?��? 추�?';
             if (isEdit && idx >= 0) {
                 const act = itineraryData[currentDayIndex].activities[idx];
                 document.getElementById('act-time').value = act.time;
@@ -1319,7 +1354,7 @@
 
         async function deleteActivity(idx) {
             if(!canEdit()) return;
-            if(confirm('이 여행을 삭제할까요?')) {
+            if(confirm('???��????��??��???')) {
                 itineraryData[currentDayIndex].activities.splice(idx, 1);
                 renderActivities(itineraryData[currentDayIndex].activities);
                 await syncToCloud();
@@ -1331,7 +1366,7 @@
             const icon = document.getElementById('act-icon').value;
             const title = document.getElementById('act-title').value.trim();
             const desc = document.getElementById('act-desc').value.trim();
-            if(!title) return showToast("제목을 입력하세요");
+            if(!title) return showToast("?�목???�력?�세??);
             const newAct = { id: Date.now().toString(), time, icon, title, desc };
             if (!itineraryData[currentDayIndex].activities) itineraryData[currentDayIndex].activities = [];
             if (editingActIndex >= 0) itineraryData[currentDayIndex].activities[editingActIndex] = newAct;
@@ -1344,7 +1379,7 @@
 
         function addNewDay() {
             closeFab();
-            if (!canEdit()) return showToast("請先登入");
+            if (!canEdit()) return showToast("로그?�이 ?��??��???);
             const lastDay = itineraryData[itineraryData.length - 1];
             let nextDate = new Date();
             if (lastDay && lastDay.date) {
@@ -1354,7 +1389,7 @@
             const newDay = {
                 id: 'd' + (itineraryData.length + 1),
                 date: nextDate.toISOString().slice(0, 10),
-                title: '第' + (itineraryData.length + 1) + '天',
+                title: 'Day ' + (itineraryData.length + 1),
                 hotel: '',
                 food: '',
                 notes: '',
@@ -1364,19 +1399,19 @@
             renderTimeline();
             selectDay(itineraryData.length - 1);
             syncToCloud();
-            showToast('已추가 Day ' + itineraryData.length);
+            showToast('추�???Day ' + itineraryData.length);
         }
 
         async function deleteCurrentDay() {
             if (!canEdit()) return;
-            if (itineraryData.length <= 1) return showToast("최소 1일은 남겨야 합니다");
-            if (!confirm('삭제할까요 Day ' + (currentDayIndex + 1) + '？이 작업은 되돌릴 수 없습니다.')) return;
+            if (itineraryData.length <= 1) return showToast("최�? 1?��? ?�겨???��???);
+            if (!confirm('?��??��???Day ' + (currentDayIndex + 1) + '？이 ?��??� ?��?�????�습?�다.')) return;
             itineraryData.splice(currentDayIndex, 1);
             if (currentDayIndex >= itineraryData.length) currentDayIndex = itineraryData.length - 1;
             renderTimeline();
             selectDay(currentDayIndex);
             syncToCloud();
-            showToast('已刪除');
+            showToast('?��???);
         }
 
         let fabOpen = false;
@@ -1426,13 +1461,13 @@
             content.innerHTML = `
                 <div class="w-full text-left">
                     <h3 class="text-xl font-bold text-slate-800 mb-2">${act.title}</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">${act.desc || '暫無詳細說明。'}</p>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">${act.desc || '?�세 ?��????�습?�다.'}</p>
                     <div class="space-y-2">
                         <a href="${amapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm">
-                            <i class="fa-solid fa-map"></i> 高德地圖導航
+                            <i class="fa-solid fa-map"></i> Amap 길찾�?
                         </a>
                         <a href="${googleMapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-4 rounded-xl transition text-sm">
-                            <i class="fa-solid fa-location-arrow"></i> Google 地圖搜尋
+                            <i class="fa-solid fa-location-arrow"></i> Google 지??검??
                         </a>
                     </div>
                 </div>
@@ -1475,7 +1510,7 @@
         });
 
         // ============================================================
-        //  ON LOAD — determine initial view
+        //  ON LOAD ??determine initial view
         // ============================================================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1493,7 +1528,7 @@
             const lineError = urlParams.get('line_error');
             if (lineId || lineError) {
                 if (lineId) handleLineResponse(urlParams);
-                else if (lineError) showToast('Line 登入失敗');
+                else if (lineError) showToast('Line 로그???�패');
                 window.history.replaceState({}, '', window.location.pathname);
             }
 
@@ -1508,8 +1543,11 @@
                 updateLandingAuthUI();
             }
 
-            // Always show landing page
-            showLanding();
+            if (currentUser) {
+                handleStartClick();
+            } else {
+                showLanding();
+            }
         };
     </script>
 </body>

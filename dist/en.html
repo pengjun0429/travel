@@ -78,7 +78,7 @@
         (function() {
             var c = document.cookie.match(/tw_lang=([^;]+)/);
             var lang = c ? c[1] : '';
-            var pages = { en: '/en', ja: '/jp', ko: '/ko' };
+            var pages = { en: '/en', jp: '/jp', ko: '/ko' };
             if (pages[lang] && window.location.pathname !== pages[lang] && !window.location.pathname.endsWith(lang + '.html')) {
                 window.location.replace(pages[lang]);
             }
@@ -242,43 +242,52 @@
         </footer>
     </div>
 
-    <!-- ========== TripS VIEW ========== -->
+    <!-- ========== TRIPS VIEW ========== -->
     <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
-                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="Back to Home">
+                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1 hidden md:inline" title="Home">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
                 <span class="font-bold text-dark">Travelweb</span>
             </div>
             <div class="flex items-center gap-2">
-                <img id="trips-user-avatar" class="w-7 h-7 rounded-full border border-slate-200" src="" alt="">
-                <span id="trips-user-name" class="text-sm font-medium text-slate-700 hidden md:inline"></span>
-                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="Logout"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
+                <img id="trips-user-avatar" class="w-7 h-7 rounded-full border border-slate-200 hidden" src="" alt="">
+                <span id="trips-user-name" class="text-sm font-medium text-slate-700 hidden"></span>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1 hidden" id="btn-logout" title="Logout"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
             </div>
         </header>
         <main class="flex-1 overflow-y-auto p-4 md:p-8">
             <div class="max-w-4xl mx-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold text-dark">My Trips</h2>
-                        <p class="text-sm text-slate-500 mt-1" id="trip-limit-info">Free plan: max 5 trips (<span id="trip-count">0</span>/5)</p>
+                <div id="trips-login-prompt" class="hidden text-center py-16">
+                    <div class="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
                     </div>
-                    <div class="flex gap-2">
-                        <button id="btn-premium-badge" class="hidden bg-amber-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
-                            <i class="fa-solid fa-crown"></i> PREMIUM
-                        </button>
-                        <button id="btn-upgrade" onclick="openPricingModal()" class="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                            <i class="fa-solid fa-crown"></i> Upgrade
-                        </button>
-                        <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                            <i class="fa-solid fa-plus"></i> New Trip
+                    <h2 class="text-2xl font-bold text-dark mb-2">Welcome to Travelweb</h2>
+                    <p class="text-slate-500 mb-6">Sign in to start planning trips</p>
+                    <div class="flex flex-col items-center gap-3">
+                        <div id="trips-g-signin-btn-wrapper" class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+                        <button onclick="lineLogin()" class="flex items-center justify-center gap-2 bg-[#06c755] hover:bg-[#05b34a] text-white px-6 py-2.5 rounded-full text-sm font-medium transition shadow-sm">
+                            <i class="fa-brands fa-line text-lg"></i> LINE Login
                         </button>
                     </div>
                 </div>
-                <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="text-slate-400 col-span-full text-center py-12">Loading...</div>
+                <div id="trips-content" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-dark">My Trips</h2>
+                            <p class="text-sm text-slate-500 mt-1">Beta - All free (<span id="trip-count">0</span> trips)</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
+                                <i class="fa-solid fa-plus"></i> New Trip
+                            </button>
+                        </div>
+                    </div>
+                    <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div class="text-slate-400 col-span-full text-center py-12">Loading...</div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -312,10 +321,6 @@
                     <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">Collaborate</span>
                 </button>
                 <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
-                    <span id="app-premium-badge" class="hidden text-amber-500 text-xs"><i class="fa-solid fa-crown"></i></span>
-                    <button id="btn-app-upgrade" onclick="openPricingModal()" class="hidden items-center justify-center bg-gradient-to-r from-amber-400 to-orange-500 text-white w-7 h-7 md:w-auto md:h-auto md:px-2.5 md:py-1.5 rounded-lg transition text-xs font-bold shadow-sm" title="Upgrade to PREMIUM">
-                        <i class="fa-solid fa-crown text-[10px] md:text-xs"></i><span class="hidden md:inline md:ml-1">Upgrade</span>
-                    </button>
                     <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                         <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
@@ -482,7 +487,7 @@
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">���</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">���?/label>
                         <input type="date" id="input-date" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
@@ -544,39 +549,6 @@
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
                     <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">Cancel</button>
                     <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">Save</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pricing Modal -->
-    <div id="modal-pricing" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
-        <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-crown text-amber-400 mr-2"></i>Upgrade to PREMIUM</h3>
-                <button onclick="closeModal('modal-pricing')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 space-y-6">
-                <div class="text-center">
-                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-amber-300 to-orange-500 rounded-full flex items-center justify-center mb-3 shadow-lg">
-                        <i class="fa-solid fa-crown text-white text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900">Unlock Unlimited Trips</h4>
-                    <p class="text-sm text-slate-500 mt-1">During Beta, contact admin for activation code</p>
-                </div>
-                <div class="bg-slate-50 rounded-xl p-4 text-xs text-slate-500 space-y-1">
-                    <p class="font-medium text-slate-700 mb-2">Bank Transfer Info</p>
-                    <p><span class="text-slate-600">Bank:</span> (Contact admin)</p>
-                    <p><span class="text-slate-600">Account:</span> (Contact admin)</p>
-                    <p><span class="text-slate-600">iPASS MONEY:</span> (Contact admin)</p>
-                    <p class="mt-2 text-slate-400">After transfer, contact admin for activation code</p>
-                </div>
-                <div class="border-t border-slate-100 pt-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-2">Have an activation code?</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="input-activation-code" placeholder="Enter code" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none text-sm uppercase tracking-widest" maxlength="8">
-                        <button onclick="activateWithCode()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium shrink-0">Activate</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -647,9 +619,7 @@
         let ownerEmail = '';
         let collaborators = [];
         const FREE_TRIP_LIMIT = 5;
-        const PRICE_MONTHLY = 30;
-        const PRICE_YEARLY = 288;
-        let isPremium = false;
+
 
         // ============================================================
         //  UTILS
@@ -770,12 +740,32 @@
             }
         }
 
+        function isStandalone() {
+            return window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+        }
+
         function handleStartClick() {
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
-            document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : 'Not logged in';
+            showTripsLoggedInUI();
             loadTrips();
+        }
+
+        function showTripsLoggedInUI() {
+            const loggedIn = currentUser !== null;
+            document.getElementById('trips-login-prompt').classList.toggle('hidden', loggedIn);
+            document.getElementById('trips-content').classList.toggle('hidden', !loggedIn);
+            if (loggedIn) {
+                document.getElementById('trips-user-avatar').classList.remove('hidden');
+                document.getElementById('trips-user-name').classList.remove('hidden');
+                document.getElementById('btn-logout').classList.remove('hidden');
+                document.getElementById('trips-user-avatar').src = currentUser.picture;
+                document.getElementById('trips-user-name').textContent = currentUser.name;
+            } else {
+                document.getElementById('trips-user-avatar').classList.add('hidden');
+                document.getElementById('trips-user-name').classList.add('hidden');
+                document.getElementById('btn-logout').classList.add('hidden');
+            }
         }
 
         // ============================================================
@@ -785,8 +775,7 @@
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('app-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
-            document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
+            showTripsLoggedInUI();
             loadTrips();
         }
 
@@ -802,29 +791,13 @@
             try {
                 const res = await Promise.race([
                     fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000))
                 ]);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
                 const owned = data.owned || [];
                 const shared = data.shared || [];
                 document.getElementById('trip-count').textContent = owned.length;
-                await checkSubscriptionStatus();
-                const premiumBadge = document.getElementById('btn-premium-badge');
-                const upgradeBtn = document.getElementById('btn-upgrade');
-                const limitInfo = document.getElementById('trip-limit-info');
-                if (isPremium) {
-                    premiumBadge.classList.remove('hidden');
-                    upgradeBtn.classList.add('hidden');
-                    limitInfo.textContent = 'PREMIUM member, unlimited trips';
-                    document.getElementById('app-premium-badge').classList.remove('hidden');
-                    document.getElementById('btn-app-upgrade').classList.add('hidden');
-                } else {
-                    premiumBadge.classList.add('hidden');
-                    upgradeBtn.classList.remove('hidden');
-                    limitInfo.textContent = `Free plan: max ${FREE_TRIP_LIMIT} trips (${owned.length}/${FREE_TRIP_LIMIT})`;
-                    document.getElementById('app-premium-badge').classList.add('hidden');
-                    document.getElementById('btn-app-upgrade').classList.remove('hidden');
-                }
 
                 let html = '';
 
@@ -873,10 +846,9 @@
             try {
                 const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`);
                 const data = await res.json();
-                if (!isPremium && (data.owned || []).length >= FREE_TRIP_LIMIT) {
-                    showToast("Free plan: max 5 trips. Upgrade to remove limit.");
+                if ((data.owned || []).length >= FREE_TRIP_LIMIT) {
+                    showToast("Free plan: max 5 trips.");
                     isCreatingTrip = false;
-                    setTimeout(openPricingModal, 1000);
                     return;
                 }
             } catch(e) {}
@@ -1510,46 +1482,6 @@
         }
 
         // ============================================================
-        //  SUBSCRIPTION / PREMIUM
-        // ============================================================
-        async function checkSubscriptionStatus() {
-            if (!currentUser) return;
-            try {
-                const res = await fetch(`${API_BASE}/api/subscribe/status?uid=${encodeURIComponent(currentUser.uid)}`);
-                const data = await res.json();
-                isPremium = data.premium || false;
-            } catch(e) { isPremium = false; }
-        }
-
-        function openPricingModal() {
-            document.getElementById('modal-pricing').classList.remove('hidden');
-        }
-
-        async function activateWithCode() {
-            const code = document.getElementById('input-activation-code').value.trim().toUpperCase();
-            if (!code) return showToast("Please enter activation code");
-            if (!currentUser) return showToast("Please login first");
-            try {
-                const res = await fetch(`${API_BASE}/api/subscribe/activate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uid: currentUser.uid, email: currentUser.email, code })
-                });
-                const data = await res.json();
-                if (data.status === 'success') {
-                    closeModal('modal-pricing');
-                    showToast("Activation successful! Welcome to PREMIUM 🎉");
-                    isPremium = true;
-                    if (typeof loadTrips === 'function') loadTrips();
-                } else {
-                    showToast(data.error || "Activation failed");
-                }
-            } catch(e) {
-                showToast("Network error");
-            }
-        }
-
-        // ============================================================
         //  iOS HOME SCREEN TUTORIAL
         // ============================================================
         function isIOS() {
@@ -1611,13 +1543,11 @@
                 updateLandingAuthUI();
             }
 
-            // Check subscription status if logged in
-            if (savedEmail && savedName && savedUid) {
-                checkSubscriptionStatus();
+            if (currentUser) {
+                handleStartClick();
+            } else {
+                showLanding();
             }
-
-            // Always show landing page
-            showLanding();
         };
     </script>
 </body>

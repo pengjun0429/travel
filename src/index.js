@@ -1,15 +1,13 @@
 const LINE_CHANNEL_ID = '2010603361';
 const LINE_CHANNEL_SECRET = 'dfd6f08b73d3f2f06c6e0e20e4e8c621';
 const FRONTEND_URL = 'https://travelweb-8kb.pages.dev';
-const FREE_TRIP_LIMIT = 5;
-
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
         const corsHeaders = {
             'Access-Control-Allow-Origin': '*',
             'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
         };
 
         if (request.method === 'OPTIONS') {
@@ -34,17 +32,6 @@ export default {
             if (request.method === 'POST') return handleSavePrivacy(request, env, corsHeaders);
         }
 
-        // /api/subscribe/* — subscription endpoints
-        if (url.pathname === '/api/subscribe/status') {
-            return handleSubscribeStatus(request, env, corsHeaders);
-        }
-        if (url.pathname === '/api/subscribe/generate-code') {
-            return handleGenerateCode(request, env, corsHeaders);
-        }
-        if (url.pathname === '/api/subscribe/activate') {
-            return handleActivateCode(request, env, corsHeaders);
-        }
-
         // /auth/line/callback
         if (url.pathname === '/auth/line/callback') {
             return handleLineCallback(request);
@@ -58,6 +45,12 @@ export default {
             const res = await fetch(pagesUrl);
             const contentType = res.headers.get('Content-Type') || 'text/html';
             return new Response(res.body, { status: res.status, headers: { ...corsHeaders, 'Content-Type': contentType } });
+        }
+
+        // Diagnostic: echo back request body to check encoding
+        if (url.pathname === '/api/debug/echo' && request.method === 'POST') {
+            const rawBody = await request.text();
+            return json(corsHeaders, { raw_length: rawBody.length, raw_bytes: Array.from(new TextEncoder().encode(rawBody)).slice(0, 100), parsed: JSON.parse(rawBody) });
         }
 
         return new Response('Not found', { status: 404, headers: corsHeaders });
@@ -117,12 +110,13 @@ async function handleGetTrip(request, env, corsHeaders) {
 }
 
 async function handleCreateOrUpdateTrip(request, env, corsHeaders) {
-    const body = await request.json();
+    const rawBody = await request.text();
+    const body = JSON.parse(rawBody);
     const { tripId, ownerUid, ownerEmail, tripTitle, tripDate, itineraryData, collaborators } = body;
 
     // If tripId exists → update
     if (tripId) {
-        const dataStr = JSON.stringify(itineraryData || []);
+        const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(itineraryData || []))));
         const collabStr = JSON.stringify(collaborators || []);
         await env.DB.prepare(
             `UPDATE trips SET trip_title = ?, trip_date = ?, itinerary_data = ?, owner_email = ?, collaborators = ?, updated_at = datetime('now') WHERE trip_id = ?`
@@ -133,10 +127,8 @@ async function handleCreateOrUpdateTrip(request, env, corsHeaders) {
     // Otherwise → create
     if (!ownerUid) return json(corsHeaders, { error: 'Missing ownerUid' }, 400);
 
-    // Beta: free for all, unlimited trips
-
     const newTripId = 'trip_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 7);
-    const dataStr = JSON.stringify(itineraryData || []);
+    const dataStr = btoa(unescape(encodeURIComponent(JSON.stringify(itineraryData || []))));
     const collabStr = JSON.stringify(collaborators || []);
     await env.DB.prepare(
         `INSERT INTO trips (trip_id, owner_uid, owner_email, trip_title, trip_date, itinerary_data, collaborators, created_at, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, datetime('now'), datetime('now'))`
@@ -154,13 +146,16 @@ async function handleDeleteTrip(request, env, corsHeaders) {
 }
 
 function formatTrip(row) {
+    let itineraryData;
+    try { itineraryData = JSON.parse(decodeURIComponent(escape(atob(row.itinerary_data || '[]')))); }
+    catch (e) { try { itineraryData = JSON.parse(row.itinerary_data || '[]'); } catch (e2) { itineraryData = []; } }
     return {
         tripId: row.trip_id,
         ownerUid: row.owner_uid,
         ownerEmail: row.owner_email,
         tripTitle: row.trip_title,
         tripDate: row.trip_date,
-        itineraryData: JSON.parse(row.itinerary_data || '[]'),
+        itineraryData: itineraryData,
         collaborators: JSON.parse(row.collaborators || '[]'),
         createdAt: row.created_at
     };
@@ -179,71 +174,6 @@ async function handleSavePrivacy(request, env, corsHeaders) {
     if (!content) return json(corsHeaders, { error: 'Missing content' }, 400);
     await env.DB.prepare("INSERT OR REPLACE INTO settings (key, value) VALUES ('privacy_content', ?)").bind(content).run();
     return json(corsHeaders, { status: 'success' });
-}
-
-// ===== SUBSCRIPTION =====
-
-function isSubscriptionActive(sub) {
-    if (sub.status !== 'active') return false;
-    if (sub.end_date && new Date(sub.end_date) < new Date()) return false;
-    return true;
-}
-
-async function handleSubscribeStatus(request, env, corsHeaders) {
-    const url = new URL(request.url);
-    const uid = url.searchParams.get('uid');
-    if (!uid) return json(corsHeaders, { error: 'Missing uid' }, 400);
-
-    const sub = await env.DB.prepare('SELECT * FROM subscriptions WHERE user_uid = ?').bind(uid).first();
-    if (!sub) return json(corsHeaders, { premium: false });
-
-    const active = isSubscriptionActive(sub);
-    return json(corsHeaders, {
-        premium: active,
-        planType: sub.plan_type,
-        startDate: sub.start_date,
-        endDate: sub.end_date
-    });
-}
-
-async function handleGenerateCode(request, env, corsHeaders) {
-    const auth = request.headers.get('Authorization');
-    const adminKey = env.ADMIN_SECRET;
-    if (!adminKey || auth !== `Bearer ${adminKey}`) {
-        return json(corsHeaders, { error: 'Unauthorized' }, 401);
-    }
-    const body = await request.json();
-    const { plan } = body;
-    if (plan !== 'monthly' && plan !== 'yearly') return json(corsHeaders, { error: 'Invalid plan' }, 400);
-
-    const code = Math.random().toString(36).substring(2, 8).toUpperCase();
-    await env.DB.prepare(
-        "INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)"
-    ).bind(`activation_code_${code}`, JSON.stringify({ plan, used: false })).run();
-    return json(corsHeaders, { code });
-}
-
-async function handleActivateCode(request, env, corsHeaders) {
-    const body = await request.json();
-    const { uid, email, code } = body;
-    if (!uid || !email || !code) return json(corsHeaders, { error: 'Missing uid, email, or code' }, 400);
-
-    const row = await env.DB.prepare("SELECT value FROM settings WHERE key = ?").bind(`activation_code_${code}`).first();
-    if (!row) return json(corsHeaders, { error: 'Invalid code' }, 400);
-
-    const data = JSON.parse(row.value);
-    if (data.used) return json(corsHeaders, { error: 'Code already used' }, 400);
-
-    const endDate = data.plan === 'monthly'
-        ? new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-        : new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString();
-
-    await env.DB.prepare(
-        `INSERT OR REPLACE INTO subscriptions (user_uid, user_email, plan_type, status, start_date, end_date, updated_at) VALUES (?, ?, ?, 'active', datetime('now'), ?, datetime('now'))`
-    ).bind(uid, email, data.plan, endDate).run();
-
-    await env.DB.prepare("DELETE FROM settings WHERE key = ?").bind(`activation_code_${code}`).run();
-    return json(corsHeaders, { status: 'success', plan: data.plan });
 }
 
 // ===== LINE LOGIN =====
@@ -294,5 +224,6 @@ function parseIdToken(idToken) {
 }
 
 function json(headers, data, status = 200) {
-    return new Response(JSON.stringify(data), { status, headers: { ...headers, 'Content-Type': 'application/json' } });
+    const body = JSON.stringify(data, null, 0);
+    return new Response(body, { status, headers: { ...headers, 'Content-Type': 'application/json; charset=utf-8' } });
 }

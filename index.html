@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
@@ -78,7 +78,7 @@
         (function() {
             var c = document.cookie.match(/tw_lang=([^;]+)/);
             var lang = c ? c[1] : '';
-            var pages = { en: '/en', ja: '/jp', ko: '/ko' };
+            var pages = { en: '/en', jp: '/jp', ko: '/ko' };
             if (pages[lang] && window.location.pathname !== pages[lang] && !window.location.pathname.endsWith(lang + '.html')) {
                 window.location.replace(pages[lang]);
             }
@@ -104,10 +104,10 @@
                     <span class="text-white text-xl font-bold">Travelweb</span>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">中文</button>
+                    <button onclick="switchLang('zh')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">����</button>
                     <button onclick="switchLang('en')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">English</button>
-                    <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">日本語</button>
-                    <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">한국어</button>
+                    <button onclick="switchLang('jp')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">�饻�y</button>
+                    <button onclick="switchLang('ko')" class="bg-white/10 hover:bg-white/20 text-white border border-white/20 rounded-lg px-3 py-1.5 text-xs font-medium transition">???</button>
                     <div id="landing-auth" class="flex items-center gap-3">
                         <div id="landing-g-signin-btn-wrapper">
                             <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
@@ -116,7 +116,7 @@
                             <img id="landing-user-avatar" class="w-8 h-8 rounded-full border-2 border-white/30 shadow-sm" src="" alt="Avatar">
                             <span id="landing-user-name" class="text-sm font-medium text-white"></span>
                             <button onclick="enterApp()" class="bg-primary hover:bg-sky-600 text-white text-sm font-medium px-4 py-1.5 rounded-lg transition shadow-sm">
-                                進入我的行程 <i class="fa-solid fa-arrow-right ml-1"></i>
+                                My Trips <i class="fa-solid fa-arrow-right ml-1"></i>
                             </button>
                         </div>
                     </div>
@@ -133,12 +133,12 @@
                     用 <span class="text-primary">Travelweb</span> 規劃旅程
                 </h1>
                 <p class="text-lg md:text-xl text-slate-300 max-w-2xl mb-8 animate-fade-in-up-delay-1">
-                    建立專屬的旅遊行程，一鍵分享給親友<br class="hidden md:block">
-                    所有人即時查看，輕鬆同步
+                    建立專屬旅遊行程，一鍵分享給親友<br class="hidden md:block">
+                    多人共同編輯，雲端即時同步
                 </p>
                 <div class="animate-fade-in-up-delay-2 flex flex-col items-center gap-4">
                     <button id="btn-start-hero" onclick="handleStartClick()" class="bg-primary hover:bg-sky-500 text-white text-lg font-bold px-10 py-4 rounded-2xl transition shadow-lg shadow-primary/30 hover:shadow-primary/50 flex items-center gap-2">
-                        <i class="fa-solid fa-suitcase-rolling"></i> 開始規劃旅程
+                        <i class="fa-solid fa-suitcase-rolling"></i> 開始使用
                     </button>
                     <div id="landing-hero-user" class="hidden flex-col items-center gap-3">
                         <p id="landing-hero-email" class="text-slate-400 text-sm"></p>
@@ -151,16 +151,16 @@
                             </button>
                         </div>
                     </div>
-                    <div class="flex items-center gap-3 text-sm text-slate-500 mt-2">
+                    <div id="landing-login-buttons" class="flex items-center gap-3 text-sm text-slate-500 mt-2">
                         <button onclick="lineLogin()" class="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-5 py-2.5 rounded-xl transition shadow-sm">
-                            <i class="fa-brands fa-line text-lg"></i> Line 登入
+                            <i class="fa-brands fa-line text-lg"></i> LINE 登入
                         </button>
                         <span class="text-slate-600">或</span>
-                        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin" data-shape="rectangular"></div>
+                        <div class="g_id_signin" data-type="standard" data-size="medium" data-theme="outline" data-text="signin_with" data-shape="rectangular"></div>
                     </div>
                 </div>
                 <p class="text-slate-500 text-sm mt-6 animate-fade-in-up-delay-3">
-                    <i class="fa-solid fa-shield-halved mr-1"></i> 使用 Google 帳號快速登入
+                    <i class="fa-solid fa-shield-halved mr-1"></i> Google 快速登入
                 </p>
             </div>
 
@@ -173,28 +173,28 @@
         <section class="bg-white py-20 px-6">
             <div class="max-w-6xl mx-auto">
                 <h2 class="text-3xl md:text-4xl font-black text-dark text-center mb-4">為什麼選擇 Travelweb？</h2>
-                <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">讓規劃行程變得簡單、優雅、可分享</p>
+                <p class="text-slate-500 text-center mb-16 max-w-xl mx-auto">簡單、優雅、可分享的行程規劃</p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-sky-50 text-primary flex items-center justify-center mb-5">
                             <i class="fa-solid fa-user-gear text-2xl"></i>
                         </div>
-                        <h3 class="text-xl font-bold text-dark mb-2">專屬行程</h3>
-                        <p class="text-slate-600">登入後擁有個人獨立的旅遊行程，自由編輯每日景點、住宿、餐飲。</p>
+                        <h3 class="text-xl font-bold text-dark mb-2">個人行程</h3>
+                        <p class="text-slate-600">自由編輯每日行程、住宿、美食餐廳。</p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-emerald-50 text-secondary flex items-center justify-center mb-5">
                             <i class="fa-solid fa-share-nodes text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-dark mb-2">一鍵分享</h3>
-                        <p class="text-slate-600">產生專屬網址分享給親友，訪客無需登入即可查看完整行程。</p>
+                        <p class="text-slate-600">產生專屬網址分享，訪客無需登入即可瀏覽。</p>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 hover:shadow-lg transition">
                         <div class="w-14 h-14 rounded-xl bg-amber-50 text-amber-500 flex items-center justify-center mb-5">
                             <i class="fa-solid fa-cloud-arrow-up text-2xl"></i>
                         </div>
                         <h3 class="text-xl font-bold text-dark mb-2">雲端同步</h3>
-                        <p class="text-slate-600">行程資料自動同步至雲端，隨時隨地更新，不怕遺失。</p>
+                        <p class="text-slate-600">自動同步至雲端，隨時更新，永不遺失。</p>
                     </div>
                 </div>
             </div>
@@ -210,17 +210,17 @@
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">1</div>
                         <h3 class="text-lg font-bold text-dark mb-2">Google 登入</h3>
-                        <p class="text-slate-600 text-sm">使用你的 Google 帳號快速登入，安全又方便。</p>
+                        <p class="text-slate-600 text-sm">使用 Google 帳號快速安全登入。</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">2</div>
                         <h3 class="text-lg font-bold text-dark mb-2">編輯行程</h3>
-                        <p class="text-slate-600 text-sm">新增每日景點、住宿、美食，自由安排旅遊路線。</p>
+                        <p class="text-slate-600 text-sm">新增景點、住宿、美食，自由規劃路線。</p>
                     </div>
                     <div class="text-center relative">
                         <div class="w-16 h-16 mx-auto rounded-full bg-primary text-white text-2xl font-bold flex items-center justify-center mb-5 relative z-10 shadow-lg shadow-primary/30">3</div>
                         <h3 class="text-lg font-bold text-dark mb-2">分享網址</h3>
-                        <p class="text-slate-600 text-sm">產生專屬網址分享給親友，大家都能看到完整行程。</p>
+                        <p class="text-slate-600 text-sm">產生專屬網址，讓所有人都能看到完整行程。</p>
                     </div>
                 </div>
             </div>
@@ -246,39 +246,55 @@
     <div id="trips-view" class="hidden fixed inset-0 z-40 bg-slate-50 flex flex-col">
         <header class="bg-white shadow-sm z-10 px-4 md:px-6 py-3 flex justify-between items-center shrink-0">
             <div class="flex items-center gap-2">
-                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1" title="回首頁">
+                <button onclick="hideTrips()" class="text-slate-400 hover:text-slate-700 transition p-1 hidden md:inline" title="Home">
                     <i class="fa-solid fa-arrow-left"></i>
                 </button>
                 <i class="fa-solid fa-mountain-sun text-primary text-xl"></i>
                 <span class="font-bold text-dark">Travelweb</span>
             </div>
             <div class="flex items-center gap-2">
-                <img id="trips-user-avatar" class="w-7 h-7 rounded-full border border-slate-200" src="" alt="">
-                <span id="trips-user-name" class="text-sm font-medium text-slate-700 hidden md:inline"></span>
-                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1" title="登出"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
+                <img id="trips-user-avatar" class="w-7 h-7 rounded-full border border-slate-200 hidden" src="" alt="">
+                <span id="trips-user-name" class="text-sm font-medium text-slate-700 hidden"></span>
+                <button onclick="handleLogout()" class="text-slate-400 hover:text-red-500 transition p-1 hidden" id="btn-logout" title="Logout"><i class="fa-solid fa-sign-out-alt text-sm"></i></button>
             </div>
         </header>
         <main class="flex-1 overflow-y-auto p-4 md:p-8">
             <div class="max-w-4xl mx-auto">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="text-2xl font-bold text-dark">我的行程</h2>
-                        <p class="text-sm text-slate-500 mt-1" id="trip-limit-info">免費版最多 5 個行程（<span id="trip-count">0</span>/5）</p>
+                <div id="trips-login-prompt" class="hidden text-center py-16">
+                    <div class="w-16 h-16 mx-auto bg-primary/10 rounded-full flex items-center justify-center mb-4">
+                        <i class="fa-solid fa-mountain-sun text-primary text-2xl"></i>
                     </div>
-                    <div class="flex gap-2">
-                        <button id="btn-premium-badge" class="hidden bg-amber-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1 shadow-sm">
-                            <i class="fa-solid fa-crown"></i> PREMIUM
-                        </button>
-                        <button id="btn-upgrade" onclick="openPricingModal()" class="bg-gradient-to-r from-amber-400 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                            <i class="fa-solid fa-crown"></i> 升級
-                        </button>
-                        <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
-                            <i class="fa-solid fa-plus"></i> 新增行程
+                    <h2 class="text-2xl font-bold text-dark mb-2">歡迎使用 Travelweb</h2>
+                    <p class="text-slate-500 mb-6">登入後即可開始規劃行程</p>
+                    <div class="flex flex-col items-center gap-3">
+                        <div id="trips-g-signin-btn-wrapper" class="g_id_signin" data-type="standard" data-shape="pill" data-theme="outline" data-text="signin_with" data-size="large" data-logo_alignment="left"></div>
+                        <button onclick="lineLogin()" class="flex items-center justify-center gap-2 bg-[#06c755] hover:bg-[#05b34a] text-white px-6 py-2.5 rounded-full text-sm font-medium transition shadow-sm">
+                            <i class="fa-brands fa-line text-lg"></i> LINE 登入
                         </button>
                     </div>
                 </div>
-                <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <div class="text-slate-400 col-span-full text-center py-12">載入中...</div>
+                <div id="trips-content" class="hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold text-dark">我的行程</h2>
+                            <p class="text-sm text-slate-500 mt-1">Beta 版，全部免費（<span id="trip-count">0</span> 個行程）</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="createTrip()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
+                                <i class="fa-solid fa-plus"></i> 新增行程
+                            </button>
+                            <button onclick="document.getElementById('import-json-input').click()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
+                                <i class="fa-solid fa-file-import"></i> 匯入 JSON
+                            </button>
+                            <button onclick="openPasteJsonModal()" class="bg-emerald-50 hover:bg-emerald-100 text-emerald-600 border border-emerald-200 px-4 py-2 rounded-xl text-sm font-medium flex items-center gap-2 transition shadow-sm">
+                                <i class="fa-solid fa-paste"></i> 貼上 JSON
+                            </button>
+                            <input type="file" id="import-json-input" accept=".json" class="hidden" onchange="importTripFromJson(event)">
+                        </div>
+                    </div>
+                    <div id="trips-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+<div class="text-slate-400 col-span-full text-center py-12">載入中...</div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -312,10 +328,6 @@
                     <i class="fa-solid fa-users text-sm md:text-base"></i><span class="hidden md:inline md:ml-1.5 text-sm">共同編輯</span>
                 </button>
                 <div id="auth-section" class="flex items-center gap-0.5 md:gap-2">
-                    <span id="app-premium-badge" class="hidden text-amber-500 text-xs"><i class="fa-solid fa-crown"></i></span>
-                    <button id="btn-app-upgrade" onclick="openPricingModal()" class="hidden items-center justify-center bg-gradient-to-r from-amber-400 to-orange-500 text-white w-7 h-7 md:w-auto md:h-auto md:px-2.5 md:py-1.5 rounded-lg transition text-xs font-bold shadow-sm" title="升級 PREMIUM">
-                        <i class="fa-solid fa-crown text-[10px] md:text-xs"></i><span class="hidden md:inline md:ml-1">升級</span>
-                    </button>
                     <div id="app-user-profile" class="flex items-center gap-0.5 md:gap-2">
                         <img id="app-user-avatar" class="w-6 h-6 md:w-8 md:h-8 rounded-full border border-slate-200 shadow-sm" src="" alt="Avatar">
                         <span id="app-user-name" class="text-[10px] md:text-sm font-medium text-slate-700 hidden md:inline"></span>
@@ -339,7 +351,7 @@
                 <div class="max-w-3xl mx-auto w-full p-4 md:p-8 pb-24 flex-1 flex flex-col">
                 <div class="flex justify-between items-end mb-6">
                     <div>
-                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">載入中...</h2>
+                        <h2 id="current-day-title" class="text-2xl md:text-3xl font-bold text-dark mb-2">Loading...</h2>
                         <p id="current-day-date" class="text-slate-500 font-medium"></p>
                     </div>
                     <div class="flex items-center gap-2">
@@ -390,6 +402,12 @@
                     <button onclick="addNewDay()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
                         <i class="fa-solid fa-calendar-plus text-secondary"></i> 新增一天
                     </button>
+                    <button onclick="openPasteJsonModal()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
+                        <i class="fa-solid fa-paste text-emerald-500"></i> 貼上 JSON
+                    </button>
+                    <button onclick="exportTripAsJson()" class="flex items-center gap-2 bg-white hover:bg-slate-50 text-slate-700 px-4 py-2.5 rounded-xl shadow-lg border border-slate-200 text-sm font-medium transition">
+                        <i class="fa-solid fa-download text-blue-500"></i> 匯出 JSON
+                    </button>
                 </div>
                 <div class="flex justify-end">
                     <button onclick="toggleFab()" class="w-14 h-14 bg-primary hover:bg-sky-600 text-white rounded-full shadow-lg shadow-primary/40 flex items-center justify-center transition text-xl">
@@ -425,7 +443,7 @@
                         <p id="collab-owner" class="text-slate-500 text-sm">-</p>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">新增共同編輯者（Google Email）</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">新增共同編輯者（Email）</label>
                         <div class="flex gap-2">
                             <input type="email" id="input-collab-email" placeholder="example@gmail.com" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-emerald-500 outline-none text-sm">
                             <button onclick="addCollaborator()" class="bg-emerald-500 hover:bg-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-medium">新增</button>
@@ -448,12 +466,12 @@
         <div id="modal-global-config" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900">行程設定</h3>
+<h3 class="font-bold text-lg text-slate-900">行程設定</h3>
                     <button onclick="closeModal('modal-global-config')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">旅遊行程標題名稱</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">旅遊行程標題</label>
                         <input type="text" id="config-trip-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
@@ -464,7 +482,7 @@
                         <p class="text-xs text-slate-400 mb-1">帳號資訊</p>
                         <p class="text-sm font-medium text-slate-700"><i class="fa-solid fa-envelope mr-1 text-slate-400"></i><span id="config-email">-</span></p>
                         <p class="text-xs text-slate-500 mt-1">登入方式：<span id="config-auth-method">-</span></p>
-                        <p class="text-xs text-slate-400 mt-1">同 Email 的登入方式共用同一個行程帳號</p>
+                        <p class="text-xs text-slate-400 mt-1">同 Email 共用同一個帳號</p>
                     </div>
                     <button onclick="openPrivacyEditor()" class="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-600 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center justify-center gap-2">
                         <i class="fa-solid fa-file-shield"></i> 編輯隱私權政策
@@ -472,7 +490,7 @@
                 </div>
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
                     <button onclick="closeModal('modal-global-config')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存設定至雲端</button>
+                    <button onclick="saveGlobalConfig()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存設定</button>
                 </div>
             </div>
         </div>
@@ -480,7 +498,7 @@
         <div id="modal-day-info" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 class="font-bold text-lg text-slate-900">編輯今日資訊</h3>
+<h3 class="font-bold text-lg text-slate-900">編輯今日資訊</h3>
                     <button onclick="closeModal('modal-day-info')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
@@ -489,11 +507,15 @@
                         <input type="date" id="input-date" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">當天標題</label>
+                        <input type="text" id="input-day-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none" placeholder="例如：第一天、抵達東京">
+                    </div>
+                    <div>
                         <label class="block text-sm font-medium text-slate-700 mb-1">住宿地點</label>
                         <input type="text" id="input-hotel" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">推薦美食/餐廳</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">推薦美食 / 餐廳</label>
                         <input type="text" id="input-food" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
@@ -511,7 +533,7 @@
         <div id="modal-activity" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
             <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
                 <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">新增景點/活動</h3>
+                    <h3 id="modal-activity-title" class="font-bold text-lg text-slate-900">新增景點</h3>
                     <button onclick="closeModal('modal-activity')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
                 </div>
                 <div class="p-6 space-y-4">
@@ -536,7 +558,7 @@
                         </div>
                     </div>
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-1">標題 (景點名稱)</label>
+                        <label class="block text-sm font-medium text-slate-700 mb-1">標題（景點名稱）</label>
                         <input type="text" id="act-title" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none">
                     </div>
                     <div>
@@ -547,59 +569,6 @@
                 <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2">
                     <button onclick="closeModal('modal-activity')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
                     <button onclick="saveActivity()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg">儲存</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Privacy Editor Modal -->
-    <div id="modal-privacy" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
-        <div class="modal-full bg-white rounded-2xl w-full max-w-3xl mx-4 overflow-hidden shadow-2xl flex flex-col">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
-                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-file-shield text-primary mr-2"></i>編輯隱私權政策</h3>
-                <button onclick="closeModal('modal-privacy')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 space-y-4 overflow-y-auto flex-1">
-                <p class="text-xs text-slate-400">使用 HTML 格式編輯，會即時顯示在隱私權政策頁面。</p>
-                <textarea id="privacy-editor" rows="20" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-primary outline-none"></textarea>
-            </div>
-            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2 shrink-0">
-                <button onclick="closeModal('modal-privacy')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg">取消</button>
-                <button onclick="savePrivacyPolicy()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg flex items-center gap-2">
-                    <i class="fa-solid fa-check"></i> 儲存
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Pricing Modal -->
-    <div id="modal-pricing" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
-        <div class="modal-full bg-white rounded-2xl w-full max-w-lg mx-4 overflow-hidden shadow-2xl">
-            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
-                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-crown text-amber-400 mr-2"></i>升級 PREMIUM</h3>
-                <button onclick="closeModal('modal-pricing')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
-            </div>
-            <div class="p-6 space-y-6">
-                <div class="text-center">
-                    <div class="w-16 h-16 mx-auto bg-gradient-to-br from-amber-300 to-orange-500 rounded-full flex items-center justify-center mb-3 shadow-lg">
-                        <i class="fa-solid fa-crown text-white text-2xl"></i>
-                    </div>
-                    <h4 class="text-xl font-bold text-slate-900">解鎖無限行程</h4>
-                    <p class="text-sm text-slate-500 mt-1">Beta 期間請聯絡管理員取得啟用碼</p>
-                </div>
-                <div class="bg-slate-50 rounded-xl p-4 text-xs text-slate-500 space-y-1">
-                    <p class="font-medium text-slate-700 mb-2">匯款資訊</p>
-                    <p><span class="text-slate-600">銀行：</span>（請聯絡管理員）</p>
-                    <p><span class="text-slate-600">帳號：</span>（請聯絡管理員）</p>
-                    <p><span class="text-slate-600">iPASS MONEY：</span>（請聯絡管理員）</p>
-                    <p class="mt-2 text-slate-400">匯款後請告知管理員，會提供啟用碼</p>
-                </div>
-                <div class="border-t border-slate-100 pt-4">
-                    <label class="block text-sm font-medium text-slate-700 mb-2">已有啟用碼？請輸入</label>
-                    <div class="flex gap-2">
-                        <input type="text" id="input-activation-code" placeholder="輸入啟用碼" class="flex-1 bg-white text-slate-900 border border-slate-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-primary outline-none text-sm uppercase tracking-widest" maxlength="8">
-                        <button onclick="activateWithCode()" class="bg-primary hover:bg-sky-600 text-white px-4 py-2 rounded-lg text-sm font-medium shrink-0">啟用</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -645,11 +614,31 @@
         </div>
     </div>
 
+    <!-- Paste JSON Modal -->
+    <div id="modal-paste-json" class="fixed inset-0 bg-black/50 hidden z-50 flex items-center justify-center backdrop-blur-sm p-0 md:p-4">
+        <div class="modal-full bg-white rounded-2xl w-full max-w-2xl mx-4 overflow-hidden shadow-2xl flex flex-col">
+            <div class="p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50 shrink-0">
+                <h3 class="font-bold text-lg text-slate-900"><i class="fa-solid fa-paste text-emerald-500 mr-2"></i>貼上 JSON</h3>
+                <button onclick="closeModal('modal-paste-json')" class="text-slate-400 hover:text-slate-700"><i class="fa-solid fa-xmark text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4 overflow-y-auto flex-1">
+                <p class="text-xs text-slate-400">貼上行程 JSON 內容，格式需與匯入檔一致。</p>
+                <textarea id="paste-json-textarea" rows="15" class="w-full bg-white text-slate-900 border border-slate-300 rounded-lg px-4 py-3 font-mono text-sm focus:ring-2 focus:ring-primary outline-none" placeholder='{"tripTitle":"行程名稱","tripDate":"日期","itineraryData":[...]}'></textarea>
+            </div>
+            <div class="p-4 border-t border-slate-100 bg-slate-50 flex justify-end gap-2 shrink-0">
+                <button onclick="closeModal('modal-paste-json')" class="px-4 py-2 text-slate-600 hover:bg-slate-200 rounded-lg text-sm">取消</button>
+                <button onclick="importPastedJson()" class="px-4 py-2 bg-primary hover:bg-sky-600 text-white rounded-lg text-sm font-medium flex items-center gap-2">
+                    <i class="fa-solid fa-check"></i> 匯入
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // ============================================================
         //  CONFIG
         // ============================================================
-        const LINE_CHANNEL_ID = "2010603361"; // Line Developers 的 Channel ID
+        const LINE_CHANNEL_ID = "2010603361"; // Line Developers �� Channel ID
         const API_BASE = "https://travel-api.pengjun0429.workers.dev";
 
         // ============================================================
@@ -670,9 +659,7 @@
         let ownerEmail = '';
         let collaborators = [];
         const FREE_TRIP_LIMIT = 5;
-        const PRICE_MONTHLY = 30;
-        const PRICE_YEARLY = 288;
-        let isPremium = false;
+
 
         // ============================================================
         //  UTILS
@@ -700,8 +687,7 @@
 
         function switchLang(lang) {
             document.cookie = 'tw_lang=' + lang + ';path=/;max-age=31536000';
-            const pages = { en: '/en', ja: '/jp', ko: '/ko' };
-            window.location.replace(pages[lang] || '/');
+            window.location.replace(lang === 'en' ? '/en' : lang === 'jp' ? '/jp' : lang === 'ko' ? '/ko' : '/');
         }
 
         function showToast(message) {
@@ -729,7 +715,7 @@
         }
 
         function goToHome() {
-            if (confirm('回到行程列表？')) {
+            if (confirm('�^��Back to Trips�H')) {
                 document.getElementById('app-view').classList.add('view-hidden');
                 window.history.replaceState({}, '', window.location.pathname);
                 if (currentUser) {
@@ -741,11 +727,11 @@
         }
 
         // ============================================================
-        //  AUTH — shared handler for both landing and app
+        //  AUTH �X shared handler for both landing and app
         // ============================================================
         function handleGoogleSignInResponse(response) {
             const payload = decodeJwt(response.credential);
-            if (!payload) return showToast("無法讀取 Google 登入資訊");
+            if (!payload) return showToast("Failed to read Google login info");
 
             const email = payload.email.trim().toLowerCase();
             const uid = generateUid(email);
@@ -767,7 +753,7 @@
             localStorage.setItem('tw_auth_method', 'google');
 
             updateLandingAuthUI();
-            showToast(`歡迎，${payload.name}！`);
+            showToast(`�w��A${payload.name}�I`);
         }
 
         function updateLandingAuthUI() {
@@ -782,7 +768,7 @@
 
                 const heroUser = document.getElementById('landing-hero-user');
                 heroUser.classList.remove('hidden');
-                document.getElementById('landing-hero-email').textContent = '已使用 ' + currentUser.email + ' 登入';
+                document.getElementById('landing-hero-email').textContent = 'Signed in as ' + currentUser.email;
                 document.getElementById('landing-login-buttons').classList.add('hidden');
             } else {
                 document.getElementById('landing-g-signin-btn-wrapper').classList.remove('hidden');
@@ -794,23 +780,42 @@
             }
         }
 
+        function isStandalone() {
+            return window.navigator.standalone === true || window.matchMedia('(display-mode: standalone)').matches;
+        }
+
         function handleStartClick() {
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
-            document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '未登入';
+            showTripsLoggedInUI();
             loadTrips();
         }
 
+        function showTripsLoggedInUI() {
+            const loggedIn = currentUser !== null;
+            document.getElementById('trips-login-prompt').classList.toggle('hidden', loggedIn);
+            document.getElementById('trips-content').classList.toggle('hidden', !loggedIn);
+            if (loggedIn) {
+                document.getElementById('trips-user-avatar').classList.remove('hidden');
+                document.getElementById('trips-user-name').classList.remove('hidden');
+                document.getElementById('btn-logout').classList.remove('hidden');
+                document.getElementById('trips-user-avatar').src = currentUser.picture;
+                document.getElementById('trips-user-name').textContent = currentUser.name;
+            } else {
+                document.getElementById('trips-user-avatar').classList.add('hidden');
+                document.getElementById('trips-user-name').classList.add('hidden');
+                document.getElementById('btn-logout').classList.add('hidden');
+            }
+        }
+
         // ============================================================
-        //  TRIPS LIST
+        //  TripS LIST
         // ============================================================
         function showTrips() {
             document.getElementById('landing-view').classList.add('view-hidden');
             document.getElementById('app-view').classList.add('view-hidden');
             document.getElementById('trips-view').classList.remove('hidden');
-            document.getElementById('trips-user-avatar').src = currentUser ? currentUser.picture : '';
-            document.getElementById('trips-user-name').textContent = currentUser ? currentUser.name : '';
+            showTripsLoggedInUI();
             loadTrips();
         }
 
@@ -822,53 +827,37 @@
         async function loadTrips() {
             if (!currentUser) return;
             const container = document.getElementById('trips-list');
-            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">載入中...</div>';
+            container.innerHTML = '<div class="text-slate-400 col-span-full text-center py-12">Loading...</div>';
             try {
                 const res = await Promise.race([
                     fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`),
-                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 10000))
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000))
                 ]);
+                if (!res.ok) throw new Error('HTTP ' + res.status);
                 const data = await res.json();
                 const owned = data.owned || [];
                 const shared = data.shared || [];
                 document.getElementById('trip-count').textContent = owned.length;
-                await checkSubscriptionStatus();
-                const premiumBadge = document.getElementById('btn-premium-badge');
-                const upgradeBtn = document.getElementById('btn-upgrade');
-                const limitInfo = document.getElementById('trip-limit-info');
-                if (isPremium) {
-                    premiumBadge.classList.remove('hidden');
-                    upgradeBtn.classList.add('hidden');
-                    limitInfo.textContent = 'PREMIUM 會員，無限行程';
-                    document.getElementById('app-premium-badge').classList.remove('hidden');
-                    document.getElementById('btn-app-upgrade').classList.add('hidden');
-                } else {
-                    premiumBadge.classList.add('hidden');
-                    upgradeBtn.classList.remove('hidden');
-                    limitInfo.textContent = `免費版最多 ${FREE_TRIP_LIMIT} 個行程（${owned.length}/${FREE_TRIP_LIMIT}）`;
-                    document.getElementById('app-premium-badge').classList.add('hidden');
-                    document.getElementById('btn-app-upgrade').classList.remove('hidden');
-                }
 
                 let html = '';
 
                 // My trips
-                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">我的行程</h3></div>';
+                html += '<div class="col-span-full"><h3 class="text-lg font-bold text-dark mb-3">My Trips</h3></div>';
                 if (owned.length === 0) {
-                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>還沒有行程</p></div>';
+                    html += '<div class="col-span-full text-center py-8 text-slate-400"><i class="fa-solid fa-suitcase-rolling text-4xl mb-3 block"></i><p>�٨S��Trip</p></div>';
                 } else {
                     html += owned.map(trip => tripCard(trip, false)).join('');
                 }
 
                 // Shared trips
                 if (shared.length > 0) {
-                    html += '<div class="col-span-full mt-6 pt-4 border-t border-slate-200"><h3 class="text-lg font-bold text-dark mb-3"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>共用給我的</h3></div>';
+                    html += '<div class="col-span-full mt-6 pt-4 border-t border-slate-200"><h3 class="text-lg font-bold text-dark mb-3"><i class="fa-solid fa-users text-emerald-500 mr-2"></i>Shared With Me</h3></div>';
                     html += shared.map(trip => tripCard(trip, true)).join('');
                 }
 
-                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">還沒有行程</p></div>';
+                container.innerHTML = html || '<div class="col-span-full text-center py-16"><p class="text-slate-500 mb-4">�٨S��Trip</p></div>';
             } catch (err) {
-                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>載入失敗</p><button onclick="loadTrips()" class="mt-2 text-sm underline">重試</button></div>';
+                container.innerHTML = '<div class="text-red-400 col-span-full text-center py-12"><i class="fa-solid fa-triangle-exclamation text-2xl mb-2"></i><p>Load failed</p><button onclick="loadTrips()" class="mt-2 text-sm underline">Retry</button></div>';
             }
         }
 
@@ -880,11 +869,11 @@
                             <div class="w-10 h-10 rounded-xl ${isShared ? 'bg-emerald-100 text-emerald-500' : 'bg-primary/10 text-primary'} flex items-center justify-center">
                                 <i class="fa-solid ${isShared ? 'fa-users' : 'fa-suitcase-rolling'}"></i>
                             </div>
-                            ${!isShared ? `<button onclick="event.stopPropagation(); deleteTrip('${trip.trip_id}')" class="text-slate-300 hover:text-red-500 transition p-1 opacity-0 group-hover:opacity-100" title="刪除"><i class="fa-solid fa-trash text-sm"></i></button>` : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full font-medium">共用</span>'}
+                            ${!isShared ? `<button onclick="event.stopPropagation(); deleteTrip('${trip.trip_id}')" class="text-slate-300 hover:text-red-500 transition p-1 opacity-0 group-hover:opacity-100" title="刪除"><i class="fa-solid fa-trash text-sm"></i></button>` : '<span class="text-xs bg-emerald-100 text-emerald-600 px-2 py-0.5 rounded-full font-medium">Shared</span>'}
                         </div>
                         <h3 class="font-bold text-dark text-lg mb-1 truncate">${trip.trip_title}</h3>
-                        <p class="text-sm text-slate-500">${trip.trip_date || '未設定日期'}</p>
-                        <p class="text-xs text-slate-400 mt-2">${isShared ? '擁有者: ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('zh-TW')}</p>
+                        <p class="text-sm text-slate-500">${trip.trip_date || 'No date set'}</p>
+                        <p class="text-xs text-slate-400 mt-2">${isShared ? '�֦���: ' + trip.owner_email : new Date(trip.created_at).toLocaleDateString('zh-TW')}</p>
                     </div>
                 </div>`;
         }
@@ -897,10 +886,9 @@
             try {
                 const res = await fetch(`${API_BASE}/api/trips?uid=${encodeURIComponent(currentUser.uid)}&email=${encodeURIComponent(currentUser.email)}`);
                 const data = await res.json();
-                if (!isPremium && (data.owned || []).length >= FREE_TRIP_LIMIT) {
-                    showToast("免費版最多 5 個行程，升級即可解除限制");
+                if ((data.owned || []).length >= FREE_TRIP_LIMIT) {
+                    showToast("免費版最多 5 個行程");
                     isCreatingTrip = false;
-                    setTimeout(openPricingModal, 1000);
                     return;
                 }
             } catch(e) {}
@@ -923,51 +911,103 @@
             isCreatingTrip = false;
         }
 
+        function importTripFromJson(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = async function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    const title = data.tripTitle || '匯入的行程';
+                    const tripDate = data.tripDate || '';
+                    const itineraryData = data.itineraryData || [];
+                    if (!currentUser) return showToast("請先登入");
+                    const res = await fetch(`${API_BASE}/api/trip`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            ownerUid: currentUser.uid, ownerEmail: currentUser.email,
+                            tripTitle: title, tripDate: tripDate,
+                            itineraryData: itineraryData, collaborators: []
+                        })
+                    });
+                    const d = await res.json();
+                    if (d.tripId) {
+                        showToast("匯入成功！");
+                        selectTrip(d.tripId);
+                        loadTrips();
+                    } else {
+                        showToast(d.error || "匯入失敗");
+                    }
+                } catch (err) {
+                    showToast("JSON 格式錯誤");
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        function openPasteJsonModal() {
+            document.getElementById('paste-json-textarea').value = '';
+            document.getElementById('modal-paste-json').classList.remove('hidden');
+        }
+
+        async function importPastedJson() {
+            const text = document.getElementById('paste-json-textarea').value.trim();
+            if (!text) return showToast("請貼上 JSON 內容");
+            try {
+                const data = JSON.parse(text);
+                const title = data.tripTitle || '匯入的行程';
+                const tripDate = data.tripDate || '';
+                const itineraryData = data.itineraryData || [];
+                if (!currentUser) return showToast("請先登入");
+                const res = await fetch(`${API_BASE}/api/trip`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ownerUid: currentUser.uid, ownerEmail: currentUser.email,
+                        tripTitle: title, tripDate: tripDate,
+                        itineraryData: itineraryData, collaborators: []
+                    })
+                });
+                const d = await res.json();
+                if (d.tripId) {
+                    closeModal('modal-paste-json');
+                    showToast("匯入成功！");
+                    selectTrip(d.tripId);
+                    loadTrips();
+                } else {
+                    showToast(d.error || "匯入失敗");
+                }
+            } catch (err) {
+                showToast("JSON 格式錯誤");
+            }
+        }
+
+        function exportTripAsJson() {
+            if (!currentTrip && !currentTripId) return showToast("請先開啟一個行程");
+            const data = {
+                tripTitle: globalConfig.tripTitle || (currentTrip ? currentTrip.tripTitle : ''),
+                tripDate: globalConfig.tripDate || (currentTrip ? currentTrip.tripDate : ''),
+                itineraryData: itineraryData
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (data.tripTitle || '行程') + '.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast("已匯出 JSON");
+        }
+
         async function deleteTrip(tripId) {
             if (!confirm("確定刪除？無法復原。")) return;
             await fetch(`${API_BASE}/api/trip?trip_id=${tripId}`, { method: 'DELETE' });
             showToast("已刪除");
             loadTrips();
-        }
-
-        // ============================================================
-        //  SUBSCRIPTION / PREMIUM
-        // ============================================================
-        async function checkSubscriptionStatus() {
-            if (!currentUser) return;
-            try {
-                const res = await fetch(`${API_BASE}/api/subscribe/status?uid=${encodeURIComponent(currentUser.uid)}`);
-                const data = await res.json();
-                isPremium = data.premium || false;
-            } catch(e) { isPremium = false; }
-        }
-
-        function openPricingModal() {
-            document.getElementById('modal-pricing').classList.remove('hidden');
-        }
-
-        async function activateWithCode() {
-            const code = document.getElementById('input-activation-code').value.trim().toUpperCase();
-            if (!code) return showToast("請輸入啟用碼");
-            if (!currentUser) return showToast("請先登入");
-            try {
-                const res = await fetch(`${API_BASE}/api/subscribe/activate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ uid: currentUser.uid, email: currentUser.email, code })
-                });
-                const data = await res.json();
-                if (data.status === 'success') {
-                    closeModal('modal-pricing');
-                    showToast("啟用成功！歡迎成為 PREMIUM 會員 🎉");
-                    isPremium = true;
-                    if (typeof loadTrips === 'function') loadTrips();
-                } else {
-                    showToast(data.error || "啟用失敗");
-                }
-            } catch(e) {
-                showToast("網路錯誤");
-            }
         }
 
         async function selectTrip(tripId) {
@@ -1029,7 +1069,7 @@
             localStorage.setItem('tw_auth_method', 'line');
 
             updateLandingAuthUI();
-            showToast(`歡迎，${currentUser.name}！`);
+            showToast(`�w��A${currentUser.name}�I`);
 
             // Clean URL
             window.history.replaceState({}, '', window.location.pathname);
@@ -1043,7 +1083,7 @@
             localStorage.removeItem('tw_user_picture');
             localStorage.removeItem('tw_user_uid');
             google.accounts.id.disableAutoSelect();
-            showToast("已登出");
+            showToast("Logged out");
             showLanding();
             updateLandingAuthUI();
         }
@@ -1090,7 +1130,7 @@
                 }
                 return null;
             } catch (err) {
-                console.error("雲端連線失敗:", err);
+                console.error("���ݳs�u����:", err);
                 return null;
             }
         }
@@ -1172,16 +1212,16 @@
         }
 
         // ============================================================
-        //  SHARE — unique URL per user
+        //  SHARE �X unique URL per user
         // ============================================================
         function shareItinerary() {
             if (!currentUser || !currentTripId) return showToast("請先登入");
             const baseUrl = window.location.origin + window.location.pathname;
             const shareUrl = baseUrl + '?trip=' + currentTripId + '&guest=1';
             navigator.clipboard.writeText(shareUrl).then(() => {
-                showToast("已複製專屬分享網址！");
+                showToast("�w�ƻs�M��Share URL�I");
             }).catch(() => {
-                prompt("請手動複製以下網址分享：", shareUrl);
+                prompt("�Ф�ʽƻs�H�U���}Share�G", shareUrl);
             });
         }
 
@@ -1200,7 +1240,7 @@
         async function saveGlobalConfig() {
             const newTitle = document.getElementById('config-trip-title').value.trim();
             const newDate = document.getElementById('config-trip-date').value.trim();
-            if(!newTitle) return showToast("標題不能為空！");
+            if(!newTitle) return showToast("Title is required!");
             globalConfig.tripTitle = newTitle;
             globalConfig.tripDate = newDate;
             updateHeaderUI();
@@ -1258,7 +1298,7 @@
         function renderCollabList() {
             const container = document.getElementById('collab-list');
             if (collaborators.length === 0) {
-                container.innerHTML = '<p class="text-slate-400 text-sm">尚無共同編輯者</p>';
+                container.innerHTML = '<p class="text-slate-400 text-sm">No collaborators yet</p>';
                 return;
             }
             container.innerHTML = collaborators.map(email => `
@@ -1269,48 +1309,12 @@
             `).join('');
         }
 
-        // ============================================================
-        //  PRIVACY POLICY
-        // ============================================================
-        function openPrivacyEditor() {
-            if (!currentUser) return showToast("請先登入");
-            closeModal('modal-global-config');
-            fetch(`${API_BASE}/api/privacy`)
-                .then(r => r.json())
-                .then(data => {
-                    document.getElementById('privacy-editor').value = data.content || '<h1 class="text-3xl font-bold text-slate-900">隱私權政策 (Privacy Policy)</h1>\n<p class="text-sm text-slate-500 mb-8">更新日期：' + new Date().toISOString().slice(0,10) + '</p>\n\n<section class="mb-8">\n<h2 class="text-xl font-bold text-slate-900 mb-3">關於 Travelweb</h2>\n<p class="text-slate-600">請在此編輯隱私權政策內容。</p>\n</section>';
-                    document.getElementById('modal-privacy').classList.remove('hidden');
-                })
-                .catch(() => showToast("載入失敗"));
-        }
-
-        async function savePrivacyPolicy() {
-            const content = document.getElementById('privacy-editor').value.trim();
-            if (!content) return showToast("內容不能為空");
-            try {
-                const res = await fetch(`${API_BASE}/api/privacy`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ content })
-                });
-                const data = await res.json();
-                if (data.status === 'success') {
-                    showToast("已儲存！");
-                    closeModal('modal-privacy');
-                } else {
-                    showToast("儲存失敗");
-                }
-            } catch (err) {
-                showToast("網路錯誤");
-            }
-        }
-
         async function addCollaborator() {
             const input = document.getElementById('input-collab-email');
             const email = input.value.trim().toLowerCase();
-            if (!email || !email.includes('@')) return showToast("請輸入有效的 Email");
+            if (!email || !email.includes('@')) return showToast("Enter a valid email");
             if (!currentUser) return showToast("請先登入");
-            if (!isOwner()) return showToast("僅擁有者可管理共同編輯者");
+            if (!isOwner()) return showToast("Only the owner can manage collaborators");
 
             if (!ownerEmail) {
                 ownerEmail = currentUser.email;
@@ -1330,12 +1334,12 @@
             });
 
             renderCollabList();
-            showToast(`已邀請 ${email} 共同編輯`);
+            showToast(`已邀請 ${email}`);
         }
 
         async function removeCollaborator(email) {
             if (!isOwner()) return;
-            if (!confirm(`確定要移除 ${email} 的編輯權限？`)) return;
+            if (!confirm(`Remove ${email} ��Edit�v���H`)) return;
 
             collaborators = collaborators.filter(e => e !== email);
 
@@ -1393,7 +1397,7 @@
             const dayOfWeek = ['日', '一', '二', '三', '四', '五', '六'][dateObj.getDay()];
             document.getElementById('current-day-date').textContent = `${day.date} (星期${dayOfWeek})`;
             document.getElementById('info-hotel').textContent = day.hotel || '無安排';
-            document.getElementById('info-food').textContent = day.food || '無特別安排';
+            document.getElementById('info-food').textContent = day.food || '無安排';
             document.getElementById('info-notes').textContent = day.notes || '尚無備忘錄資訊...';
             renderActivities(day.activities);
         }
@@ -1441,6 +1445,7 @@
             if(!canEdit()) return showToast("請先登入以取得編輯權限");
             const day = itineraryData[currentDayIndex];
             document.getElementById('input-date').value = day.date || '';
+            document.getElementById('input-day-title').value = day.title || '';
             document.getElementById('input-hotel').value = day.hotel || '';
             document.getElementById('input-food').value = day.food || '';
             document.getElementById('input-notes').value = day.notes || '';
@@ -1450,6 +1455,7 @@
         async function saveDayInfo() {
             const day = itineraryData[currentDayIndex];
             day.date = document.getElementById('input-date').value;
+            day.title = document.getElementById('input-day-title').value;
             day.hotel = document.getElementById('input-hotel').value;
             day.food = document.getElementById('input-food').value;
             day.notes = document.getElementById('input-notes').value;
@@ -1482,7 +1488,7 @@
 
         async function deleteActivity(idx) {
             if(!canEdit()) return;
-            if(confirm('確定要刪除這個行程嗎？')) {
+            if(confirm('Delete this trip?')) {
                 itineraryData[currentDayIndex].activities.splice(idx, 1);
                 renderActivities(itineraryData[currentDayIndex].activities);
                 await syncToCloud();
@@ -1494,7 +1500,7 @@
             const icon = document.getElementById('act-icon').value;
             const title = document.getElementById('act-title').value.trim();
             const desc = document.getElementById('act-desc').value.trim();
-            if(!title) return showToast("標題不能為空");
+            if(!title) return showToast("Title is required");
             const newAct = { id: Date.now().toString(), time, icon, title, desc };
             if (!itineraryData[currentDayIndex].activities) itineraryData[currentDayIndex].activities = [];
             if (editingActIndex >= 0) itineraryData[currentDayIndex].activities[editingActIndex] = newAct;
@@ -1517,7 +1523,7 @@
             const newDay = {
                 id: 'd' + (itineraryData.length + 1),
                 date: nextDate.toISOString().slice(0, 10),
-                title: '第' + (itineraryData.length + 1) + '天',
+                title: '��' + (itineraryData.length + 1) + '��',
                 hotel: '',
                 food: '',
                 notes: '',
@@ -1527,13 +1533,13 @@
             renderTimeline();
             selectDay(itineraryData.length - 1);
             syncToCloud();
-            showToast('已新增 Day ' + itineraryData.length);
+            showToast('�wAdd Day ' + itineraryData.length);
         }
 
         async function deleteCurrentDay() {
             if (!canEdit()) return;
             if (itineraryData.length <= 1) return showToast("至少要保留一天");
-            if (!confirm('確定要刪除 Day ' + (currentDayIndex + 1) + '？此操作無法復原。')) return;
+            if (!confirm('確定刪除 Day ' + (currentDayIndex + 1) + '？此操作無法復原。')) return;
             itineraryData.splice(currentDayIndex, 1);
             if (currentDayIndex >= itineraryData.length) currentDayIndex = itineraryData.length - 1;
             renderTimeline();
@@ -1589,13 +1595,13 @@
             content.innerHTML = `
                 <div class="w-full text-left">
                     <h3 class="text-xl font-bold text-slate-800 mb-2">${act.title}</h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">${act.desc || '暫無詳細說明。'}</p>
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6 bg-slate-50 p-4 rounded-xl border border-slate-100">${act.desc || 'No details available.'}</p>
                     <div class="space-y-2">
                         <a href="${amapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-emerald-500 hover:bg-emerald-600 text-white font-medium py-2.5 px-4 rounded-xl transition text-sm">
-                            <i class="fa-solid fa-map"></i> 高德地圖導航
+                            <i class="fa-solid fa-map"></i> Amap Navigation
                         </a>
                         <a href="${googleMapUrl}" target="_blank" class="flex items-center justify-center gap-2 w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-medium py-2.5 px-4 rounded-xl transition text-sm">
-                            <i class="fa-solid fa-location-arrow"></i> Google 地圖搜尋
+                            <i class="fa-solid fa-location-arrow"></i> Google Maps
                         </a>
                     </div>
                 </div>
@@ -1604,8 +1610,8 @@
 
         function getFallbackDefaultData() {
             return [
-                { id: "d1", date: new Date().toISOString().slice(0,10), title: "第一天", hotel: "", food: "", notes: "", activities: [] },
-                { id: "d2", date: new Date(Date.now()+86400000).toISOString().slice(0,10), title: "第二天", hotel: "", food: "", notes: "", activities: [] }
+                { id: "d1", date: new Date().toISOString().slice(0,10), title: "Day 1", hotel: "", food: "", notes: "", activities: [] },
+                { id: "d2", date: new Date(Date.now()+86400000).toISOString().slice(0,10), title: "Day 2", hotel: "", food: "", notes: "", activities: [] }
             ];
         }
 
@@ -1638,7 +1644,7 @@
         });
 
         // ============================================================
-        //  ON LOAD — determine initial view
+        //  ON LOAD �X determine initial view
         // ============================================================
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -1656,7 +1662,7 @@
             const lineError = urlParams.get('line_error');
             if (lineId || lineError) {
                 if (lineId) handleLineResponse(urlParams);
-                else if (lineError) showToast('Line 登入失敗');
+                else if (lineError) showToast('Line login failed');
                 window.history.replaceState({}, '', window.location.pathname);
             }
 
@@ -1671,13 +1677,11 @@
                 updateLandingAuthUI();
             }
 
-            // Check subscription status if logged in
-            if (savedEmail && savedName && savedUid) {
-                checkSubscriptionStatus();
+            if (currentUser) {
+                handleStartClick();
+            } else {
+                showLanding();
             }
-
-            // Always show landing page
-            showLanding();
         };
     </script>
 </body>
